@@ -65,42 +65,67 @@ const structuredData = {
 };
 
 export default async function Home() {
-  // Fetch real data from database
-  const [categories, testimonials, courseStats] = await Promise.all([
-    prisma.category.findMany({
-      select: {
-        id: true,
-        name: true,
-        slug: true,
-        _count: {
-          select: { courses: true }
-        }
-      },
-      orderBy: { name: 'asc' }
-    }),
-    prisma.testimonial.findMany({
-      select: {
-        id: true,
-        author: true,
-        message: true,
-        courseId: true,
-        createdAt: true,
-      },
-      orderBy: { createdAt: 'desc' },
-      take: 6
-    }),
-    prisma.course.aggregate({
-      where: { published: true },
-      _count: true,
-      _avg: { rating: true }
-    })
-  ]);
+  // Fetch real data from database with fallbacks for build time
+  let categories: Array<{
+    id: string;
+    name: string;
+    slug: string;
+    _count: { courses: number };
+  }> = [];
+  let testimonials: Array<{
+    id: string;
+    author: string;
+    message: string;
+    courseId: string | null;
+    createdAt: Date;
+  }> = [];
+  let courseStats: { _count: number; _avg: { rating: number | null } } = { 
+    _count: 0, 
+    _avg: { rating: 4.7 } 
+  };
+  let totalEnrollments = 0;
+  let completedEnrollments = 0;
 
-  // Calculate success metrics from real data
-  const totalEnrollments = await prisma.enrollment.count();
-  const completedEnrollments = await prisma.enrollment.count({
-    where: { status: 'COMPLETED' }
-  });
+  try {
+    [categories, testimonials, courseStats] = await Promise.all([
+      prisma.category.findMany({
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          _count: {
+            select: { courses: true }
+          }
+        },
+        orderBy: { name: 'asc' }
+      }),
+      prisma.testimonial.findMany({
+        select: {
+          id: true,
+          author: true,
+          message: true,
+          courseId: true,
+          createdAt: true,
+        },
+        orderBy: { createdAt: 'desc' },
+        take: 6
+      }),
+      prisma.course.aggregate({
+        where: { published: true },
+        _count: true,
+        _avg: { rating: true }
+      })
+    ]);
+
+    // Calculate success metrics from real data
+    totalEnrollments = await prisma.enrollment.count();
+    completedEnrollments = await prisma.enrollment.count({
+      where: { status: 'COMPLETED' }
+    });
+  } catch (error) {
+    console.error('Error fetching data during build:', error);
+    // Use fallback data for build time
+  }
   
   const successMetrics = {
     totalStudents: totalEnrollments || 0,

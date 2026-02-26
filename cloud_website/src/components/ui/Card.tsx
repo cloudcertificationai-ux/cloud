@@ -35,6 +35,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
 
     // Padding styles
     const paddingStyles = {
+      none: '',
       xs: 'p-2',
       sm: 'p-3',
       md: 'p-4',

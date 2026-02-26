@@ -43,7 +43,13 @@ export async function generateStaticParams() {
 // Generate metadata for SEO with enhanced structured data
 export async function generateMetadata({ params }: CourseDetailPageProps): Promise<Metadata> {
   const resolvedParams = await params;
-  const course = await dbDataService.getCourseBySlug(resolvedParams.slug);
+  let course = null;
+  
+  try {
+    course = await dbDataService.getCourseBySlug(resolvedParams.slug);
+  } catch (error) {
+    console.error('Error fetching course for metadata during build:', error);
+  }
   
   if (!course) {
     return {
@@ -106,7 +112,14 @@ export async function generateMetadata({ params }: CourseDetailPageProps): Promi
 
 export default async function CourseDetailPage({ params }: CourseDetailPageProps) {
   const resolvedParams = await params;
-  const course = await dbDataService.getCourseBySlug(resolvedParams.slug);
+  let course = null;
+  
+  try {
+    course = await dbDataService.getCourseBySlug(resolvedParams.slug);
+  } catch (error) {
+    console.error('Error fetching course during build:', error);
+    notFound();
+  }
   
   if (!course) {
     notFound();
@@ -130,8 +143,12 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
   
   let isEnrolled = false;
   if (session?.user?.id) {
-    const enrollment = await dbDataService.checkEnrollment(session.user.id, course.id);
-    isEnrolled = enrollment?.status === 'ACTIVE';
+    try {
+      const enrollment = await dbDataService.checkEnrollment(session.user.id, course.id);
+      isEnrolled = enrollment?.status === 'ACTIVE';
+    } catch (error) {
+      console.error('Error checking enrollment during build:', error);
+    }
   }
 
   // Generate SEO metadata and structured data - use static time for build

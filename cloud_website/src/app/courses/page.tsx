@@ -108,14 +108,19 @@ export default async function CoursesPage({ searchParams }: CoursePageProps) {
   const limit = parseInt(resolvedSearchParams.limit as string) || 12;
 
   // Fetch categories from database
-  const categoriesFromDb = await prisma.category.findMany({
-    select: {
-      id: true,
-      name: true,
-      slug: true,
-    },
-    orderBy: { name: 'asc' }
-  });
+  let categoriesFromDb: Array<{ id: string; name: string; slug: string }> = [];
+  try {
+    categoriesFromDb = await prisma.category.findMany({
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+      },
+      orderBy: { name: 'asc' }
+    });
+  } catch (error) {
+    console.error('Error fetching categories during build:', error);
+  }
 
   // Map to CourseCategory type with defaults
   const categories: CourseCategory[] = categoriesFromDb.map(cat => ({
@@ -125,29 +130,54 @@ export default async function CoursesPage({ searchParams }: CoursePageProps) {
   }));
 
   // Get search results using the database service
-  const searchResults = await dbDataService.getCourses({
-    category: categoryParam,
-    level: levelParam,
-    search: query,
-    published: true,
-    page,
-    pageSize: limit,
-    sortBy,
-    sortOrder,
-  });
+  let searchResults: Awaited<ReturnType<typeof dbDataService.getCourses>> = { 
+    courses: [], 
+    total: 0, 
+    page: 1, 
+    pageSize: limit, 
+    totalPages: 0 
+  };
+  try {
+    searchResults = await dbDataService.getCourses({
+      category: categoryParam,
+      level: levelParam,
+      search: query,
+      published: true,
+      page,
+      pageSize: limit,
+      sortBy,
+      sortOrder,
+    });
+  } catch (error) {
+    console.error('Error fetching courses during build:', error);
+  }
 
   // Calculate price and duration ranges from database
-  const priceStats = await prisma.course.aggregate({
-    where: { published: true },
-    _min: { priceCents: true },
-    _max: { priceCents: true },
-  });
-
-  const durationStats = await prisma.course.aggregate({
-    where: { published: true },
-    _min: { durationMin: true },
-    _max: { durationMin: true },
-  });
+  let priceStats: { _min: { priceCents: number | null }, _max: { priceCents: number | null } } = { 
+    _min: { priceCents: 0 }, 
+    _max: { priceCents: 100000 } 
+  };
+  let durationStats: { _min: { durationMin: number | null }, _max: { durationMin: number | null } } = { 
+    _min: { durationMin: 0 }, 
+    _max: { durationMin: 500 } 
+  };
+  
+  try {
+    [priceStats, durationStats] = await Promise.all([
+      prisma.course.aggregate({
+        where: { published: true },
+        _min: { priceCents: true },
+        _max: { priceCents: true },
+      }),
+      prisma.course.aggregate({
+        where: { published: true },
+        _min: { durationMin: true },
+        _max: { durationMin: true },
+      })
+    ]);
+  } catch (error) {
+    console.error('Error fetching stats during build:', error);
+  }
 
   const priceRange = {
     min: priceStats._min.priceCents ? Math.floor(priceStats._min.priceCents / 100) : 0,

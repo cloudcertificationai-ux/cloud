@@ -40,7 +40,7 @@ export interface ButtonProps extends BaseComponentProps {
 // Card component interfaces
 export interface CardProps extends BaseComponentProps {
   variant?: 'default' | 'elevated' | 'outlined' | 'filled';
-  padding?: SizeVariant;
+  padding?: SizeVariant | 'none';
   hover?: boolean;
   clickable?: boolean;
   onClick?: () => void;
