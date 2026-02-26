@@ -1,0 +1,280 @@
+{
+  "info": {
+    "name": "Course CRUD APIs - Verification",
+    "description": "Collection for testing Course CRUD APIs in the admin panel",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Create Course - Valid Data",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Introduction to Web Development\",\n  \"slug\": \"intro-web-dev\",\n  \"summary\": \"Learn the basics of web development\",\n  \"description\": \"A comprehensive course covering HTML, CSS, and JavaScript fundamentals\",\n  \"priceCents\": 9900,\n  \"currency\": \"INR\",\n  \"level\": \"Beginner\",\n  \"durationMin\": 180,\n  \"thumbnailUrl\": \"https://cdn.example.com/thumb.jpg\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3001/api/admin/courses",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "admin", "courses"]
+        },
+        "description": "Create a new course with all valid fields. Should return 201 with course data."
+      },
+      "response": []
+    },
+    {
+      "name": "2. Create Course - Auto-generate Slug",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Advanced React Patterns\",\n  \"summary\": \"Master advanced React concepts\",\n  \"priceCents\": 14900,\n  \"currency\": \"INR\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3001/api/admin/courses",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "admin", "courses"]
+        },
+        "description": "Create course without slug - should auto-generate from title. Should return 201."
+      },
+      "response": []
+    },
+    {
+      "name": "3. Create Course - Duplicate Slug (409)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Another Web Dev Course\",\n  \"slug\": \"intro-web-dev\",\n  \"priceCents\": 9900\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3001/api/admin/courses",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "admin", "courses"]
+        },
+        "description": "Try to create course with existing slug. Should return 409 Conflict."
+      },
+      "response": []
+    },
+    {
+      "name": "4. Create Course - Missing Required Fields (400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"slug\": \"incomplete-course\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3001/api/admin/courses",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "admin", "courses"]
+        },
+        "description": "Missing title and priceCents. Should return 400 Bad Request with validation errors."
+      },
+      "response": []
+    },
+    {
+      "name": "5. Create Course - Invalid Price (400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Invalid Price Course\",\n  \"priceCents\": -500\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3001/api/admin/courses",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "admin", "courses"]
+        },
+        "description": "Negative price value. Should return 400 Bad Request."
+      },
+      "response": []
+    },
+    {
+      "name": "6. Get Course by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3001/api/admin/courses/{{courseId}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "admin", "courses", "{{courseId}}"]
+        },
+        "description": "Get course with full curriculum. Replace {{courseId}} with actual ID from create response. Should return 200 with course, modules, and lessons."
+      },
+      "response": []
+    },
+    {
+      "name": "7. Get Course - Not Found (404)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3001/api/admin/courses/nonexistent-id-12345",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "admin", "courses", "nonexistent-id-12345"]
+        },
+        "description": "Try to get nonexistent course. Should return 404 Not Found."
+      },
+      "response": []
+    },
+    {
+      "name": "8. Update Course - Valid Data",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Updated Course Title\",\n  \"summary\": \"Updated summary text\",\n  \"priceCents\": 12900,\n  \"level\": \"Intermediate\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3001/api/admin/courses/{{courseId}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "admin", "courses", "{{courseId}}"]
+        },
+        "description": "Update course metadata. Replace {{courseId}} with actual ID. Should return 200 with updated course."
+      },
+      "response": []
+    },
+    {
+      "name": "9. Update Course - Change Slug (Unpublished)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"slug\": \"new-course-slug\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3001/api/admin/courses/{{courseId}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "admin", "courses", "{{courseId}}"]
+        },
+        "description": "Change slug of unpublished course. Should return 200 (allowed)."
+      },
+      "response": []
+    },
+    {
+      "name": "10. Update Course - Not Found (404)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Updated Title\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3001/api/admin/courses/nonexistent-id-12345",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "admin", "courses", "nonexistent-id-12345"]
+        },
+        "description": "Try to update nonexistent course. Should return 404 Not Found."
+      },
+      "response": []
+    },
+    {
+      "name": "11. Delete Course",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3001/api/admin/courses/{{courseId}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "admin", "courses", "{{courseId}}"]
+        },
+        "description": "Delete course. Replace {{courseId}} with actual ID. Should return 200 with success message. Verify cascade deletion in database."
+      },
+      "response": []
+    },
+    {
+      "name": "12. Delete Course - Not Found (404)",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3001/api/admin/courses/nonexistent-id-12345",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "admin", "courses", "nonexistent-id-12345"]
+        },
+        "description": "Try to delete nonexistent course. Should return 404 Not Found."
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "courseId",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

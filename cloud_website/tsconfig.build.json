@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "strict": false
+  },
+  "exclude": [
+    "node_modules",
+    "tests/e2e/**/*",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "scripts/**/*",
+    "prisma/migrations/**/*"
+  ]
+}

@@ -1,0 +1,983 @@
+openapi: 3.0.3
+info:
+  title: Anywheredoor API
+  description: |
+    API for the Anywheredoor learning platform, providing authentication, course enrollment, 
+    progress tracking, and administrative functions.
+    
+    ## Authentication
+    
+    - **User Endpoints**: Require NextAuth.js session cookie
+    - **Admin Endpoints**: Require API key authentication with HMAC signature
+    
+    ## Rate Limiting
+    
+    - User endpoints: 100 requests/minute
+    - Admin endpoints: 1000 requests/minute
+  version: 1.0.0
+  contact:
+    email: api-support@anywheredoor.com
+  license:
+    name: Proprietary
+
+servers:
+  - url: http://localhost:3000/api
+    description: Development server
+  - url: https://anywheredoor.com/api
+    description: Production server
+
+tags:
+  - name: Authentication
+    description: User authentication operations
+  - name: Enrollments
+    description: Course enrollment management
+  - name: Profile
+    description: User profile operations
+  - name: Progress
+    description: Course progress tracking
+  - name: Courses
+    description: Course catalog operations
+  - name: Payments
+    description: Payment processing
+  - name: Webhooks
+    description: Webhook endpoints
+  - name: Admin - Students
+    description: Student management (admin)
+  - name: Admin - Enrollments
+    description: Enrollment management (admin)
+  - name: Admin - Analytics
+    description: Analytics and reporting (admin)
+  - name: Admin - Audit
+    description: Audit log access (admin)
+
+components:
+  securitySchemes:
+    SessionCookie:
+      type: apiKey
+      in: cookie
+      name: next-auth.session-token
+      description: NextAuth.js session cookie
+    
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key for admin endpoints
+    
+    SignatureAuth:
+      type: apiKey
+      in: header
+      name: X-Signature
+      description: HMAC-SHA256 signature for request verification
+    
+    TimestampAuth:
+      type: apiKey
+      in: header
+      name: X-Timestamp
+      description: Unix timestamp for request timing
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+        code:
+          type: string
+          description: Error code
+        timestamp:
+          type: string
+          format: date-time
+        requestId:
+          type: string
+      required:
+        - error
+    
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+        image:
+          type: string
+          format: uri
+        role:
+          type: string
+          enum: [STUDENT, INSTRUCTOR, ADMIN]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        lastLoginAt:
+          type: string
+          format: date-time
+    
+    Profile:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        bio:
+          type: string
+        location:
+          type: string
+        timezone:
+          type: string
+        phone:
+          type: string
+    
+    Course:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        slug:
+          type: string
+        summary:
+          type: string
+        priceCents:
+          type: integer
+        currency:
+          type: string
+        published:
+          type: boolean
+        featured:
+          type: boolean
+        level:
+          type: string
+        durationMin:
+          type: integer
+        rating:
+          type: number
+          format: float
+        thumbnailUrl:
+          type: string
+          format: uri
+        instructor:
+          $ref: '#/components/schemas/Instructor'
+        category:
+          $ref: '#/components/schemas/Category'
+    
+    Instructor:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        avatar:
+          type: string
+          format: uri
+    
+    Category:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        slug:
+          type: string
+    
+    Enrollment:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        courseId:
+          type: string
+        enrolledAt:
+          type: string
+          format: date-time
+        lastAccessedAt:
+          type: string
+          format: date-time
+        completionPercentage:
+          type: number
+          format: float
+        status:
+          type: string
+          enum: [ACTIVE, CANCELLED, COMPLETED, REFUNDED]
+        source:
+          type: string
+        lastUpdatedAt:
+          type: string
+          format: date-time
+    
+    CourseProgress:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        courseId:
+          type: string
+        lessonId:
+          type: string
+        completed:
+          type: boolean
+        timeSpent:
+          type: integer
+        lastPosition:
+          type: integer
+        timestamp:
+          type: string
+          format: date-time
+    
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+        totalPages:
+          type: integer
+        hasNextPage:
+          type: boolean
+        hasPreviousPage:
+          type: boolean
+
+paths:
+  /enrollments:
+    post:
+      tags:
+        - Enrollments
+      summary: Create course enrollment
+      description: Enroll the authenticated user in a course
+      security:
+        - SessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                courseId:
+                  type: string
+                courseSlug:
+                  type: string
+              required:
+                - courseId
+                - courseSlug
+      responses:
+        '200':
+          description: Enrollment created or payment required
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    properties:
+                      success:
+                        type: boolean
+                      enrollment:
+                        $ref: '#/components/schemas/Enrollment'
+                  - type: object
+                    properties:
+                      requiresPayment:
+                        type: boolean
+                      purchaseId:
+                        type: string
+                      amount:
+                        type: integer
+                      currency:
+                        type: string
+        '400':
+          description: Already enrolled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    
+    get:
+      tags:
+        - Enrollments
+      summary: Get user enrollments
+      description: Get all enrollments for the authenticated user
+      security:
+        - SessionCookie: []
+      responses:
+        '200':
+          description: List of enrollments
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/Enrollment'
+                        - type: object
+                          properties:
+                            course:
+                              $ref: '#/components/schemas/Course'
+                  timestamp:
+                    type: string
+                    format: date-time
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /enrollments/complete-intent:
+    post:
+      tags:
+        - Enrollments
+      summary: Complete pending enrollment
+      description: Complete an enrollment that was interrupted by authentication
+      security:
+        - SessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                courseId:
+                  type: string
+                courseSlug:
+                  type: string
+              required:
+                - courseId
+      responses:
+        '200':
+          description: Enrollment completed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  enrollment:
+                    $ref: '#/components/schemas/Enrollment'
+  
+  /profile:
+    get:
+      tags:
+        - Profile
+      summary: Get user profile
+      description: Get the authenticated user's profile
+      security:
+        - SessionCookie: []
+      responses:
+        '200':
+          description: User profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    allOf:
+                      - $ref: '#/components/schemas/User'
+                      - type: object
+                        properties:
+                          profile:
+                            $ref: '#/components/schemas/Profile'
+                  timestamp:
+                    type: string
+                    format: date-time
+        '401':
+          description: Not authenticated
+    
+    put:
+      tags:
+        - Profile
+      summary: Update user profile
+      description: Update the authenticated user's profile
+      security:
+        - SessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                image:
+                  type: string
+                  format: uri
+                bio:
+                  type: string
+                location:
+                  type: string
+                timezone:
+                  type: string
+                phone:
+                  type: string
+      responses:
+        '200':
+          description: Profile updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      success:
+                        type: boolean
+                      user:
+                        $ref: '#/components/schemas/User'
+                      profile:
+                        $ref: '#/components/schemas/Profile'
+  
+  /progress:
+    post:
+      tags:
+        - Progress
+      summary: Update lesson progress
+      description: Record progress for a lesson
+      security:
+        - SessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                courseId:
+                  type: string
+                lessonId:
+                  type: string
+                completed:
+                  type: boolean
+                timeSpent:
+                  type: integer
+                lastPosition:
+                  type: integer
+              required:
+                - courseId
+                - lessonId
+      responses:
+        '200':
+          description: Progress updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      success:
+                        type: boolean
+                      progress:
+                        $ref: '#/components/schemas/CourseProgress'
+                      completionStatus:
+                        type: object
+                        properties:
+                          status:
+                            type: string
+                          completionPercentage:
+                            type: number
+                          completedLessons:
+                            type: integer
+                          totalLessons:
+                            type: integer
+        '403':
+          description: Not enrolled in course
+  
+  /progress/{courseId}:
+    get:
+      tags:
+        - Progress
+      summary: Get course progress
+      description: Get progress for a specific course
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Course progress
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      courseId:
+                        type: string
+                      totalLessons:
+                        type: integer
+                      completedLessons:
+                        type: integer
+                      completionPercentage:
+                        type: number
+                      lastLesson:
+                        type: string
+                      timeSpent:
+                        type: integer
+                      lessons:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/CourseProgress'
+  
+  /courses:
+    get:
+      tags:
+        - Courses
+      summary: List courses
+      description: Get list of all published courses
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: level
+          in: query
+          schema:
+            type: string
+        - name: featured
+          in: query
+          schema:
+            type: boolean
+        - name: search
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of courses
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Course'
+  
+  /payments/stripe/checkout:
+    post:
+      tags:
+        - Payments
+      summary: Create Stripe checkout session
+      description: Create a checkout session for course purchase
+      security:
+        - SessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                purchaseId:
+                  type: string
+                successUrl:
+                  type: string
+                  format: uri
+                cancelUrl:
+                  type: string
+                  format: uri
+              required:
+                - purchaseId
+      responses:
+        '200':
+          description: Checkout session created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sessionId:
+                    type: string
+                  url:
+                    type: string
+                    format: uri
+  
+  /admin/students:
+    get:
+      tags:
+        - Admin - Students
+      summary: List students
+      description: Get paginated list of students
+      security:
+        - ApiKeyAuth: []
+        - SignatureAuth: []
+        - TimestampAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            maximum: 100
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+            enum: [name, email, createdAt]
+        - name: sortOrder
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
+      responses:
+        '200':
+          description: List of students
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      students:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+                      pagination:
+                        $ref: '#/components/schemas/Pagination'
+                  timestamp:
+                    type: string
+                    format: date-time
+                  requestId:
+                    type: string
+        '401':
+          description: Invalid API key
+        '403':
+          description: Invalid signature
+        '429':
+          description: Rate limit exceeded
+  
+  /admin/students/{id}:
+    get:
+      tags:
+        - Admin - Students
+      summary: Get student details
+      description: Get detailed information for a specific student
+      security:
+        - ApiKeyAuth: []
+        - SignatureAuth: []
+        - TimestampAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Student details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        $ref: '#/components/schemas/User'
+                      enrollments:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Enrollment'
+                      stats:
+                        type: object
+                        properties:
+                          totalEnrollments:
+                            type: integer
+                          completedCourses:
+                            type: integer
+                          totalTimeSpent:
+                            type: integer
+                          averageProgress:
+                            type: number
+        '404':
+          description: Student not found
+  
+  /admin/enrollments:
+    post:
+      tags:
+        - Admin - Enrollments
+      summary: Create enrollment (admin)
+      description: Create an enrollment for a student
+      security:
+        - ApiKeyAuth: []
+        - SignatureAuth: []
+        - TimestampAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                courseId:
+                  type: string
+                source:
+                  type: string
+                  default: admin
+              required:
+                - userId
+                - courseId
+      responses:
+        '201':
+          description: Enrollment created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      success:
+                        type: boolean
+                      enrollment:
+                        $ref: '#/components/schemas/Enrollment'
+        '400':
+          description: Already enrolled or invalid request
+  
+  /admin/enrollments/{id}:
+    delete:
+      tags:
+        - Admin - Enrollments
+      summary: Remove enrollment (admin)
+      description: Remove an enrollment
+      security:
+        - ApiKeyAuth: []
+        - SignatureAuth: []
+        - TimestampAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Enrollment removed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      success:
+                        type: boolean
+                      message:
+                        type: string
+        '404':
+          description: Enrollment not found
+  
+  /admin/analytics/enrollments:
+    get:
+      tags:
+        - Admin - Analytics
+      summary: Get enrollment statistics
+      description: Get enrollment analytics and trends
+      security:
+        - ApiKeyAuth: []
+        - SignatureAuth: []
+        - TimestampAuth: []
+      parameters:
+        - name: startDate
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: courseId
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Enrollment statistics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      totalEnrollments:
+                        type: integer
+                      activeEnrollments:
+                        type: integer
+                      completedEnrollments:
+                        type: integer
+                      enrollmentsByMonth:
+                        type: object
+                        additionalProperties:
+                          type: integer
+  
+  /admin/analytics/students:
+    get:
+      tags:
+        - Admin - Analytics
+      summary: Get student statistics
+      description: Get student analytics and metrics
+      security:
+        - ApiKeyAuth: []
+        - SignatureAuth: []
+        - TimestampAuth: []
+      responses:
+        '200':
+          description: Student statistics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      totalStudents:
+                        type: integer
+                      activeStudents:
+                        type: integer
+                      newStudentsThisMonth:
+                        type: integer
+                      averageCoursesPerStudent:
+                        type: number
+                      averageCompletionRate:
+                        type: number
+  
+  /admin/audit-logs:
+    get:
+      tags:
+        - Admin - Audit
+      summary: Get audit logs
+      description: Get audit logs with filtering
+      security:
+        - ApiKeyAuth: []
+        - SignatureAuth: []
+        - TimestampAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+            maximum: 200
+        - name: action
+          in: query
+          schema:
+            type: string
+        - name: userId
+          in: query
+          schema:
+            type: string
+        - name: resourceType
+          in: query
+          schema:
+            type: string
+        - name: startDate
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: Audit logs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      logs:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            userId:
+                              type: string
+                            action:
+                              type: string
+                            resourceType:
+                              type: string
+                            resourceId:
+                              type: string
+                            details:
+                              type: object
+                            ipAddress:
+                              type: string
+                            userAgent:
+                              type: string
+                            createdAt:
+                              type: string
+                              format: date-time
+                      pagination:
+                        $ref: '#/components/schemas/Pagination'

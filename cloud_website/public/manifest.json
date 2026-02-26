@@ -1,0 +1,22 @@
+{
+  "name": "Cloud Certification - Online Learning Platform",
+  "short_name": "Cloud Certification",
+  "description": "Transform your career with expert-led online courses in cloud computing, programming, data science, and cybersecurity.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f9fb",
+  "theme_color": "#0db5a6",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en-US",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ],
+  "prefer_related_applications": false,
+  "related_applications": []
+}

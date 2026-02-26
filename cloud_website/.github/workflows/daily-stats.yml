@@ -1,0 +1,56 @@
+name: Daily Statistics Aggregation
+
+on:
+  schedule:
+    # Run daily at midnight UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    # Allow manual triggering
+    inputs:
+      date:
+        description: 'Date to aggregate (YYYY-MM-DD, leave empty for yesterday)'
+        required: false
+        type: string
+
+jobs:
+  aggregate-stats:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./anywheredoor
+      
+      - name: Run aggregation script
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          REDIS_URL: ${{ secrets.REDIS_URL }}
+        run: |
+          if [ -n "${{ github.event.inputs.date }}" ]; then
+            npm run aggregate-stats ${{ github.event.inputs.date }}
+          else
+            npm run aggregate-stats
+          fi
+        working-directory: ./anywheredoor
+      
+      - name: Notify on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'Daily Statistics Aggregation Failed',
+              body: `The daily statistics aggregation job failed on ${new Date().toISOString().split('T')[0]}.\n\nPlease check the workflow logs for details.`,
+              labels: ['monitoring', 'automated']
+            })
