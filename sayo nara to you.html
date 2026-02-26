@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Last Confession</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(-45deg,#0f0f1a,#1a1a2e,#16213e,#1f4068);
+    background-size: 400% 400%;
+    animation: gradientMove 15s ease infinite;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    color:white;
+    overflow:hidden;
+}
+
+@keyframes gradientMove{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+.container{
+    width:90%;
+    max-width:950px;
+    height:90vh;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(25px);
+    border-radius:25px;
+    padding:30px;
+    overflow-y:auto;
+    box-shadow:0 0 60px rgba(255,0,90,0.35);
+    animation:fadeIn 2s ease;
+    position:relative;
+}
+
+h1{
+    text-align:center;
+    margin-bottom:25px;
+    color:#ff4d6d;
+    letter-spacing:3px;
+    animation:pulse 3s infinite;
+}
+
+@keyframes pulse{
+    0%{text-shadow:0 0 10px #ff4d6d;}
+    50%{text-shadow:0 0 25px #ff1e56;}
+    100%{text-shadow:0 0 10px #ff4d6d;}
+}
+
+.message{
+    white-space:pre-line;
+    line-height:1.9;
+    font-size:15px;
+    color:#eee;
+}
+
+.final{
+    margin-top:30px;
+    padding:25px;
+    border-left:4px solid #ff4d6d;
+    background:rgba(255,77,109,0.1);
+    border-radius:15px;
+    font-size:16px;
+    font-weight:bold;
+    color:#ffb3c1;
+    animation:glowBox 4s infinite alternate;
+}
+
+@keyframes glowBox{
+    from{box-shadow:0 0 10px #ff4d6d;}
+    to{box-shadow:0 0 30px #ff1e56;}
+}
+
+@keyframes fadeIn{
+    from{opacity:0;transform:translateY(20px);}
+    to{opacity:1;transform:translateY(0);}
+}
+
+/* Floating hearts */
+.heart{
+    position:absolute;
+    color:#ff4d6d;
+    font-size:18px;
+    animation:float 8s linear infinite;
+    opacity:0.5;
+}
+
+@keyframes float{
+    0%{transform:translateY(100vh) scale(0.5);}
+    100%{transform:translateY(-10vh) scale(1);}
+}
+
+.container::-webkit-scrollbar{
+    width:6px;
+}
+.container::-webkit-scrollbar-thumb{
+    background:#ff4d6d;
+    border-radius:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>Hello JI</h1>
+
+<div class="message" id="text"></div>
+
+<div class="final">
+Mujhse na jhuute waade nahi hote , or tareef, mujhe baate banana nahi aata
+<br><br>
+"I CANT ASK FOR ANYTHING I KNOW"
+<br><br>
+i can't change the thing i have done till Now, and i dont want this to be my last Confession to you,
+<br><br>
+BUT I knoW
+</div>
+
+</div>
+
+<script>
+
+// Typing animation
+const confession = `YOUR FULL CONFESSION TEXT HERE`;
+
+const fullText = `Mujhe nahi pta ki ye feeling kabh see aane lgi mujhe aapke liye pr ha mujhe ye pta h ki mujhe ye kabh aaisash hu meri feeling ko le kr.
+
+Jabh m Shimla gya tha tabh se m ish feeling ko smjh rha tha ki what exactly I feel about you.
+Birthday tkh se phle mujhe smjh aagya tha ki my feeling for you is no joke but mne bola nahi aapko clearly kabhi.
+13 ko mne aapko sabh bola jo bol skhta tha.
+
+But more by the time I start loving each and everything about you.
+Har ek cheez chaaye vo kuch bhi ho —
+aapka gussa,
+santh rhna,
+facial expression,
+your thoughts,
+your smile,
+your face,
+your eyes,
+jabh aapko aashman m dekhte ho,
+jabh aap kush hote ho animal ke sath specially dog ke sath,
+jabh aap kisi baat ko le ke excited hote ho,
+jabh aap jhooti jhooti cheezo pr muskra te ho,
+jabh aap apne se baadh kr saamne waalo ko rakhte ho,
+jabh aap mere sath 5 km tkh chalte ho,
+jabh aapko mne phli baar sunflower diya tha tabhi aapki smile,
+jabh aap gaana gaate ho,
+jabh aap chicken khaate ho ya paneer,
+
+aapko itna kush dekh kr mujhe bahut saakoon feel hota h.
+
+I start seeing you from the side angle, start loving everything.
+
+mujhe lghta tha ki aapko kho duga,
+pr aapni exsitment me glt he kr deta hu,
+
+But I also know ki mujhe kese dekhte ho (AS A FRIEND).
+Till this day I still admire you, still love you.
+
+Mujhe na aapki haadat ho gai h.
+Aapko nahi dekhta hu to bs khooa khooa sa lghta h.
+Jese ki mne kuch miss kr rha hu.
+M voice nahi sunta hu to lghta h ki…
+
+Ye bhi sach h ki mne aapse kabhi bhi jhoot nahi bola.
+
+And yes, I know I fucked up pretty badly.
+Mujhe nahi pta ki itni galtiya m kese kr skhta hu jisko m seriously itna chahata hu.
+
+Kya m toxic hu? Haa shaayad.
+Kya m bura hu? Haa.
+Kya mne kabhi aapko glt najar se dekha? Nahi.
+Kya mne aapke baare m kabhi kuch bura socha? Nahi.
+Kya mne kabhi aapko lightly liya? Nahi.
+
+Pr mere action kabh meri baato ko justify nahi kr skhe.
+Aapne itni baar itni chiijo ke liye mna kra hoga,
+mne kabhi bhi un chiijo ko nahi mna.
+
+Haa ye glt h.
+Glti nahi h — glt h.
+
+Aapne ke itni baar mna krne pr bhi m kabh bhi nahi rukha.
+Mujhe lghta tha ki ye bhi mujhse rot na jaaye,
+ki m kabhi darr na du,
+pr mne hamesa wahi krta rha.
+
+Hamesa glt he kra h.
+Pr kabhi glt nahi chaaya aapke liye.
+Kabhi glt nahi socha aapke liye.
+Kabhi dusri ladhki ko nahi dekha — SACHI.
+
+Pr kabhi aapke baare m nahi socha ki aapko kya chiaye,
+aap kya chate h,
+aapko kon or kya nahi pareshaan hai, (jese ki touching (ye worst point h mera)).
+
+Mere m khaamiya bahut h.
+Jisse bahut saare log paareshaan h.
+Ek ye bhi h ki m aapne dimagh ko sath nahi kr ptata —
+jisko log "OVERTHINKING" bolte h.
+
+Or m kabhi bhi sahi time pr situation read nahi kr ptata.
+"Kaafi sunna h."
+
+Jo baat dimagh m chl rhi hoti h,
+vo m apne aap ko bolne se nahi rok pata.
+
+Abhi bhi m wahi kr rha hu
+jo saayadh aapko pasand bhi na aaye.
+
+Mujhe pta h m kuch theek nahi kr skhta.
+Pr mujhe ye bhi smjh aagya h ki jesa m hu abhi,
+aapko kabhi pasand nahi aauga.
+
+Jesa hu m abhi,
+mujhe nahi lghta m aapke yaha kisi ke liye bhi hu.
+
+Or mujhe nahi pta ki m kese ishko handle kruga,
+kyu ki aajh tabh to nahi kr paaya hu
+handle aapni aadat or trauma ko le kar.
+
+But THANK YOU for tolerating me for all this time.
+
+I hope mne kuch cheeze aachi kri hogi.
+Kuch to aacha kra hoga.
+Maybe some good memory.
+
+I already hurt you enough
+for you to block me
+when you never does block anyone.
+
+And I don’t know this is an apology,
+thankful,
+guilty,
+or something else totally message.
+
+But m kabhi aapko vo nahi bol paaya
+jo bolna chata tha.
+Kabhi aapko itna comfort feel nahi krwaya
+ki aap kuch bol paaye.
+
+Kabhi aapko vo nahi dikha paaya.
+Kabhi aapko uss trha treat nahi kr paaya
+jo aap deserve krte ho.
+
+Kabhi kuch sahi nahi kr paaya.
+M jaanta hu or smjh gya hu.
+
+"Aagr aap ye message padh rhe h to M bs ye bolna chatata hu ki kehena ko mere pass bahut kuch h aapke baare ki m kyu pasand krta hu...  "
+
+THANK YOU FOR BEING IN MY LIFE.
+
+I don’t know how to tell you
+how cool,
+pretty,
+charming,
+gorgeous,
+beautiful,
+hot and cute and lovable you are ki shabd km pdh jaayege —
+with a good HEART and mind. ❤️`;
+
+let i = 0;
+function typeWriter(){
+    if(i < fullText.length){
+        document.getElementById("text").innerHTML += fullText.charAt(i);
+        i++;
+        setTimeout(typeWriter, 15);
+    }
+}
+typeWriter();
+
+// Floating hearts generator
+function createHeart(){
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML = "";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = (Math.random() * 20 + 10) + "px";
+    heart.style.animationDuration = (Math.random() * 5 + 5) + "s";
+    document.body.appendChild(heart);
+    setTimeout(()=>{ heart.remove(); },8000);
+}
+setInterval(createHeart,1000);
+
+</script>
+
+</body>
+</html>
