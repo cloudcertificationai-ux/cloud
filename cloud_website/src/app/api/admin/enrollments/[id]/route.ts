@@ -29,14 +29,14 @@ async function handleDeleteEnrollment(
     const enrollment = await prisma.enrollment.findUnique({
       where: { id },
       include: {
-        user: {
+        User: {
           select: {
             id: true,
             email: true,
             name: true,
           },
         },
-        course: {
+        Course: {
           select: {
             id: true,
             title: true,
@@ -70,10 +70,10 @@ async function handleDeleteEnrollment(
         resourceId: id,
         details: {
           userId: enrollment.userId,
-          userEmail: enrollment.user.email,
-          userName: enrollment.user.name,
+          userEmail: enrollment.User.email,
+          userName: enrollment.User.name,
           courseId: enrollment.courseId,
-          courseTitle: enrollment.course.title,
+          courseTitle: enrollment.Course.title,
           enrolledAt: enrollment.enrolledAt,
           status: enrollment.status,
         },
@@ -112,7 +112,7 @@ async function handleGetEnrollmentDetail(
     const enrollment = await prisma.enrollment.findUnique({
       where: { id },
       include: {
-        user: {
+        User: {
           select: {
             id: true,
             email: true,
@@ -120,7 +120,7 @@ async function handleGetEnrollmentDetail(
             image: true,
           },
         },
-        course: {
+        Course: {
           select: {
             id: true,
             title: true,
@@ -128,18 +128,18 @@ async function handleGetEnrollmentDetail(
             thumbnailUrl: true,
             priceCents: true,
             currency: true,
-            instructor: {
+            Instructor: {
               select: {
                 id: true,
                 name: true,
                 avatar: true,
               },
             },
-            modules: {
+            Module: {
               select: {
                 id: true,
                 title: true,
-                lessons: {
+                Lesson: {
                   select: {
                     id: true,
                     title: true,
@@ -149,7 +149,7 @@ async function handleGetEnrollmentDetail(
             },
           },
         },
-        purchase: {
+        Purchase: {
           select: {
             id: true,
             amountCents: true,
@@ -179,8 +179,8 @@ async function handleGetEnrollmentDetail(
     })
 
     // Calculate statistics
-    const totalLessons = enrollment.course.modules.reduce(
-      (sum, module) => sum + module.lessons.length,
+    const totalLessons = enrollment.Course.Module.reduce(
+      (sum, module) => sum + module.Lesson.length,
       0
     )
     const completedLessons = progress.filter((p) => p.completed).length

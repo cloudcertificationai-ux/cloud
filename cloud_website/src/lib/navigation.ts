@@ -50,6 +50,11 @@ export const mainNavigation: NavigationItem[] = [
     label: 'Contact', 
     description: 'Get in touch with our team' 
   },
+  { 
+    href: '/blog', 
+    label: 'Blog', 
+    description: 'Read our latest articles and insights' 
+  },
 ];
 
 /**

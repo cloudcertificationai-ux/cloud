@@ -209,7 +209,7 @@ async function getCourseCompletionRates() {
       id: true,
       title: true,
       slug: true,
-      enrollments: {
+      Enrollment: {
         select: {
           status: true,
         },
@@ -219,8 +219,8 @@ async function getCourseCompletionRates() {
 
   return courses
     .map((course) => {
-      const totalEnrollments = course.enrollments.length
-      const completedEnrollments = course.enrollments.filter(
+      const totalEnrollments = course.Enrollment.length
+      const completedEnrollments = course.Enrollment.filter(
         (e) => e.status === 'COMPLETED'
       ).length
       const completionRate = totalEnrollments > 0

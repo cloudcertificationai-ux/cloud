@@ -31,10 +31,10 @@ async function handleGetStudentDetail(
     const student = await prisma.user.findUnique({
       where: { id },
       include: {
-        profile: true,
-        enrollments: {
+        Profile: true,
+        Enrollment: {
           include: {
-            course: {
+            Course: {
               select: {
                 id: true,
                 title: true,
@@ -42,7 +42,7 @@ async function handleGetStudentDetail(
                 thumbnailUrl: true,
                 priceCents: true,
                 currency: true,
-                instructor: {
+                Instructor: {
                   select: {
                     id: true,
                     name: true,
@@ -51,7 +51,7 @@ async function handleGetStudentDetail(
                 },
               },
             },
-            purchase: {
+            Purchase: {
               select: {
                 id: true,
                 amountCents: true,
@@ -65,9 +65,9 @@ async function handleGetStudentDetail(
             enrolledAt: 'desc',
           },
         },
-        purchases: {
+        Purchase: {
           include: {
-            course: {
+            Course: {
               select: {
                 id: true,
                 title: true,
@@ -79,9 +79,9 @@ async function handleGetStudentDetail(
             createdAt: 'desc',
           },
         },
-        reviews: {
+        Review: {
           include: {
-            course: {
+            Course: {
               select: {
                 id: true,
                 title: true,
@@ -95,10 +95,10 @@ async function handleGetStudentDetail(
         },
         _count: {
           select: {
-            enrollments: true,
-            purchases: true,
-            reviews: true,
-            progress: true,
+            Enrollment: true,
+            Purchase: true,
+            Review: true,
+            CourseProgress: true,
           },
         },
       },
@@ -121,16 +121,16 @@ async function handleGetStudentDetail(
     })
 
     // Get total lessons per course for completion calculation
-    const courseIds = student.enrollments.map((e) => e.courseId)
+    const courseIds = student.Enrollment.map((e) => e.courseId)
     const courseLessonCounts = await prisma.course.findMany({
       where: {
         id: { in: courseIds },
       },
       select: {
         id: true,
-        modules: {
+        Module: {
           select: {
-            lessons: {
+            Lesson: {
               select: {
                 id: true,
               },
@@ -142,8 +142,8 @@ async function handleGetStudentDetail(
 
     // Calculate completion percentages
     const completionData = courseLessonCounts.map((course) => {
-      const totalLessons = course.modules.reduce(
-        (sum, module) => sum + module.lessons.length,
+      const totalLessons = course.Module.reduce(
+        (sum, module) => sum + module.Lesson.length,
         0
       )
       const completedLessons =
@@ -181,16 +181,16 @@ async function handleGetStudentDetail(
         role: student.role,
         createdAt: student.createdAt,
         lastLoginAt: student.lastLoginAt,
-        profile: student.profile,
+        profile: student.Profile,
       },
-      enrollments: student.enrollments,
-      purchases: student.purchases,
-      reviews: student.reviews,
+      enrollments: student.Enrollment,
+      purchases: student.Purchase,
+      reviews: student.Review,
       statistics: {
-        totalEnrollments: student._count.enrollments,
+        totalEnrollments: student._count.Enrollment,
         completedCourses,
-        totalPurchases: student._count.purchases,
-        totalReviews: student._count.reviews,
+        totalPurchases: student._count.Purchase,
+        totalReviews: student._count.Review,
         totalTimeSpent: totalTimeSpent._sum.timeSpent || 0,
         courseProgress: completionData,
       },

@@ -113,14 +113,20 @@ export async function POST(
         // Create enrollment linked to purchase
         const enrollment = await prisma.enrollment.create({
           data: {
-            userId: user.id,
-            courseId: course.id,
+            User: {
+              connect: { id: user.id }
+            },
+            Course: {
+              connect: { id: course.id }
+            },
             source: 'purchase',
             status: 'ACTIVE',
-            purchaseId: purchase.id,
+            Purchase: {
+              connect: { id: purchase.id }
+            },
           },
           include: {
-            course: true,
+            Course: true,
           },
         })
 
@@ -158,8 +164,12 @@ export async function POST(
         // Create pending purchase
         const purchase = await prisma.purchase.create({
           data: {
-            userId: user.id,
-            courseId: course.id,
+            User: {
+              connect: { id: user.id }
+            },
+            Course: {
+              connect: { id: course.id }
+            },
             amountCents: course.priceCents,
             currency: course.currency,
             provider: 'stripe',
@@ -179,13 +189,17 @@ export async function POST(
     // Free course - create enrollment immediately with status ACTIVE
     const enrollment = await prisma.enrollment.create({
       data: {
-        userId: user.id,
-        courseId: course.id,
+        User: {
+          connect: { id: user.id }
+        },
+        Course: {
+          connect: { id: course.id }
+        },
         source: 'free',
         status: 'ACTIVE',
       },
       include: {
-        course: true,
+        Course: true,
       },
     })
 

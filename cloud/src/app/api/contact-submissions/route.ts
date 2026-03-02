@@ -16,11 +16,23 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status');
+    const type = searchParams.get('type'); // 'demo' or 'all'
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '20');
     const skip = (page - 1) * limit;
 
-    const where = status && status !== 'ALL' ? { status: status as any } : {};
+    // Build where clause
+    const where: any = {};
+    
+    // Filter by status
+    if (status && status !== 'ALL') {
+      where.status = status as any;
+    }
+    
+    // Filter by type (demo requests have subject "Free Demo Request")
+    if (type === 'demo') {
+      where.subject = 'Free Demo Request';
+    }
 
     const [submissions, total] = await Promise.all([
       prisma.contactSubmission.findMany({

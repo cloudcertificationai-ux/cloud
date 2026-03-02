@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
@@ -20,6 +20,7 @@ import {
   ShieldCheckIcon,
   DocumentTextIcon,
   EnvelopeIcon,
+  VideoCameraIcon,
 } from '@heroicons/react/24/outline'
 
 interface AdminLayoutProps {
@@ -29,8 +30,10 @@ interface AdminLayoutProps {
 const navigation = [
   { name: 'Dashboard', href: '/admin/dashboard', icon: HomeIcon },
   { name: 'Courses', href: '/admin/courses', icon: BookOpenIcon },
+  { name: 'Blog', href: '/admin/blog', icon: DocumentTextIcon },
   { name: 'Instructors', href: '/admin/instructors', icon: AcademicCapIcon },
   { name: 'Students', href: '/admin/students', icon: UserGroupIcon },
+  { name: 'Demo Requests', href: '/admin/demo-requests', icon: VideoCameraIcon },
   { name: 'Contact Submissions', href: '/admin/contact-submissions', icon: EnvelopeIcon },
   { name: 'Analytics', href: '/admin/analytics', icon: ChartBarIcon },
   { name: 'Audit Logs', href: '/admin/audit-logs', icon: DocumentTextIcon },
@@ -44,6 +47,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const router = useRouter()
   const pathname = usePathname()
 
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/auth/signin')
+    }
+  }, [status, router])
+
   if (status === 'loading') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-neutral-50 via-white to-teal-50/30">
@@ -56,7 +65,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   }
 
   if (status === 'unauthenticated') {
-    router.push('/auth/signin')
     return null
   }
 

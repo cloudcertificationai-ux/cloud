@@ -69,7 +69,7 @@ async function handleGetStudents(request: NextRequest) {
         lastLoginAt: true,
         _count: {
           select: {
-            enrollments: true,
+            Enrollment: true,
           },
         },
       },

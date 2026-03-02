@@ -64,7 +64,7 @@ async function handleGetEnrollments(request: NextRequest) {
     const enrollments = await prisma.enrollment.findMany({
       where,
       include: {
-        user: {
+        User: {
           select: {
             id: true,
             email: true,
@@ -72,7 +72,7 @@ async function handleGetEnrollments(request: NextRequest) {
             image: true,
           },
         },
-        course: {
+        Course: {
           select: {
             id: true,
             title: true,
@@ -189,15 +189,19 @@ async function handleCreateEnrollment(request: NextRequest) {
     // Create enrollment
     const enrollment = await prisma.enrollment.create({
       data: {
-        userId,
-        courseId,
+        User: {
+          connect: { id: userId }
+        },
+        Course: {
+          connect: { id: courseId }
+        },
         source,
         status,
         enrolledAt: new Date(),
         completionPercentage: 0,
       },
       include: {
-        user: {
+        User: {
           select: {
             id: true,
             email: true,
@@ -205,7 +209,7 @@ async function handleCreateEnrollment(request: NextRequest) {
             image: true,
           },
         },
-        course: {
+        Course: {
           select: {
             id: true,
             title: true,

@@ -13,6 +13,8 @@ const AnimatedCard = dynamic(() => import('@/components/EnhancedAnimations').the
 const AnimatedButton = dynamic(() => import('@/components/EnhancedAnimations').then(mod => ({ default: mod.AnimatedButton })));
 const TrustIndicators = dynamic(() => import('@/components/TrustIndicators'));
 const TestimonialsSection = dynamic(() => import('@/components/TestimonialsSection').then(mod => ({ default: mod.TestimonialsSection })));
+const WelcomePopup = dynamic(() => import('@/components/WelcomePopup'));
+const BlogSection = dynamic(() => import('@/components/BlogSection'));
 
 // Static generation - this page will be pre-rendered at build time
 export const metadata: Metadata = {
@@ -70,7 +72,7 @@ export default async function Home() {
     id: string;
     name: string;
     slug: string;
-    _count: { courses: number };
+    _count: { Course: number };
   }> = [];
   let testimonials: Array<{
     id: string;
@@ -85,16 +87,25 @@ export default async function Home() {
   };
   let totalEnrollments = 0;
   let completedEnrollments = 0;
+  let blogPosts: Array<{
+    id: string;
+    title: string;
+    slug: string;
+    excerpt: string | null;
+    coverImageUrl: string | null;
+    publishedAt: Date | null;
+    author: { name: string | null; image: string | null };
+  }> = [];
 
   try {
-    [categories, testimonials, courseStats] = await Promise.all([
+    [categories, testimonials, courseStats, blogPosts] = await Promise.all([
       prisma.category.findMany({
         select: {
           id: true,
           name: true,
           slug: true,
           _count: {
-            select: { courses: true }
+            select: { Course: true }
           }
         },
         orderBy: { name: 'asc' }
@@ -114,6 +125,28 @@ export default async function Home() {
         where: { published: true },
         _count: true,
         _avg: { rating: true }
+      }),
+      prisma.blogPost.findMany({
+        where: { published: true },
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          excerpt: true,
+          coverImageUrl: true,
+          publishedAt: true,
+          author: {
+            select: {
+              name: true,
+              image: true,
+            },
+          },
+        },
+        orderBy: [
+          { featured: 'desc' },
+          { publishedAt: 'desc' },
+        ],
+        take: 10,
       })
     ]);
 
@@ -276,8 +309,14 @@ export default async function Home() {
           showViewAll={true}
         />
 
+        {/* Blog Section */}
+        <BlogSection posts={blogPosts} />
+
         {/* Navigation Flow */}
         <NavigationFlow />
+
+        {/* Welcome Popup - Shows once per user */}
+        <WelcomePopup />
       </div>
     </>
   );

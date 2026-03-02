@@ -76,3 +76,4 @@ export { default as EnterpriseSolutions } from './EnterpriseSolutions';
 export { default as EnterpriseContactForm } from './EnterpriseContactForm';
 export { default as EnterpriseContactModal } from './EnterpriseContactModal';
 export { default as DemoRequestForm } from './DemoRequestForm';
+export { default as WelcomePopup } from './WelcomePopup';

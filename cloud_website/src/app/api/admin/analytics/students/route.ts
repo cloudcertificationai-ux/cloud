@@ -49,7 +49,7 @@ async function handleGetStudentAnalytics(request: NextRequest) {
     // Active students (with at least one enrollment)
     const activeStudents = await prisma.user.count({
       where: {
-        enrollments: {
+        Enrollment: {
           some: {
             status: 'ACTIVE',
           },
@@ -68,7 +68,7 @@ async function handleGetStudentAnalytics(request: NextRequest) {
     // Students with completed courses
     const studentsWithCompletedCourses = await prisma.user.count({
       where: {
-        enrollments: {
+        Enrollment: {
           some: {
             status: 'COMPLETED',
           },
@@ -91,7 +91,7 @@ async function handleGetStudentAnalytics(request: NextRequest) {
     // Students with purchases
     const studentsWithPurchases = await prisma.user.count({
       where: {
-        purchases: {
+        Purchase: {
           some: {
             status: 'COMPLETED',
           },
@@ -108,12 +108,12 @@ async function handleGetStudentAnalytics(request: NextRequest) {
         image: true,
         _count: {
           select: {
-            enrollments: true,
+            Enrollment: true,
           },
         },
       },
       orderBy: {
-        enrollments: {
+        Enrollment: {
           _count: 'desc',
         },
       },
@@ -123,7 +123,7 @@ async function handleGetStudentAnalytics(request: NextRequest) {
     // Top students by completed courses
     const topStudentsByCompletions = await prisma.user.findMany({
       where: {
-        enrollments: {
+        Enrollment: {
           some: {
             status: 'COMPLETED',
           },
@@ -134,7 +134,7 @@ async function handleGetStudentAnalytics(request: NextRequest) {
         email: true,
         name: true,
         image: true,
-        enrollments: {
+        Enrollment: {
           where: {
             status: 'COMPLETED',
           },
@@ -152,7 +152,7 @@ async function handleGetStudentAnalytics(request: NextRequest) {
         email: student.email,
         name: student.name,
         image: student.image,
-        completedCourses: student.enrollments.length,
+        completedCourses: student.Enrollment.length,
       }))
       .sort((a, b) => b.completedCourses - a.completedCourses)
 
@@ -214,7 +214,7 @@ async function handleGetStudentAnalytics(request: NextRequest) {
           email: student.email,
           name: student.name,
           image: student.image,
-          enrollmentCount: student._count.enrollments,
+          enrollmentCount: student._count.Enrollment,
         })),
         byCompletions: topStudentsByCompletionsFormatted,
       },

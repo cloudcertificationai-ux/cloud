@@ -98,9 +98,15 @@ export async function POST(
         timestamp: new Date(),
       },
       create: {
-        userId: user.id,
-        courseId: course.id,
-        lessonId,
+        User: {
+          connect: { id: user.id }
+        },
+        Course: {
+          connect: { id: course.id }
+        },
+        Lesson: {
+          connect: { id: lessonId }
+        },
         completed: completed ?? false,
         timeSpent: timeSpent ?? 0,
         lastPosition: lastPosition ?? 0,
@@ -192,9 +198,9 @@ export async function GET(
     const course = await prisma.course.findUnique({
       where: { slug },
       include: {
-        modules: {
+        Module: {
           include: {
-            lessons: {
+            Lesson: {
               orderBy: { order: 'asc' },
             },
           },
@@ -242,15 +248,15 @@ export async function GET(
     }, null as typeof progressRecords[0] | null)
 
     // Calculate total and completed lessons
-    const totalLessons = course.modules.reduce(
-      (sum, module) => sum + module.lessons.length,
+    const totalLessons = course.Module.reduce(
+      (sum, module) => sum + module.Lesson.length,
       0
     )
     const completedLessons = progressRecords.filter(p => p.completed).length
 
     // Build progress response with lesson details
-    const progressByLesson = course.modules.flatMap(module =>
-      module.lessons.map(lesson => {
+    const progressByLesson = course.Module.flatMap(module =>
+      module.Lesson.map(lesson => {
         const progress = progressMap.get(lesson.id)
         return {
           lessonId: lesson.id,

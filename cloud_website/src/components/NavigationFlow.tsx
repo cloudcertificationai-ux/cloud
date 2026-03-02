@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { getRelatedNavigation, getContextualCTA } from '@/lib/navigation';
 
 interface NavigationFlowProps {
@@ -24,6 +25,20 @@ export default function NavigationFlow({
   return (
     <div className={`bg-gray-50 border-t border-gray-200 ${className}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Success Mantra Image Section */}
+        <div className="mb-12 flex justify-center">
+          <div className="w-full max-w-5xl">
+            <Image
+              src="/success-mantra.png"
+              alt="Our Success Mantra - Commitment, Fulfillment, and Accomplishment with Beyond Courses support including 24/7 Support, LinkedIn Profile, Resume Writing, Alumni Sessions, Interview Preparation, and Live Projects"
+              width={1200}
+              height={400}
+              className="w-full h-auto rounded-lg shadow-lg"
+              priority={false}
+            />
+          </div>
+        </div>
+
         {/* Contextual Call-to-Action */}
         {showCTA && (
           <div className="text-center mb-8">
