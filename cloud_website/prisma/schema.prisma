@@ -7,7 +7,7 @@ datasource db {
 }
 
 model APIErrorLog {
-  id           String   @id
+  id           String   @id @default(cuid())
   requestId    String
   method       String
   path         String
@@ -26,7 +26,7 @@ model APIErrorLog {
 }
 
 model APIPerformanceLog {
-  id           String   @id
+  id           String   @id @default(cuid())
   requestId    String
   method       String
   path         String
@@ -44,7 +44,7 @@ model APIPerformanceLog {
 }
 
 model Account {
-  id                String  @id
+  id                String  @id @default(cuid())
   userId            String
   type              String
   provider          String
@@ -63,7 +63,7 @@ model Account {
 }
 
 model ApiKey {
-  id         String    @id
+  id         String    @id @default(cuid())
   keyName    String
   apiKey     String    @unique
   apiSecret  String
@@ -77,20 +77,20 @@ model ApiKey {
 }
 
 model Assignment {
-  id                   String                 @id
+  id                   String                 @id @default(cuid())
   title                String
   description          String
   dueDate              DateTime
   maxMarks             Int
   requirements         String
   createdAt            DateTime               @default(now())
-  updatedAt            DateTime
+  updatedAt            DateTime               @updatedAt
   AssignmentSubmission AssignmentSubmission[]
   Lesson               Lesson[]
 }
 
 model AssignmentSubmission {
-  id                                       String     @id
+  id                                       String     @id @default(cuid())
   assignmentId                             String
   userId                                   String
   r2Key                                    String
@@ -102,7 +102,7 @@ model AssignmentSubmission {
   gradedAt                                 DateTime?
   gradedBy                                 String?
   createdAt                                DateTime   @default(now())
-  updatedAt                                DateTime
+  updatedAt                                DateTime   @updatedAt
   Assignment                               Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
   User_AssignmentSubmission_gradedByToUser User?      @relation("AssignmentSubmission_gradedByToUser", fields: [gradedBy], references: [id])
   User_AssignmentSubmission_userIdToUser   User       @relation("AssignmentSubmission_userIdToUser", fields: [userId], references: [id], onDelete: Cascade)
@@ -113,7 +113,7 @@ model AssignmentSubmission {
 }
 
 model AuditLog {
-  id           String   @id
+  id           String   @id @default(cuid())
   userId       String?
   action       String
   resourceType String
@@ -158,7 +158,7 @@ model BlogPost {
 }
 
 model Category {
-  id     String   @id
+  id     String   @id @default(cuid())
   name   String   @unique
   slug   String   @unique
   Course Course[]
@@ -167,7 +167,7 @@ model Category {
 }
 
 model ContactSubmission {
-  id               String        @id
+  id               String        @id @default(cuid())
   name             String
   email            String
   phone            String?
@@ -179,7 +179,7 @@ model ContactSubmission {
   respondedAt      DateTime?
   respondedBy      String?
   createdAt        DateTime      @default(now())
-  updatedAt        DateTime
+  updatedAt        DateTime      @updatedAt
   countryCode      String?       @default("+91")
 
   @@index([createdAt])
@@ -188,7 +188,7 @@ model ContactSubmission {
 }
 
 model Course {
-  id             String           @id
+  id             String           @id @default(cuid())
   title          String
   slug           String           @unique
   summary        String?
@@ -202,7 +202,7 @@ model Course {
   rating         Float?           @default(0)
   thumbnailUrl   String?
   createdAt      DateTime         @default(now())
-  updatedAt      DateTime
+  updatedAt      DateTime         @updatedAt
   instructorId   String?
   categoryId     String?
   Category       Category?        @relation(fields: [categoryId], references: [id])
@@ -222,7 +222,7 @@ model Course {
 }
 
 model CourseProgress {
-  id           String    @id
+  id           String    @id @default(cuid())
   userId       String
   courseId     String
   lessonId     String?
@@ -232,7 +232,7 @@ model CourseProgress {
   timestamp    DateTime  @default(now())
   completedAt  DateTime?
   createdAt    DateTime  @default(now())
-  updatedAt    DateTime
+  updatedAt    DateTime  @updatedAt
   watchedSec   Int       @default(0)
   Course       Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
   Lesson       Lesson?   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
@@ -246,7 +246,7 @@ model CourseProgress {
 }
 
 model DailyStatistics {
-  id                    String   @id
+  id                    String   @id @default(cuid())
   date                  DateTime @unique
   totalUploads          Int      @default(0)
   totalTranscodes       Int      @default(0)
@@ -265,7 +265,7 @@ model DailyStatistics {
 }
 
 model Enrollment {
-  id                   String           @id
+  id                   String           @id @default(cuid())
   userId               String
   courseId             String
   enrolledAt           DateTime         @default(now())
@@ -286,7 +286,7 @@ model Enrollment {
 }
 
 model Instructor {
-  id      String   @id
+  id      String   @id @default(cuid())
   name    String
   bio     String?
   avatar  String?
@@ -297,7 +297,7 @@ model Instructor {
 }
 
 model Lesson {
-  id             String           @id
+  id             String           @id @default(cuid())
   title          String
   content        String?
   videoUrl       String?
@@ -309,7 +309,7 @@ model Lesson {
   kind           LessonKind       @default(VIDEO)
   mediaId        String?
   quizId         String?
-  updatedAt      DateTime
+  updatedAt      DateTime         @updatedAt
   CourseProgress CourseProgress[]
   Assignment     Assignment?      @relation(fields: [assignmentId], references: [id])
   Media          Media?           @relation(fields: [mediaId], references: [id])
@@ -324,7 +324,7 @@ model Lesson {
 }
 
 model Media {
-  id           String      @id
+  id           String      @id @default(cuid())
   originalName String
   r2Key        String      @unique
   manifestUrl  String?
@@ -338,7 +338,7 @@ model Media {
   metadata     Json        @default("{}")
   uploadedBy   String
   createdAt    DateTime    @default(now())
-  updatedAt    DateTime
+  updatedAt    DateTime    @updatedAt
   Lesson       Lesson[]
   User         User        @relation(fields: [uploadedBy], references: [id])
 
@@ -347,7 +347,7 @@ model Media {
 }
 
 model Module {
-  id       String   @id
+  id       String   @id @default(cuid())
   title    String
   order    Int
   courseId String
@@ -359,7 +359,7 @@ model Module {
 }
 
 model PlaybackSession {
-  id             String    @id
+  id             String    @id @default(cuid())
   userId         String
   mediaId        String
   lessonId       String
@@ -371,7 +371,7 @@ model PlaybackSession {
   completionRate Float     @default(0)
   metadata       Json      @default("{}")
   createdAt      DateTime  @default(now())
-  updatedAt      DateTime
+  updatedAt      DateTime  @updatedAt
 
   @@index([courseId])
   @@index([lessonId])
@@ -381,7 +381,7 @@ model PlaybackSession {
 }
 
 model Profile {
-  id       String  @id
+  id       String  @id @default(cuid())
   userId   String  @unique
   bio      String?
   location String?
@@ -393,7 +393,7 @@ model Profile {
 }
 
 model Purchase {
-  id          String         @id
+  id          String         @id @default(cuid())
   userId      String
   courseId    String
   amountCents Int
@@ -402,7 +402,7 @@ model Purchase {
   providerId  String?
   status      PurchaseStatus @default(PENDING)
   createdAt   DateTime       @default(now())
-  updatedAt   DateTime
+  updatedAt   DateTime       @updatedAt
   Enrollment  Enrollment?
   Course      Course         @relation(fields: [courseId], references: [id])
   User        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -415,7 +415,7 @@ model Purchase {
 }
 
 model Question {
-  id            String       @id
+  id            String       @id @default(cuid())
   quizId        String
   text          String
   type          QuestionType
@@ -425,27 +425,27 @@ model Question {
   points        Int          @default(1)
   order         Int
   createdAt     DateTime     @default(now())
-  updatedAt     DateTime
+  updatedAt     DateTime     @updatedAt
   Quiz          Quiz         @relation(fields: [quizId], references: [id], onDelete: Cascade)
 
   @@index([quizId])
 }
 
 model Quiz {
-  id           String        @id
+  id           String        @id @default(cuid())
   title        String
   description  String
   timeLimit    Int
   passingScore Int
   createdAt    DateTime      @default(now())
-  updatedAt    DateTime
+  updatedAt    DateTime      @updatedAt
   Lesson       Lesson[]
   Question     Question[]
   QuizAttempt  QuizAttempt[]
 }
 
 model QuizAttempt {
-  id          String   @id
+  id          String   @id @default(cuid())
   quizId      String
   userId      String
   answers     Json     @default("{}")
@@ -460,7 +460,7 @@ model QuizAttempt {
 }
 
 model Review {
-  id        String   @id
+  id        String   @id @default(cuid())
   userId    String
   courseId  String
   rating    Int
@@ -475,7 +475,7 @@ model Review {
 }
 
 model Session {
-  id           String   @id
+  id           String   @id @default(cuid())
   sessionToken String   @unique
   userId       String
   expires      DateTime
@@ -487,7 +487,7 @@ model Session {
 }
 
 model Testimonial {
-  id        String   @id
+  id        String   @id @default(cuid())
   courseId  String
   author    String
   message   String
@@ -498,7 +498,7 @@ model Testimonial {
 }
 
 model TranscodeJobLog {
-  id           String    @id
+  id           String    @id @default(cuid())
   mediaId      String
   jobId        String
   status       String
@@ -509,7 +509,7 @@ model TranscodeJobLog {
   errorStack   String?
   metadata     Json      @default("{}")
   createdAt    DateTime  @default(now())
-  updatedAt    DateTime
+  updatedAt    DateTime  @updatedAt
 
   @@index([jobId])
   @@index([mediaId])
@@ -518,14 +518,14 @@ model TranscodeJobLog {
 }
 
 model User {
-  id                                                       String                 @id
+  id                                                       String                 @id @default(cuid())
   email                                                    String                 @unique
   emailVerified                                            DateTime?
   name                                                     String?
   image                                                    String?
   role                                                     UserRole               @default(STUDENT)
   createdAt                                                DateTime               @default(now())
-  updatedAt                                                DateTime
+  updatedAt                                                DateTime               @updatedAt
   lastLoginAt                                              DateTime?
   password                                                 String?
   Account                                                  Account[]
