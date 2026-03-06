@@ -15,6 +15,7 @@ const TrustIndicators = dynamic(() => import('@/components/TrustIndicators'));
 const TestimonialsSection = dynamic(() => import('@/components/TestimonialsSection').then(mod => ({ default: mod.TestimonialsSection })));
 const WelcomePopup = dynamic(() => import('@/components/WelcomePopup'));
 const BlogSection = dynamic(() => import('@/components/BlogSection'));
+const ContactSupportPopup = dynamic(() => import('@/components/ContactSupportPopup'));
 
 // Static generation - this page will be pre-rendered at build time
 export const metadata: Metadata = {
@@ -309,8 +310,29 @@ export default async function Home() {
           showViewAll={true}
         />
 
+        {/* Featured Image Section */}
+        <section className="py-8 sm:py-12 bg-gray-50">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <ScrollReveal>
+              <div className="relative w-full max-w-6xl mx-auto rounded-lg overflow-hidden shadow-lg">
+                <Image
+                  src="/WhatsApp Image 2026-03-06 at 13.32.53.jpeg"
+                  alt="Featured content"
+                  width={1200}
+                  height={600}
+                  className="w-full h-auto object-cover"
+                  priority={false}
+                />
+              </div>
+            </ScrollReveal>
+          </div>
+        </section>
+
         {/* Blog Section */}
         <BlogSection posts={blogPosts} />
+
+        {/* Contact Support Popup - Before Footer */}
+        <ContactSupportPopup />
 
         {/* Navigation Flow */}
         <NavigationFlow />

@@ -9,22 +9,41 @@ export const metadata: Metadata = {
   description: 'Read our latest articles on technology, career development, and learning strategies.',
 };
 
+// Make this page dynamic to avoid build-time database queries
+export const dynamic = 'force-dynamic';
+
 export default async function BlogPage() {
-  const blogPosts = await prisma.blogPost.findMany({
-    where: { published: true },
-    include: {
-      author: {
-        select: {
-          name: true,
-          image: true,
+  let blogPosts: Array<{
+    id: string;
+    title: string;
+    slug: string;
+    excerpt: string | null;
+    coverImageUrl: string | null;
+    publishedAt: Date | null;
+    featured: boolean;
+    author: { name: string | null; image: string | null };
+  }> = [];
+
+  try {
+    blogPosts = await prisma.blogPost.findMany({
+      where: { published: true },
+      include: {
+        author: {
+          select: {
+            name: true,
+            image: true,
+          },
         },
       },
-    },
-    orderBy: [
-      { featured: 'desc' },
-      { publishedAt: 'desc' },
-    ],
-  });
+      orderBy: [
+        { featured: 'desc' },
+        { publishedAt: 'desc' },
+      ],
+    });
+  } catch (error) {
+    console.error('Error fetching blog posts:', error);
+    // Return empty array on error
+  }
 
   const featuredPost = blogPosts.find(post => post.featured);
   const regularPosts = blogPosts.filter(post => !post.featured);
