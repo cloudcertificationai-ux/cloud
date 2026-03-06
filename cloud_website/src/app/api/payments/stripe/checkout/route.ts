@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     const purchase = await prisma.purchase.findUnique({
       where: { id: purchaseId },
       include: {
-        course: true,
+        Course: true,
         user: true,
       },
     })

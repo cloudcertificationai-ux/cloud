@@ -117,7 +117,7 @@ export class QuizService {
         },
       },
       include: {
-        questions: {
+        Question: {
           orderBy: { order: 'asc' },
         },
       },
@@ -141,7 +141,7 @@ export class QuizService {
     const quiz = await prisma.quiz.findUnique({
       where: { id: quizId },
       include: {
-        questions: {
+        Question: {
           orderBy: { order: 'asc' },
         },
       },
@@ -152,10 +152,10 @@ export class QuizService {
     }
 
     // Grade the attempt
-    const results = await this.gradeAnswers(quiz.questions, answers);
+    const results = await this.gradeAnswers(quiz.Question, answers);
 
     // Calculate total score
-    const totalPoints = quiz.questions.reduce((sum, q) => sum + q.points, 0);
+    const totalPoints = quiz.Question.reduce((sum, q) => sum + q.points, 0);
     const earnedPoints = results.reduce((sum, r) => sum + r.earnedPoints, 0);
     const scorePercentage = totalPoints > 0 ? Math.round((earnedPoints / totalPoints) * 100) : 0;
     const passed = scorePercentage >= quiz.passingScore;
@@ -266,9 +266,9 @@ export class QuizService {
     const attempt = await prisma.quizAttempt.findUnique({
       where: { id: attemptId },
       include: {
-        quiz: {
+        Quiz: {
           include: {
-            questions: {
+            Question: {
               orderBy: { order: 'asc' },
             },
           },
@@ -281,7 +281,7 @@ export class QuizService {
     }
 
     const results = await this.gradeAnswers(
-      attempt.quiz.questions,
+      attempt.Quiz.Question,
       attempt.answers as Record<string, any>
     );
 
@@ -301,9 +301,9 @@ export class QuizService {
     const attempt = await prisma.quizAttempt.findUnique({
       where: { id: attemptId },
       include: {
-        quiz: {
+        Quiz: {
           include: {
-            questions: {
+            Question: {
               orderBy: { order: 'asc' },
             },
           },
@@ -322,7 +322,7 @@ export class QuizService {
 
     // Grade the attempt to get detailed results
     const results = await this.gradeAnswers(
-      attempt.quiz.questions,
+      attempt.Quiz.Question,
       attempt.answers as Record<string, any>
     );
 
@@ -335,9 +335,9 @@ export class QuizService {
       submittedAt: attempt.submittedAt,
       results,
       quiz: {
-        title: attempt.quiz.title,
-        description: attempt.quiz.description,
-        passingScore: attempt.quiz.passingScore,
+        title: attempt.Quiz.title,
+        description: attempt.Quiz.description,
+        passingScore: attempt.Quiz.passingScore,
       },
     };
   }

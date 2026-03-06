@@ -344,9 +344,9 @@ export class DbDataService {
     return prisma.enrollment.findMany({
       where: { userId },
       include: {
-        course: {
+        Course: {
           include: {
-            instructor: true,
+            Instructor: true,
             modules: {
               include: { lessons: true },
             },
@@ -484,7 +484,7 @@ export class DbDataService {
     return prisma.user.findUnique({
       where: { id: userId },
       include: {
-        profile: true,
+        Profile: true,
         enrollments: {
           include: {
             course: true,
@@ -510,7 +510,7 @@ export class DbDataService {
       prisma.enrollment.count(),
       prisma.user.count({
         where: {
-          enrollments: {
+          Enrollment: {
             some: {
               status: 'ACTIVE',
             },

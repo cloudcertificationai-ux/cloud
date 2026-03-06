@@ -180,7 +180,7 @@ export async function queryAuditLogs(query: AuditLogQuery) {
     prisma.auditLog.findMany({
       where,
       include: {
-        user: {
+        User: {
           select: {
             id: true,
             email: true,

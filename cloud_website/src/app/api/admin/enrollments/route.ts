@@ -80,7 +80,7 @@ async function handleGetEnrollments(request: NextRequest) {
             thumbnailUrl: true,
             priceCents: true,
             currency: true,
-            instructor: {
+            Instructor: {
               select: {
                 id: true,
                 name: true,
@@ -89,7 +89,7 @@ async function handleGetEnrollments(request: NextRequest) {
             },
           },
         },
-        purchase: {
+        Purchase: {
           select: {
             id: true,
             amountCents: true,
@@ -215,7 +215,7 @@ async function handleCreateEnrollment(request: NextRequest) {
             title: true,
             slug: true,
             thumbnailUrl: true,
-            instructor: {
+            Instructor: {
               select: {
                 id: true,
                 name: true,

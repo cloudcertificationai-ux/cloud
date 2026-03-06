@@ -127,7 +127,7 @@ class TranscodeWorker {
         const media = await prisma.media.findUnique({
           where: { id: mediaId },
           include: {
-            user: {
+            User: {
               select: { email: true },
             },
           },

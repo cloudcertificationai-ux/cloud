@@ -259,7 +259,7 @@ export class SyncService {
         const user = await prisma.user.findUnique({
           where: { id: userId },
           include: {
-            profile: true,
+            Profile: true,
           },
         })
 

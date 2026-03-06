@@ -26,7 +26,7 @@ export class NotificationService {
       const media = await prisma.media.findUnique({
         where: { id: mediaId },
         include: {
-          user: {
+          User: {
             select: {
               id: true,
               name: true,

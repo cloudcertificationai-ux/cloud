@@ -224,7 +224,7 @@ export class ProgressTracker {
     const course = await prisma.course.findUnique({
       where: { id: courseId },
       include: {
-        modules: {
+        Module: {
           include: {
             lessons: true,
           },
