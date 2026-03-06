@@ -53,9 +53,9 @@ export async function GET(
     const lesson = await prisma.lesson.findUnique({
       where: { id: lessonId },
       include: {
-        module: {
+        Module: {
           include: {
-            course: {
+            Course: {
               select: {
                 id: true,
                 title: true,
@@ -64,7 +64,7 @@ export async function GET(
             },
           },
         },
-        media: {
+        Media: {
           select: {
             id: true,
             originalName: true,
@@ -77,9 +77,9 @@ export async function GET(
             mimeType: true,
           },
         },
-        quiz: {
+        Quiz: {
           include: {
-            questions: {
+            Question: {
               select: {
                 id: true,
                 text: true,
@@ -95,7 +95,7 @@ export async function GET(
             },
           },
         },
-        assignment: {
+        Assignment: {
           select: {
             id: true,
             title: true,
@@ -120,7 +120,7 @@ export async function GET(
     }
 
     // Verify user is enrolled in the course
-    const courseId = lesson.module.course.id;
+    const courseId = lesson.Module.Course.id;
     const enrollment = await prisma.enrollment.findUnique({
       where: {
         userId_courseId: {
@@ -154,14 +154,14 @@ export async function GET(
         kind: lesson.kind,
         moduleId: lesson.moduleId,
         module: {
-          id: lesson.module.id,
-          title: lesson.module.title,
-          course: lesson.module.course,
+          id: lesson.Module.id,
+          title: lesson.Module.title,
+          course: lesson.Module.Course,
         },
         // Include resources based on lesson kind
-        media: lesson.media,
-        quiz: lesson.quiz,
-        assignment: lesson.assignment,
+        media: lesson.Media,
+        quiz: lesson.Quiz,
+        assignment: lesson.Assignment,
         createdAt: lesson.createdAt.toISOString(),
         updatedAt: lesson.updatedAt.toISOString(),
       },

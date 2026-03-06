@@ -49,14 +49,14 @@ export class ProgressTracker {
     // Get the lesson to find courseId and mediaId
     const lesson = await prisma.lesson.findUnique({
       where: { id: lessonId },
-      include: { module: true },
+      include: { Module: true },
     });
 
     if (!lesson) {
       throw new Error('Lesson not found');
     }
 
-    const courseId = lesson.module.courseId;
+    const courseId = lesson.Module.courseId;
 
     // Get existing progress
     const existingProgress = await prisma.courseProgress.findUnique({
@@ -184,14 +184,14 @@ export class ProgressTracker {
   async markComplete(userId: string, lessonId: string): Promise<void> {
     const lesson = await prisma.lesson.findUnique({
       where: { id: lessonId },
-      include: { module: true },
+      include: { Module: true },
     });
 
     if (!lesson) {
       throw new Error('Lesson not found');
     }
 
-    const courseId = lesson.module.courseId;
+    const courseId = lesson.Module.courseId;
 
     await prisma.courseProgress.upsert({
       where: {
@@ -226,7 +226,7 @@ export class ProgressTracker {
       include: {
         Module: {
           include: {
-            lessons: true,
+            Lesson: true,
           },
         },
       },
@@ -237,8 +237,8 @@ export class ProgressTracker {
     }
 
     // Count total lessons
-    const totalLessons = course.modules.reduce(
-      (sum, module) => sum + module.lessons.length,
+    const totalLessons = course.Module.reduce(
+      (sum, module) => sum + module.Lesson.length,
       0
     );
 

@@ -168,7 +168,7 @@ async function handleGetStudentDetail(
     })
 
     // Count completed courses
-    const completedCourses = student.enrollments.filter(
+    const completedCourses = student.Enrollment.filter(
       (e) => e.status === 'COMPLETED'
     ).length
 

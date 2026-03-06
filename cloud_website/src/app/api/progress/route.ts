@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
     // Get lesson to find courseId if not provided
     const lesson = await prisma.lesson.findUnique({
       where: { id: lessonId },
-      include: { module: true },
+      include: { Module: true },
     })
 
     if (!lesson) {
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const actualCourseId = courseId || lesson.module.courseId
+    const actualCourseId = courseId || lesson.Module.courseId
 
     // Check if user is enrolled in the course
     const enrollment = await dbDataService.checkEnrollment(user.id, actualCourseId)

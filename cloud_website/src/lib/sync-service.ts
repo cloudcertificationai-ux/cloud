@@ -198,7 +198,7 @@ export class SyncService {
         const enrollment = await prisma.enrollment.findUnique({
           where: { id: enrollmentId },
           include: {
-            user: {
+            User: {
               select: {
                 id: true,
                 email: true,
@@ -206,7 +206,7 @@ export class SyncService {
                 image: true,
               },
             },
-            course: {
+            Course: {
               select: {
                 id: true,
                 title: true,
@@ -320,7 +320,7 @@ export class SyncService {
             courseId,
           },
           include: {
-            course: {
+            Course: {
               select: {
                 id: true,
                 title: true,
@@ -452,7 +452,7 @@ export class SyncService {
     const enrollment = await prisma.enrollment.findUnique({
       where: { id: enrollmentId },
       include: {
-        user: {
+        User: {
           select: {
             id: true,
             email: true,
@@ -460,7 +460,7 @@ export class SyncService {
             image: true,
           },
         },
-        course: {
+        Course: {
           select: {
             id: true,
             title: true,
@@ -496,7 +496,7 @@ export class SyncService {
     const user = await prisma.user.findUnique({
       where: { id: userId },
       include: {
-        profile: true,
+        Profile: true,
       },
     })
 

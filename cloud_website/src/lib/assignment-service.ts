@@ -156,7 +156,7 @@ export class AssignmentService {
     // Get submission
     const submission = await prisma.assignmentSubmission.findUnique({
       where: { id: submissionId },
-      include: { assignment: true },
+      include: { Assignment: true },
     });
 
     if (!submission) {
@@ -188,9 +188,9 @@ export class AssignmentService {
     const submission = await prisma.assignmentSubmission.findUnique({
       where: { id: submissionId },
       include: {
-        assignment: {
+        Assignment: {
           include: {
-            lessons: true,
+            Lesson: true,
           },
         },
       },
@@ -201,9 +201,9 @@ export class AssignmentService {
     }
 
     // Validate marks
-    if (marks < 0 || marks > submission.assignment.maxMarks) {
+    if (marks < 0 || marks > submission.Assignment.maxMarks) {
       throw new Error(
-        `Marks must be between 0 and ${submission.assignment.maxMarks}`
+        `Marks must be between 0 and ${submission.Assignment.maxMarks}`
       );
     }
 
@@ -220,7 +220,7 @@ export class AssignmentService {
 
     // Requirement 7.6: Mark lesson complete when graded
     // Find the lesson associated with this assignment
-    const lesson = submission.assignment.lessons[0]; // Assuming one lesson per assignment
+    const lesson = submission.Assignment.Lesson[0]; // Assuming one lesson per assignment
     if (lesson) {
       await progressTracker.markComplete(submission.userId, lesson.id);
       
@@ -228,9 +228,9 @@ export class AssignmentService {
       const courseId = await prisma.lesson
         .findUnique({
           where: { id: lesson.id },
-          include: { module: true },
+          include: { Module: true },
         })
-        .then((l) => l?.module.courseId);
+        .then((l) => l?.Module.courseId);
 
       if (courseId) {
         await progressTracker.calculateCourseCompletion(
@@ -255,15 +255,15 @@ export class AssignmentService {
     const submission = await prisma.assignmentSubmission.findUnique({
       where: { id: submissionId },
       include: {
-        assignment: true,
-        user: {
+        Assignment: true,
+        User_AssignmentSubmission_userIdToUser: {
           select: {
             id: true,
             name: true,
             email: true,
           },
         },
-        grader: {
+        User_AssignmentSubmission_gradedByToUser: {
           select: {
             id: true,
             name: true,
@@ -301,8 +301,8 @@ export class AssignmentService {
         assignmentId_userId: { assignmentId, userId },
       },
       include: {
-        assignment: true,
-        grader: {
+        Assignment: true,
+        User_AssignmentSubmission_gradedByToUser: {
           select: {
             id: true,
             name: true,
@@ -337,14 +337,14 @@ export class AssignmentService {
     const submissions = await prisma.assignmentSubmission.findMany({
       where: { assignmentId },
       include: {
-        user: {
+        User_AssignmentSubmission_userIdToUser: {
           select: {
             id: true,
             name: true,
             email: true,
           },
         },
-        grader: {
+        User_AssignmentSubmission_gradedByToUser: {
           select: {
             id: true,
             name: true,

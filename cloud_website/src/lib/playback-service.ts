@@ -59,12 +59,12 @@ export async function generatePlaybackToken(
   const lesson = await prisma.lesson.findUnique({
     where: { id: lessonId },
     include: {
-      module: {
+      Module: {
         include: {
-          course: true,
+          Course: true,
         },
       },
-      media: true,
+      Media: true,
     },
   });
 
@@ -72,15 +72,15 @@ export async function generatePlaybackToken(
     throw new Error('Lesson not found');
   }
 
-  if (!lesson.media) {
+  if (!lesson.Media) {
     throw new Error('Media not found for lesson');
   }
 
-  if (lesson.media.id !== mediaId) {
+  if (lesson.Media.id !== mediaId) {
     throw new Error('Media ID does not match lesson');
   }
 
-  const courseId = lesson.module.courseId;
+  const courseId = lesson.Module.courseId;
 
   // Verify enrollment
   const isEnrolled = await verifyEnrollment(userId, courseId);
@@ -89,7 +89,7 @@ export async function generatePlaybackToken(
   }
 
   // Get the manifest URL or R2 key
-  const manifestUrl = lesson.media.manifestUrl;
+  const manifestUrl = lesson.Media.manifestUrl;
   if (!manifestUrl) {
     throw new Error('Media is not ready for playback');
   }

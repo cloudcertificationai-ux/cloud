@@ -133,8 +133,8 @@ class TranscodeWorker {
           },
         });
         
-        if (media?.user?.email) {
-          watermarkText = media.user.email;
+        if (media?.User?.email) {
+          watermarkText = media.User.email;
           console.log(`[Transcode] Watermarking enabled for user: ${watermarkText}`);
         }
       }

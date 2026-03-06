@@ -104,7 +104,7 @@ export class QuizService {
         description,
         timeLimit,
         passingScore,
-        questions: {
+        Question: {
           create: questions.map((q) => ({
             text: q.text,
             type: q.type,

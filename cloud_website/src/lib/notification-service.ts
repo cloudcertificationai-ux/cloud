@@ -36,12 +36,12 @@ export class NotificationService {
         },
       });
 
-      if (!media || !media.user) {
+      if (!media || !media.User) {
         console.error('Cannot send notification: Media or user not found');
         return;
       }
 
-      const instructor = media.user;
+      const instructor = media.User;
 
       // Prepare email content
       const subject = `Video Transcoding Failed: ${fileName}`;

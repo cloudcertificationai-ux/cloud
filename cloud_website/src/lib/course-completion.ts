@@ -51,7 +51,7 @@ async function handleCourseCompletion(userId: string, courseId: string): Promise
       prisma.user.findUnique({ where: { id: userId } }),
       prisma.course.findUnique({ 
         where: { id: courseId },
-        include: { instructor: true }
+        include: { Instructor: true }
       }),
     ]);
 
@@ -95,7 +95,7 @@ export async function getUserCompletionStats(userId: string) {
   const enrollments = await prisma.enrollment.findMany({
     where: { userId },
     include: {
-      course: {
+      Course: {
         select: {
           id: true,
           title: true,
@@ -136,9 +136,9 @@ export async function getUserCompletionStats(userId: string) {
       })
       .slice(0, 5)
       .map(e => ({
-        courseId: e.course.id,
-        courseTitle: e.course.title,
-        courseThumbnail: e.course.thumbnailUrl,
+        courseId: e.Course.id,
+        courseTitle: e.Course.title,
+        courseThumbnail: e.Course.thumbnailUrl,
         completedAt: e.lastAccessedAt,
       })),
   };
@@ -171,7 +171,7 @@ export async function getCoursesNearingCompletion(userId: string) {
       },
     },
     include: {
-      course: {
+      Course: {
         select: {
           id: true,
           title: true,
@@ -186,10 +186,10 @@ export async function getCoursesNearingCompletion(userId: string) {
   });
 
   return enrollments.map(e => ({
-    courseId: e.course.id,
-    courseTitle: e.course.title,
-    courseThumbnail: e.course.thumbnailUrl,
-    courseSlug: e.course.slug,
+    courseId: e.Course.id,
+    courseTitle: e.Course.title,
+    courseThumbnail: e.Course.thumbnailUrl,
+    courseSlug: e.Course.slug,
     completionPercentage: e.completionPercentage,
     lastAccessedAt: e.lastAccessedAt,
   }));

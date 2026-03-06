@@ -18,7 +18,7 @@ export default async function DashboardPage() {
     redirect('/auth/signin?callbackUrl=/dashboard')
   }
 
-  const enrollments = await dbDataService.getUserEnrollments(session.user.id)
+  const enrollments = await dbDataService.getUserEnrollments(session.user.id) as any[]
 
   return (
     <div className="min-h-screen bg-neutral-50">

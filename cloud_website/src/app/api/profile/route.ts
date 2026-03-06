@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
       role: user.role,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
-      profile: user.profile,
+      profile: user.Profile,
     })
   } catch (error) {
     console.error('Error fetching profile:', error)

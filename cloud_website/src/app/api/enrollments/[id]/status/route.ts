@@ -56,7 +56,7 @@ export async function PUT(
     const enrollment = await prisma.enrollment.findUnique({
       where: { id },
       include: {
-        course: true,
+        Course: true,
       },
     })
 
@@ -82,7 +82,7 @@ export async function PUT(
         status,
       },
       include: {
-        course: true,
+        Course: true,
       },
     })
 
@@ -104,7 +104,7 @@ export async function PUT(
       enrollment.id,
       {
         courseId: enrollment.courseId,
-        courseSlug: enrollment.course.slug,
+        courseSlug: enrollment.Course.slug,
         oldStatus: enrollment.status,
         newStatus: status,
       }

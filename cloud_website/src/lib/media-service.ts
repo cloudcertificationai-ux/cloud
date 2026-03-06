@@ -371,7 +371,7 @@ class MediaService {
         createdAt: 'desc',
       },
       include: {
-        user: {
+        User: {
           select: {
             id: true,
             name: true,

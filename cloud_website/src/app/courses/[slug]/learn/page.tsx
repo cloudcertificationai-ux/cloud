@@ -87,8 +87,8 @@ export default async function LearnPage({ params, searchParams }: LearnPageProps
     }
     
     // If still no lesson, use the first lesson
-    if (!currentLessonId && course.modules.length > 0 && course.modules[0].lessons.length > 0) {
-      currentLessonId = course.modules[0].lessons[0].id;
+    if (!currentLessonId && course.Module.length > 0 && course.Module[0].Lesson.length > 0) {
+      currentLessonId = course.Module[0].Lesson[0].id;
     }
   }
 

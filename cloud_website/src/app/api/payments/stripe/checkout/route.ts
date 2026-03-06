@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
       where: { id: purchaseId },
       include: {
         Course: true,
-        user: true,
+        User: true,
       },
     })
 
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify purchase belongs to current user
-    if (purchase.user.email !== session.user.email) {
+    if (purchase.User.email !== session.user.email) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 403 }
@@ -62,8 +62,8 @@ export async function POST(request: NextRequest) {
           price_data: {
             currency: purchase.currency.toLowerCase(),
             product_data: {
-              name: purchase.course.title,
-              description: purchase.course.summary || undefined,
+              name: purchase.Course.title,
+              description: purchase.Course.summary || undefined,
             },
             unit_amount: purchase.amountCents,
           },
@@ -71,10 +71,10 @@ export async function POST(request: NextRequest) {
         },
       ],
       mode: 'payment',
-      success_url: `${process.env.NEXTAUTH_URL}/courses/${purchase.course.slug}/learn?payment=success`,
-      cancel_url: `${process.env.NEXTAUTH_URL}/courses/${purchase.course.slug}?payment=cancelled`,
+      success_url: `${process.env.NEXTAUTH_URL}/courses/${purchase.Course.slug}/learn?payment=success`,
+      cancel_url: `${process.env.NEXTAUTH_URL}/courses/${purchase.Course.slug}?payment=cancelled`,
       client_reference_id: purchaseId,
-      customer_email: purchase.user.email || undefined,
+      customer_email: purchase.User.email || undefined,
       metadata: {
         purchaseId: purchase.id,
         courseId: purchase.courseId,

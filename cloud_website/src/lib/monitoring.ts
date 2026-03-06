@@ -403,6 +403,7 @@ export class MonitoringService {
         },
         create: {
           date: startOfDay,
+          updatedAt: new Date(),
           totalUploads: statistics.totalUploads,
           totalTranscodes: statistics.totalTranscodes,
           successfulTranscodes: statistics.successfulTranscodes,
@@ -415,6 +416,7 @@ export class MonitoringService {
           averageResponseTime: statistics.averageResponseTime,
         },
         update: {
+          updatedAt: new Date(),
           totalUploads: statistics.totalUploads,
           totalTranscodes: statistics.totalTranscodes,
           successfulTranscodes: statistics.successfulTranscodes,

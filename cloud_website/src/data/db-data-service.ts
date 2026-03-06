@@ -85,14 +85,14 @@ export class DbDataService {
             published: true,
             featured: true,
             createdAt: true,
-            instructor: {
+            Instructor: {
               select: {
                 id: true,
                 name: true,
                 avatar: true,
               },
             },
-            category: {
+            Category: {
               select: {
                 id: true,
                 name: true,
@@ -100,7 +100,7 @@ export class DbDataService {
               },
             },
             _count: {
-              select: { enrollments: true, reviews: true },
+              select: { Enrollment: true, Review: true },
             },
           },
           orderBy,
@@ -149,7 +149,7 @@ export class DbDataService {
           thumbnailUrl: true,
           createdAt: true,
           updatedAt: true,
-          instructor: {
+          Instructor: {
             select: {
               id: true,
               name: true,
@@ -158,19 +158,19 @@ export class DbDataService {
               company: true,
             },
           },
-          category: {
+          Category: {
             select: {
               id: true,
               name: true,
               slug: true,
             },
           },
-          modules: {
+          Module: {
             select: {
               id: true,
               title: true,
               order: true,
-              lessons: {
+              Lesson: {
                 select: {
                   id: true,
                   title: true,
@@ -184,13 +184,13 @@ export class DbDataService {
             },
             orderBy: { order: 'asc' },
           },
-          reviews: {
+          Review: {
             select: {
               id: true,
               rating: true,
               comment: true,
               createdAt: true,
-              user: {
+              User: {
                 select: {
                   id: true,
                   name: true,
@@ -201,7 +201,7 @@ export class DbDataService {
             orderBy: { createdAt: 'desc' },
             take: 10,
           },
-          testimonials: {
+          Testimonial: {
             select: {
               id: true,
               author: true,
@@ -210,7 +210,7 @@ export class DbDataService {
             },
           },
           _count: {
-            select: { enrollments: true, reviews: true },
+            select: { Enrollment: true, Review: true },
           },
         },
       })
@@ -243,7 +243,7 @@ export class DbDataService {
         updatedAt: true,
         instructorId: true,
         categoryId: true,
-        instructor: {
+        Instructor: {
           select: {
             id: true,
             name: true,
@@ -252,19 +252,19 @@ export class DbDataService {
             company: true,
           },
         },
-        category: {
+        Category: {
           select: {
             id: true,
             name: true,
             slug: true,
           },
         },
-        modules: {
+        Module: {
           select: {
             id: true,
             title: true,
             order: true,
-            lessons: {
+            Lesson: {
               select: {
                 id: true,
                 title: true,
@@ -291,12 +291,12 @@ export class DbDataService {
           title: true,
           slug: true,
           published: true,
-          modules: {
+          Module: {
             select: {
               id: true,
               title: true,
               order: true,
-              lessons: {
+              Lesson: {
                 select: {
                   id: true,
                   title: true,
@@ -318,9 +318,9 @@ export class DbDataService {
       }
 
       // Add lesson type based on available fields
-      const modulesWithTypes = course.modules.map(module => ({
+      const modulesWithTypes = course.Module.map(module => ({
         ...module,
-        lessons: module.lessons.map(lesson => ({
+        lessons: module.Lesson.map(lesson => ({
           ...lesson,
           type: lesson.videoUrl ? 'video' : 'article', // Simplified type detection
         })),
@@ -347,8 +347,8 @@ export class DbDataService {
         Course: {
           include: {
             Instructor: true,
-            modules: {
-              include: { lessons: true },
+            Module: {
+              include: { Lesson: true },
             },
           },
         },
@@ -366,7 +366,7 @@ export class DbDataService {
         status: 'ACTIVE',
       },
       include: {
-        course: true,
+        Course: true,
       },
     })
   }
@@ -391,16 +391,16 @@ export class DbDataService {
     const course = await prisma.course.findUnique({
       where: { id: courseId },
       include: {
-        modules: {
-          include: { lessons: true },
+        Module: {
+          include: { Lesson: true },
         },
       },
     })
 
     if (!course) return null
 
-    const totalLessons = course.modules.reduce(
-      (sum, module) => sum + module.lessons.length,
+    const totalLessons = course.Module.reduce(
+      (sum, module) => sum + module.Lesson.length,
       0
     )
     const completedLessons = progress.filter((p) => p.completed).length
@@ -462,7 +462,7 @@ export class DbDataService {
         where,
         include: {
           _count: {
-            select: { enrollments: true, purchases: true },
+            select: { Enrollment: true, Purchase: true },
           },
         },
         skip,
@@ -485,20 +485,20 @@ export class DbDataService {
       where: { id: userId },
       include: {
         Profile: true,
-        enrollments: {
+        Enrollment: {
           include: {
-            course: true,
-            purchase: true,
+            Course: true,
+            Purchase: true,
           },
         },
-        purchases: {
+        Purchase: {
           include: {
-            course: true,
+            Course: true,
           },
         },
-        reviews: {
+        Review: {
           include: {
-            course: true,
+            Course: true,
           },
         },
       },

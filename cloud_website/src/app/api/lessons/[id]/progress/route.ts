@@ -54,9 +54,9 @@ export async function GET(
     const lesson = await prisma.lesson.findUnique({
       where: { id: lessonId },
       include: {
-        module: {
+        Module: {
           include: {
-            course: {
+            Course: {
               select: {
                 id: true,
               },
@@ -77,7 +77,7 @@ export async function GET(
       );
     }
 
-    const courseId = lesson.module.course.id;
+    const courseId = lesson.Module.Course.id;
 
     // Verify user is enrolled in the course
     const enrollment = await prisma.enrollment.findUnique({
