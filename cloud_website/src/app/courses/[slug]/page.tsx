@@ -157,7 +157,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
   // Generate breadcrumb data
   const breadcrumbItems = [
     { label: 'Courses', href: '/courses' },
-    { label: course.category?.name || 'Uncategorized', href: `/courses?category=${course.category?.slug || ''}` },
+    { label: course.Category?.name || 'Uncategorized', href: `/courses?category=${course.Category?.slug || ''}` },
     { label: course.title }
   ];
 
