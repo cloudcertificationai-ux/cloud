@@ -5,7 +5,7 @@ import { authOptions } from '@/lib/auth';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -17,8 +17,10 @@ export async function GET(
       );
     }
 
+    const { id } = await context.params;
+
     const post = await prisma.blogPost.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         author: {
           select: {
@@ -50,7 +52,7 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -62,6 +64,7 @@ export async function PUT(
       );
     }
 
+    const { id } = await context.params;
     const body = await request.json();
     const {
       title,
@@ -82,7 +85,7 @@ export async function PUT(
       const existingPost = await prisma.blogPost.findFirst({
         where: {
           slug,
-          id: { not: params.id },
+          id: { not: id },
         },
       });
 
@@ -95,7 +98,7 @@ export async function PUT(
     }
 
     const currentPost = await prisma.blogPost.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!currentPost) {
@@ -106,7 +109,7 @@ export async function PUT(
     }
 
     const post = await prisma.blogPost.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         title,
         slug,
@@ -145,7 +148,7 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -157,8 +160,10 @@ export async function DELETE(
       );
     }
 
+    const { id } = await context.params;
+
     await prisma.blogPost.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ success: true });
