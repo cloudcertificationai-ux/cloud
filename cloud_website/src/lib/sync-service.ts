@@ -272,7 +272,7 @@ export class SyncService {
           email: user.email,
           name: user.name,
           image: user.image,
-          profile: user.profile,
+          profile: user.Profile,
           updatedAt: user.updatedAt,
         }
       }
@@ -514,7 +514,7 @@ export class SyncService {
         email: user.email,
         name: user.name,
         image: user.image,
-        profile: user.profile,
+        profile: user.Profile,
         updatedAt: user.updatedAt,
       },
       timestamp: new Date(),
