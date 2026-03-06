@@ -134,7 +134,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
   const instructors = course.Instructor ? [course.Instructor] : [];
   
   // Get testimonials for this course - already included in the query
-  const testimonials = course.testimonials || [];
+  const testimonials = course.Testimonial || [];
 
   // Check enrollment status (requirement 8.1)
   const { getServerSession } = await import('next-auth');
