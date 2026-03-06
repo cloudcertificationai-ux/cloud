@@ -62,8 +62,8 @@ export async function generateMetadata({ params }: CourseDetailPageProps): Promi
     };
   }
 
-  // Get instructors - the course already includes instructor from the database query
-  const instructors = course.instructor ? [course.instructor] : [];
+  // Get instructors - the course already includes Instructor from the database query
+  const instructors = course.Instructor ? [course.Instructor] : [];
   // Use static time for SSG to avoid the new Date() issue
   const seoMetadata = generateCourseSEOMetadata(course as any, instructors as any);
   
@@ -131,7 +131,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
   }
 
   // Get instructors for this course - already included in the query
-  const instructors = course.instructor ? [course.instructor] : [];
+  const instructors = course.Instructor ? [course.Instructor] : [];
   
   // Get testimonials for this course - already included in the query
   const testimonials = course.testimonials || [];
