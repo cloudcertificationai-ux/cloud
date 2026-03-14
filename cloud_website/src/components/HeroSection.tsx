@@ -66,19 +66,21 @@ export default function HeroSection({
   const handleVideoModalOpen = () => {
     measureOperation('video-modal-open', () => {
       setIsVideoModalOpen(true);
+      document.body.style.overflow = 'hidden';
     });
   };
 
   const handleVideoModalClose = () => {
     measureOperation('video-modal-close', () => {
       setIsVideoModalOpen(false);
+      document.body.style.overflow = '';
     });
   };
 
   return (
-    <section className="relative bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 text-white overflow-hidden">
+    <section className="relative bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 text-white">
       {/* Background Pattern - CSS gradient pattern */}
-      <div className="absolute inset-0 opacity-10" style={{
+      <div className="absolute inset-0 opacity-10 overflow-hidden pointer-events-none" style={{
         backgroundImage: 'radial-gradient(circle at 25px 25px, rgba(255, 255, 255, 0.2) 2%, transparent 0%), radial-gradient(circle at 75px 75px, rgba(255, 255, 255, 0.2) 2%, transparent 0%)',
         backgroundSize: '100px 100px'
       }}></div>

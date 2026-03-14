@@ -206,29 +206,29 @@ const WelcomePopup: React.FC<WelcomePopupProps> = ({ onSubmit }) => {
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-fade-in"
       style={{ 
-        background: 'linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(30, 41, 59, 0.85) 100%)',
-        backdropFilter: 'blur(8px)'
+        background: 'rgba(0, 0, 0, 0.75)',
+        backdropFilter: 'blur(4px)'
       }}
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"
       aria-labelledby="welcome-popup-title"
     >
-      <div className="relative w-full max-w-5xl max-h-[95vh] overflow-hidden rounded-3xl shadow-2xl animate-scale-in">
+      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden rounded-2xl shadow-2xl animate-scale-in">
         {/* Close button */}
         <button
           onClick={handleClose}
-          className="absolute top-6 right-6 z-20 p-2.5 text-white hover:text-gray-200 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full transition-all hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/50"
+          className="absolute top-3 right-3 z-20 p-2 text-white hover:text-gray-200 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full transition-all hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/50"
           aria-label="Close popup"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
 
-        <div className="flex flex-col md:flex-row min-h-[600px]">
+        <div className="flex flex-col md:flex-row min-h-0">
           {/* Left side - Enhanced Branding */}
-          <div className="relative w-full md:w-[45%] bg-blue-600 p-10 md:p-12 text-white overflow-hidden">
+          <div className="relative w-full md:w-[40%] bg-blue-600 p-6 text-white overflow-hidden">
             {/* Decorative background elements */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-accent-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
@@ -236,49 +236,35 @@ const WelcomePopup: React.FC<WelcomePopupProps> = ({ onSubmit }) => {
             <div className="relative z-10 h-full flex flex-col justify-between">
               {/* Header */}
               <div>
-                <div className="inline-flex items-center gap-3 mb-8">
-                  <div className="w-14 h-14 bg-gradient-to-br from-accent-400 to-accent-600 rounded-2xl flex items-center justify-center shadow-lg shadow-accent-500/30 transform hover:scale-105 transition-transform">
-                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="inline-flex items-center gap-2 mb-4">
+                  <div className="w-10 h-10 bg-gradient-to-br from-accent-400 to-accent-600 rounded-xl flex items-center justify-center shadow-lg shadow-accent-500/30">
+                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
                   </div>
                 </div>
                 
-                <h2 className="text-4xl md:text-5xl font-bold leading-tight mb-4 bg-gradient-to-r from-white to-white/90 bg-clip-text text-transparent">
+                <h2 className="text-2xl font-bold leading-tight mb-2">
                   Begin Your<br />Journey With Us
                 </h2>
-                <p className="text-lg text-white/80 mb-8">
+                <p className="text-sm text-white/80 mb-4">
                   Transform your career with industry-leading courses
                 </p>
               </div>
 
               {/* Features */}
-              <div className="space-y-6">
-                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20 shadow-xl">
-                  <h3 className="text-sm font-semibold mb-3 text-white/90 uppercase tracking-wide">Program Designed By</h3>
-                  <div className="flex flex-wrap gap-2">
-                    <span className="px-4 py-2 bg-white rounded-xl text-primary-700 font-semibold text-sm shadow-lg">
-                      Industry Partners
-                    </span>
-                    <span className="px-4 py-2 bg-white rounded-xl text-primary-700 font-semibold text-sm shadow-lg">
-                      Top Experts
-                    </span>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <h3 className="text-sm font-semibold text-white/90 uppercase tracking-wide">Why Choose Us</h3>
+              <div className="space-y-3">
+                <div className="space-y-2">
+                  <h3 className="text-xs font-semibold text-white/90 uppercase tracking-wide">Why Choose Us</h3>
                   {[
                     { icon: '👥', text: '50,000+ Students Trained' },
                     { icon: '⭐', text: '4.8/5 Average Rating' },
-                    { icon: '🎓', text: 'Industry-Certified Instructors' },
+                    { icon: '🎓', text: 'Certified Instructors' },
                     { icon: '💼', text: '92% Job Placement Rate' }
                   ].map((item, index) => (
-                    <div key={index} className="flex items-center gap-3 group">
-                      <div className="w-10 h-10 bg-accent-500/20 backdrop-blur-sm rounded-xl flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
-                        {item.icon}
-                      </div>
-                      <span className="text-white/90 font-medium">{item.text}</span>
+                    <div key={index} className="flex items-center gap-2">
+                      <span className="text-base">{item.icon}</span>
+                      <span className="text-white/90 text-sm font-medium">{item.text}</span>
                     </div>
                   ))}
                 </div>
@@ -287,21 +273,21 @@ const WelcomePopup: React.FC<WelcomePopupProps> = ({ onSubmit }) => {
           </div>
 
           {/* Right side - Modern Form */}
-          <div className="w-full md:w-[55%] bg-white p-8 md:p-12 overflow-y-auto max-h-[95vh] md:max-h-none">
+          <div className="w-full md:w-[60%] bg-white p-5 overflow-y-auto max-h-[90vh]">
             <div className="max-w-md mx-auto">
-              <div className="mb-8">
-                <h2 id="welcome-popup-title" className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+              <div className="mb-4">
+                <h2 id="welcome-popup-title" className="text-xl font-bold text-gray-900 mb-1">
                   Request A Free Demo
                 </h2>
-                <p className="text-gray-600">
+                <p className="text-gray-500 text-sm">
                   Fill in your details and we'll get back to you shortly
                 </p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-3">
                 {/* Full Name */}
                 <div>
-                  <label htmlFor="fullName" className="block text-sm font-semibold text-gray-900 mb-2">
+                  <label htmlFor="fullName" className="block text-xs font-semibold text-gray-900 mb-1">
                     Full Name*
                   </label>
                   <Input
@@ -310,7 +296,7 @@ const WelcomePopup: React.FC<WelcomePopupProps> = ({ onSubmit }) => {
                     type="text"
                     value={formData.fullName}
                     onChange={handleInputChange}
-                    className={`w-full h-12 px-4 border-2 rounded-xl transition-all focus:ring-4 focus:ring-primary-100 ${
+                    className={`w-full h-9 px-3 border-2 rounded-lg text-sm transition-all focus:ring-2 focus:ring-primary-100 ${
                       errors.fullName ? 'border-red-500' : 'border-gray-200 focus:border-primary-500'
                     }`}
                     placeholder="Enter your full name"
@@ -327,22 +313,22 @@ const WelcomePopup: React.FC<WelcomePopupProps> = ({ onSubmit }) => {
 
                 {/* Phone Number */}
                 <div>
-                  <label htmlFor="phoneNumber" className="block text-sm font-semibold text-gray-900 mb-2">
+                  <label htmlFor="phoneNumber" className="block text-xs font-semibold text-gray-900 mb-1">
                     Phone Number*
                   </label>
-                  <div className="flex gap-3">
+                  <div className="flex gap-2">
                     <select
                       name="countryCode"
                       value={formData.countryCode}
                       onChange={handleInputChange}
                       disabled={loadingCountries}
-                      className="h-12 px-3 border-2 border-gray-200 rounded-xl bg-white focus:ring-4 focus:ring-primary-100 focus:border-primary-500 focus:outline-none font-semibold text-gray-700 cursor-pointer min-w-[120px] disabled:opacity-50 disabled:cursor-not-allowed appearance-none"
+                      className="h-9 px-2 border-2 border-gray-200 rounded-lg bg-white focus:ring-2 focus:ring-primary-100 focus:border-primary-500 focus:outline-none font-semibold text-gray-700 text-sm cursor-pointer min-w-[100px] disabled:opacity-50 disabled:cursor-not-allowed appearance-none"
                       style={{
                         backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
                         backgroundRepeat: 'no-repeat',
                         backgroundPosition: 'right 0.5rem center',
-                        backgroundSize: '1rem',
-                        paddingRight: '2rem'
+                        backgroundSize: '0.875rem',
+                        paddingRight: '1.75rem'
                       }}
                     >
                       {loadingCountries ? (
@@ -367,7 +353,7 @@ const WelcomePopup: React.FC<WelcomePopupProps> = ({ onSubmit }) => {
                       type="tel"
                       value={formData.phoneNumber}
                       onChange={handleInputChange}
-                      className={`flex-1 h-12 px-4 border-2 rounded-xl transition-all focus:ring-4 focus:ring-primary-100 ${
+                      className={`flex-1 h-9 px-3 border-2 rounded-lg text-sm transition-all focus:ring-2 focus:ring-primary-100 ${
                         errors.phoneNumber ? 'border-red-500' : 'border-gray-200 focus:border-primary-500'
                       }`}
                       placeholder="Enter phone number"
@@ -385,7 +371,7 @@ const WelcomePopup: React.FC<WelcomePopupProps> = ({ onSubmit }) => {
 
                 {/* Email */}
                 <div>
-                  <label htmlFor="email" className="block text-sm font-semibold text-gray-900 mb-2">
+                  <label htmlFor="email" className="block text-xs font-semibold text-gray-900 mb-1">
                     Email Address*
                   </label>
                   <Input
@@ -394,7 +380,7 @@ const WelcomePopup: React.FC<WelcomePopupProps> = ({ onSubmit }) => {
                     type="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className={`w-full h-12 px-4 border-2 rounded-xl transition-all focus:ring-4 focus:ring-primary-100 ${
+                    className={`w-full h-9 px-3 border-2 rounded-lg text-sm transition-all focus:ring-2 focus:ring-primary-100 ${
                       errors.email ? 'border-red-500' : 'border-gray-200 focus:border-primary-500'
                     }`}
                     placeholder="Enter your email"
@@ -411,7 +397,7 @@ const WelcomePopup: React.FC<WelcomePopupProps> = ({ onSubmit }) => {
 
                 {/* Course Selection */}
                 <div>
-                  <label htmlFor="course" className="block text-sm font-semibold text-gray-900 mb-2">
+                  <label htmlFor="course" className="block text-xs font-semibold text-gray-900 mb-1">
                     Course You're Looking For*
                   </label>
                   <select
@@ -419,14 +405,14 @@ const WelcomePopup: React.FC<WelcomePopupProps> = ({ onSubmit }) => {
                     name="course"
                     value={formData.course}
                     onChange={handleInputChange}
-                    className={`w-full h-12 px-4 border-2 rounded-xl transition-all focus:ring-4 focus:ring-primary-100 focus:outline-none appearance-none bg-white cursor-pointer ${
+                    className={`w-full h-9 px-3 border-2 rounded-lg text-sm transition-all focus:ring-2 focus:ring-primary-100 focus:outline-none appearance-none bg-white cursor-pointer ${
                       errors.course ? 'border-red-500' : 'border-gray-200 focus:border-primary-500'
                     }`}
                     style={{
                       backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
                       backgroundRepeat: 'no-repeat',
-                      backgroundPosition: 'right 1rem center',
-                      backgroundSize: '1.25rem'
+                      backgroundPosition: 'right 0.75rem center',
+                      backgroundSize: '1rem'
                     }}
                   >
                     <option value="">Select a course</option>
@@ -448,39 +434,39 @@ const WelcomePopup: React.FC<WelcomePopupProps> = ({ onSubmit }) => {
                 </div>
 
                 {/* WhatsApp */}
-                <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl p-4 hover:border-green-300 transition-colors">
-                  <label className="flex items-center justify-between cursor-pointer group">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-green-500 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/30 group-hover:scale-110 transition-transform">
-                        <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                  <label className="flex items-center justify-between cursor-pointer">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 bg-green-500 rounded-lg flex items-center justify-center">
+                        <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                         </svg>
                       </div>
-                      <span className="text-sm font-semibold text-gray-900">Connect on WhatsApp</span>
+                      <span className="text-xs font-semibold text-gray-900">Connect on WhatsApp</span>
                     </div>
                     <input
                       type="checkbox"
                       name="whatsappConsent"
                       checked={formData.whatsappConsent}
                       onChange={handleInputChange}
-                      className="w-5 h-5 text-green-600 focus:ring-green-500 border-gray-300 rounded transition-transform hover:scale-110"
+                      className="w-4 h-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
                     />
                   </label>
                 </div>
 
                 {/* Terms */}
                 <div>
-                  <label className="flex items-start gap-3 cursor-pointer group">
+                  <label className="flex items-start gap-2 cursor-pointer">
                     <input
                       type="checkbox"
                       name="termsAccepted"
                       checked={formData.termsAccepted}
                       onChange={handleInputChange}
-                      className="mt-0.5 w-5 h-5 text-primary-600 focus:ring-primary-500 border-gray-300 rounded flex-shrink-0 transition-transform hover:scale-110"
+                      className="mt-0.5 w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded flex-shrink-0"
                     />
-                    <span className="text-sm text-gray-600 leading-relaxed">
+                    <span className="text-xs text-gray-600 leading-relaxed">
                       By registering, I agree to Cloud Certification{' '}
-                      <a href="/terms" className="text-primary-600 hover:text-primary-700 font-semibold underline decoration-2 underline-offset-2">
+                      <a href="/terms" className="text-primary-600 hover:text-primary-700 font-semibold underline underline-offset-2">
                         Terms & Conditions
                       </a>
                     </span>
@@ -499,7 +485,7 @@ const WelcomePopup: React.FC<WelcomePopupProps> = ({ onSubmit }) => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full h-14 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-bold text-lg rounded-xl shadow-xl shadow-primary-500/30 hover:shadow-2xl hover:shadow-primary-500/40 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0"
+                  className="w-full h-10 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-bold text-sm rounded-lg shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? (
                     <span className="flex items-center justify-center gap-2">

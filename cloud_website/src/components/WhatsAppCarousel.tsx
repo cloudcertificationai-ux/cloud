@@ -168,7 +168,7 @@ function PhoneCarousel() {
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       {/* fixed-size stage — phones stay inside this box */}
       <div
-        style={{ width: 340, height: 300, position: 'relative', perspective: 800, cursor: dragging ? 'grabbing' : 'grab', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        style={{ width: 340, height: 380, position: 'relative', perspective: 800, cursor: dragging ? 'grabbing' : 'grab', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
         onMouseDown={onMD} onMouseMove={onMM} onMouseUp={onMU} onMouseLeave={onMU}
         onTouchStart={onTS} onTouchMove={onTM} onTouchEnd={onTE}
       >
@@ -257,7 +257,7 @@ function Watermark() {
 // Main export
 export default function WhatsAppCarousel() {
   return (
-    <section style={{ background: 'linear-gradient(135deg,#c0392b 0%,#922B21 45%,#7B241C 100%)', position: 'relative', overflow: 'hidden', padding: '36px 0' }}>
+    <section style={{ background: 'linear-gradient(135deg,#1a56db 0%,#1e40af 45%,#1e3a8a 100%)', position: 'relative', overflow: 'hidden', padding: '72px 0' }}>
       <Watermark />
       <div style={{
         maxWidth: 1100, margin: '0 auto', padding: '0 32px',
