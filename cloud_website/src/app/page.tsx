@@ -16,6 +16,7 @@ const TestimonialsSection = dynamic(() => import('@/components/TestimonialsSecti
 const WelcomePopup = dynamic(() => import('@/components/WelcomePopup'));
 const BlogSection = dynamic(() => import('@/components/BlogSection'));
 const ContactSupportPopup = dynamic(() => import('@/components/ContactSupportPopup'));
+const ExploreCoursesSection = dynamic(() => import('@/components/ExploreCoursesSection'));
 
 // Static generation - this page will be pre-rendered at build time
 export const metadata: Metadata = {
@@ -290,6 +291,25 @@ export default async function Home() {
                 </Link>
               ))}
             </StaggerContainer>
+          </div>
+        </section>
+
+        {/* Explore Our Courses Section */}
+        <section className="py-12 sm:py-16 bg-white">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <ScrollReveal>
+              <div className="mb-6">
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 uppercase tracking-wide">
+                  Explore Our Courses &amp; Be Awesome
+                </h2>
+                <p className="text-gray-500 text-sm mt-1">Select the category and compare the university</p>
+              </div>
+            </ScrollReveal>
+
+            <div className="flex flex-col lg:flex-row gap-6">
+              {/* Left Sidebar */}
+              <ExploreCoursesSection />
+            </div>
           </div>
         </section>
 

@@ -58,6 +58,20 @@ const WelcomePopup: React.FC<WelcomePopupProps> = ({ onSubmit }) => {
     }
   }, []);
 
+  // Disable body scroll when popup is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    // Cleanup function to restore scroll when component unmounts
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
   useEffect(() => {
     // Fetch country codes from API
     const fetchCountryCodes = async () => {
@@ -214,7 +228,7 @@ const WelcomePopup: React.FC<WelcomePopupProps> = ({ onSubmit }) => {
 
         <div className="flex flex-col md:flex-row min-h-[600px]">
           {/* Left side - Enhanced Branding */}
-          <div className="relative w-full md:w-[45%] bg-gradient-to-br from-primary-600 via-primary-700 to-primary-900 p-10 md:p-12 text-white overflow-hidden">
+          <div className="relative w-full md:w-[45%] bg-blue-600 p-10 md:p-12 text-white overflow-hidden">
             {/* Decorative background elements */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-accent-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
