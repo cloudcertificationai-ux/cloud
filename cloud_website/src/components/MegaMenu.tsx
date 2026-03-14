@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Course, CourseCategory } from '@/types';
 import { ariaUtils, focusUtils, keyboardUtils } from '@/lib/accessibility-utils';
 
@@ -21,31 +22,104 @@ interface MegaMenuProps {
   onMouseLeave?: () => void;
 }
 
+// Inline course data (mirrors ExploreCoursesSection)
+const menuCategories = [
+  { id: 'pg', label: 'Online PG Programmes' },
+  { id: 'ug', label: 'Online UG Programmes' },
+  { id: 'diploma', label: 'Diploma Courses' },
+  { id: 'executive', label: 'Executive Programmes' },
+  { id: 'certifications', label: 'Certifications' },
+  { id: 'international', label: 'International Programmes' },
+  { id: 'free', label: 'Free Courses' },
+];
+
+type MenuCourse = { id: string; name: string; duration: string; image: string };
+
+const coursesByCategory: Record<string, MenuCourse[]> = {
+  pg: [
+    { id: 'mba', name: 'Online MBA', duration: '2 Years', image: '/courses/mba.jpg' },
+    { id: 'mca', name: 'Online MCA', duration: '2 Years', image: '/courses/mca.jpg' },
+    { id: 'mcom', name: 'Online MCom', duration: '2 Years', image: '/courses/mcom.jpg' },
+    { id: 'msc', name: 'Online MSc', duration: '2 Years', image: '/courses/msc.jpg' },
+    { id: 'ma', name: 'Online MA', duration: '2 Years', image: '/courses/ma.jpg' },
+    { id: 'mcom-acca', name: 'M.Com with ACCA', duration: '2 Years', image: '/courses/mcom-acca.jpg' },
+    { id: 'dist-mba', name: 'Distance MBA', duration: '2 Years', image: '/courses/dist-mba.jpg' },
+    { id: 'dist-mca', name: 'Distance MCA', duration: '2 Years', image: '/courses/dist-mca.jpg' },
+    { id: 'dist-mcom', name: 'Distance MCom', duration: '2 Years', image: '/courses/dist-mcom.jpg' },
+    { id: 'dist-mlis', name: 'Distance MLIS', duration: '1 Year', image: '/courses/dist-mlis.jpg' },
+  ],
+  ug: [
+    { id: 'bba', name: 'Online BBA', duration: '3 Years', image: '/courses/bba.jpg' },
+    { id: 'bca', name: 'Online BCA', duration: '3 Years', image: '/courses/bca.jpg' },
+    { id: 'bcom', name: 'Online BCom', duration: '3 Years', image: '/courses/bcom.jpg' },
+    { id: 'ba', name: 'Online BA', duration: '3 Years', image: '/courses/ba.jpg' },
+    { id: 'bsc', name: 'Online BSc', duration: '3 Years', image: '/courses/bsc.jpg' },
+  ],
+  diploma: [
+    { id: 'dba', name: 'Diploma in Business', duration: '1 Year', image: '/courses/dba.jpg' },
+    { id: 'dit', name: 'Diploma in IT', duration: '1 Year', image: '/courses/dit.jpg' },
+    { id: 'dhr', name: 'Diploma in HR', duration: '6 Months', image: '/courses/dhr.jpg' },
+  ],
+  executive: [
+    { id: 'emba', name: 'Executive MBA', duration: '1 Year', image: '/courses/emba.jpg' },
+    { id: 'epgm', name: 'Executive PGM', duration: '1 Year', image: '/courses/epgm.jpg' },
+  ],
+  certifications: [
+    { id: 'cert-pm', name: 'Project Management', duration: '3 Months', image: '/courses/cert-pm.jpg' },
+    { id: 'cert-ds', name: 'Data Science', duration: '6 Months', image: '/courses/cert-ds.jpg' },
+    { id: 'cert-ml', name: 'Machine Learning', duration: '6 Months', image: '/courses/cert-ml.jpg' },
+  ],
+  international: [
+    { id: 'int-mba', name: 'International MBA', duration: '2 Years', image: '/courses/int-mba.jpg' },
+    { id: 'int-ms', name: 'International MS', duration: '2 Years', image: '/courses/int-ms.jpg' },
+  ],
+  free: [
+    { id: 'free-py', name: 'Python Basics', duration: 'Self-paced', image: '/courses/free-py.jpg' },
+    { id: 'free-web', name: 'Web Development', duration: 'Self-paced', image: '/courses/free-web.jpg' },
+    { id: 'free-ai', name: 'AI Fundamentals', duration: 'Self-paced', image: '/courses/free-ai.jpg' },
+  ],
+};
+
+function CourseCard({ course }: { course: MenuCourse }) {
+  const [imgError, setImgError] = useState(false);
+  return (
+    <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '10px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+      {imgError ? (
+        <div style={{ width: '100%', height: '90px', background: 'linear-gradient(135deg, #dbeafe, #bfdbfe)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <span style={{ color: '#1d4ed8', fontSize: '11px', fontWeight: 600, textAlign: 'center', padding: '0 8px' }}>{course.name}</span>
+        </div>
+      ) : (
+        <div style={{ position: 'relative', width: '100%', height: '90px', overflow: 'hidden' }}>
+          <Image src={course.image} alt={course.name} fill style={{ objectFit: 'cover' }} onError={() => setImgError(true)} sizes="160px" />
+        </div>
+      )}
+      <div style={{ padding: '10px', display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
+        <p style={{ fontSize: '12px', fontWeight: 700, color: '#111827', margin: 0, lineHeight: 1.4 }}>{course.name}</p>
+        <p style={{ fontSize: '11px', color: '#6b7280', margin: 0 }}>Duration: {course.duration}</p>
+        <div style={{ marginTop: '8px' }}>
+          <button style={{ width: '100%', background: '#dbeafe', color: '#1d4ed8', border: 'none', borderRadius: '6px', padding: '6px 0', fontSize: '11px', fontWeight: 600, cursor: 'pointer' }}>
+            Read More
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function MegaMenu({ sections, isOpen, onClose, triggerRef, onMouseEnter, onMouseLeave }: MegaMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
-  const [activeSection, setActiveSection] = useState(0);
+  const [activeCategory, setActiveCategory] = useState('pg');
 
-  // Handle clicks outside the menu - but NOT inside
+  // Handle clicks outside the menu
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node;
-      
-      // Don't close if clicking inside the menu
-      if (menuRef.current && menuRef.current.contains(target)) {
-        return;
-      }
-      
-      // Don't close if clicking the trigger
-      if (triggerRef.current && triggerRef.current.contains(target)) {
-        return;
-      }
-      
-      // Close if clicking outside both
+      if (menuRef.current && menuRef.current.contains(target)) return;
+      if (triggerRef.current && triggerRef.current.contains(target)) return;
       onClose();
     };
 
     if (isOpen) {
-      // Use 'click' instead of 'mousedown' to allow proper interaction
       document.addEventListener('click', handleClickOutside);
       return () => document.removeEventListener('click', handleClickOutside);
     }
@@ -55,37 +129,10 @@ export default function MegaMenu({ sections, isOpen, onClose, triggerRef, onMous
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (!isOpen) return;
-
-      const focusableElements = menuRef.current?.querySelectorAll(
-        'button, [href], [tabindex]:not([tabindex="-1"])'
-      ) as NodeListOf<HTMLElement>;
-
-      if (!focusableElements?.length) return;
-
-      const currentIndex = Array.from(focusableElements).indexOf(document.activeElement as HTMLElement);
-
-      switch (event.key) {
-        case keyboardUtils.keys.ESCAPE:
-          event.preventDefault();
-          onClose();
-          triggerRef.current?.focus();
-          break;
-        case keyboardUtils.keys.ARROW_DOWN:
-          event.preventDefault();
-          const nextIndex = (currentIndex + 1) % focusableElements.length;
-          focusableElements[nextIndex]?.focus();
-          break;
-        case keyboardUtils.keys.ARROW_UP:
-          event.preventDefault();
-          const prevIndex = (currentIndex - 1 + focusableElements.length) % focusableElements.length;
-          focusableElements[prevIndex]?.focus();
-          break;
-        case keyboardUtils.keys.TAB:
-          // Allow normal tab behavior but close menu when tabbing out
-          if (!menuRef.current?.contains((event.target as HTMLElement))) {
-            onClose();
-          }
-          break;
+      if (event.key === keyboardUtils.keys.ESCAPE) {
+        event.preventDefault();
+        onClose();
+        triggerRef.current?.focus();
       }
     };
 
@@ -95,19 +142,9 @@ export default function MegaMenu({ sections, isOpen, onClose, triggerRef, onMous
     }
   }, [isOpen, onClose, triggerRef]);
 
-  // Focus management when menu opens - disabled to prevent interference
-  // useEffect(() => {
-  //   if (isOpen && menuRef.current) {
-  //     const firstFocusable = menuRef.current.querySelector(
-  //       'button, [href], [tabindex]:not([tabindex="-1"])'
-  //     ) as HTMLElement;
-  //     firstFocusable?.focus();
-  //   }
-  // }, [isOpen]);
-
   if (!isOpen) return null;
 
-  const currentSection = sections[activeSection] || sections[0];
+  const courses = coursesByCategory[activeCategory] ?? [];
 
   return (
     <div
@@ -118,165 +155,65 @@ export default function MegaMenu({ sections, isOpen, onClose, triggerRef, onMous
       id="mega-menu"
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      style={{
-        animation: 'fade-in-down 0.2s ease-out',
-        maxHeight: 'calc(100vh - 4rem)',
-        overflowY: 'auto'
-      }}
+      style={{ animation: 'fade-in-down 0.2s ease-out', maxHeight: 'calc(100vh - 4rem)', overflowY: 'auto' }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-white">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Categories Navigation */}
-          <div className="lg:col-span-1">
-            <h3 className="text-lg font-semibold text-navy-800 mb-4">
-              Course Categories
-            </h3>
-            <nav className="space-y-2">
-              {sections.map((section, index) => (
-                <button
-                  key={section.title}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setActiveSection(index);
-                  }}
-                  className={`${focusUtils.classes.focusVisible} w-full text-left px-4 py-3 rounded-lg transition-all duration-200 ${
-                    index === activeSection
-                      ? 'bg-primary-50 text-primary-700 border border-primary-200'
-                      : 'text-navy-600 hover:bg-gray-50 hover:text-navy-800'
-                  }`}
-                  role="menuitem"
-                  {...ariaUtils.attributes.button.pressed(index === activeSection)}
-                  {...ariaUtils.attributes.navigation.controls(`section-${index}`)}
-                >
-                  {section.title}
-                </button>
-              ))}
-            </nav>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 bg-white">
+        {/* Header */}
+        <div className="mb-4">
+          <h2 className="text-xl font-extrabold text-gray-900 uppercase tracking-wide">
+            Explore Our Courses &amp; Be Awesome
+          </h2>
+          <p className="text-gray-500 text-sm mt-1">Select the category and compare the university</p>
+        </div>
+
+        {/* Body: Sidebar + Course Grid */}
+        <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-start' }}>
+          {/* Sidebar */}
+          <div style={{ width: '190px', flexShrink: 0, border: '1px solid #e5e7eb', borderRadius: '8px', overflow: 'hidden' }}>
+            {menuCategories.map((cat, i) => (
+              <button
+                key={cat.id}
+                onClick={(e) => { e.stopPropagation(); setActiveCategory(cat.id); }}
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  textAlign: 'left',
+                  padding: '11px 14px',
+                  fontSize: '13px',
+                  fontWeight: 500,
+                  cursor: 'pointer',
+                  borderBottom: i < menuCategories.length - 1 ? '1px solid #f3f4f6' : 'none',
+                  background: activeCategory === cat.id ? '#1d4ed8' : '#ffffff',
+                  color: activeCategory === cat.id ? '#ffffff' : '#374151',
+                  transition: 'background 0.15s',
+                }}
+                role="menuitem"
+              >
+                {cat.label}
+              </button>
+            ))}
           </div>
 
-          {/* Category Details */}
-          <div className="lg:col-span-2" id={`section-${activeSection}`}>
-            <h3 className="text-lg font-semibold text-navy-800 mb-4">
-              {currentSection.title} Specializations
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {currentSection.categories.map((category) => (
-                <Link
-                  key={category.id}
-                  href={`/courses?category=${category.slug}`}
-                  onClick={onClose}
-                  className={`${focusUtils.classes.focusVisible} group p-4 rounded-lg border border-gray-200 hover:border-primary-300 hover:bg-primary-50 transition-all duration-200`}
-                  role="menuitem"
-                  aria-describedby={`category-${category.id}-desc`}
-                >
-                  <div className="flex items-start space-x-3">
-                    <div 
-                      className="w-3 h-3 rounded-full mt-2 flex-shrink-0"
-                      style={{ backgroundColor: category.color }}
-                    />
-                    <div>
-                      <h4 className="font-medium text-navy-800 group-hover:text-primary-700 transition-colors">
-                        {category.name}
-                      </h4>
-                      <p className="text-sm text-navy-600 mt-1 group-hover:text-navy-700" id={`category-${category.id}-desc`}>
-                        {category.description}
-                      </p>
-                    </div>
-                  </div>
-                </Link>
+          {/* Course Grid */}
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px' }}>
+              {courses.map((course) => (
+                <CourseCard key={course.id} course={course} />
               ))}
             </div>
-          </div>
-
-          {/* Featured Courses */}
-          <div className="lg:col-span-1">
-            <h3 className="text-lg font-semibold text-navy-800 mb-4">
-              Featured Courses
-            </h3>
-            <div className="space-y-4">
-              {currentSection.featuredCourses.slice(0, 3).map((course) => (
-                <Link
-                  key={course.id}
-                  href={`/courses/${course.slug}`}
-                  onClick={onClose}
-                  className={`${focusUtils.classes.focusVisible} group block p-4 rounded-lg border border-gray-200 hover:border-primary-300 hover:bg-primary-50 transition-all duration-200`}
-                  role="menuitem"
-                  aria-describedby={`course-${course.id}-meta`}
-                >
-                  <h4 className="font-medium text-navy-800 group-hover:text-primary-700 transition-colors text-sm mb-2">
-                    {course.title}
-                  </h4>
-                  <div className="flex items-center justify-between text-xs text-navy-600" id={`course-${course.id}-meta`}>
-                    <span className="bg-gray-100 px-2 py-1 rounded" aria-label={`Course level: ${course.level}`}>
-                      {course.level}
-                    </span>
-                    <span className="font-medium" aria-label={`Duration: ${course.duration.weeks} weeks`}>
-                      {course.duration.weeks} weeks
-                    </span>
-                  </div>
-                  <div className="flex items-center mt-2 text-xs">
-                    <div className="flex items-center text-warning-500" aria-label={`Rating: ${course.rating.average} out of 5 stars`}>
-                      <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                      <span>{course.rating.average}</span>
-                    </div>
-                    <span className="ml-2 text-navy-500" aria-label={`${course.rating.count} reviews`}>
-                      ({course.rating.count} reviews)
-                    </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-
-            {/* CTA */}
-            {currentSection.ctaLink && (
-              <div className="mt-6">
-                <Link
-                  href={currentSection.ctaLink}
-                  onClick={onClose}
-                  className={`${focusUtils.classes.focusVisible} block w-full px-4 py-3 bg-primary-600 text-white text-center font-medium rounded-lg hover:bg-primary-700 transition-all duration-200`}
-                  role="menuitem"
-                >
-                  View All Courses
-                </Link>
-              </div>
-            )}
           </div>
         </div>
 
-        {/* Bottom Section - Popular Skills */}
-        <div className="mt-8 pt-6 border-t border-gray-200">
-          <div className="flex flex-wrap items-center justify-between">
-            <div>
-              <h4 className="text-sm font-medium text-navy-800 mb-2">
-                Popular Skills:
-              </h4>
-              <div className="flex flex-wrap gap-2">
-                {['React', 'Python', 'AWS', 'Machine Learning', 'Cybersecurity', 'DevOps'].map((skill) => (
-                  <Link
-                    key={skill}
-                    href={`/courses?skill=${skill.toLowerCase()}`}
-                    onClick={onClose}
-                    className={`${focusUtils.classes.focusVisible} px-3 py-1 text-xs font-medium text-navy-600 bg-gray-100 rounded-full hover:bg-primary-100 hover:text-primary-700 transition-colors duration-200`}
-                    role="menuitem"
-                  >
-                    {skill}
-                  </Link>
-                ))}
-              </div>
-            </div>
-            <div className="mt-4 lg:mt-0">
-              <Link
-                href="/about"
-                onClick={onClose}
-                className={`${focusUtils.classes.focusVisible} text-sm text-primary-600 hover:text-primary-700 font-medium transition-colors duration-200`}
-                role="menuitem"
-              >
-                Why Choose Anywheredoor? →
-              </Link>
-            </div>
-          </div>
+        {/* Footer */}
+        <div className="mt-5 pt-4 border-t border-gray-200 flex justify-end">
+          <Link
+            href="/courses"
+            onClick={onClose}
+            className={`${focusUtils.classes.focusVisible} text-sm text-primary-600 hover:text-primary-700 font-medium transition-colors duration-200`}
+            role="menuitem"
+          >
+            View All Courses →
+          </Link>
         </div>
       </div>
     </div>

@@ -15,8 +15,9 @@ const TrustIndicators = dynamic(() => import('@/components/TrustIndicators'));
 const TestimonialsSection = dynamic(() => import('@/components/TestimonialsSection').then(mod => ({ default: mod.TestimonialsSection })));
 const WelcomePopup = dynamic(() => import('@/components/WelcomePopup'));
 const BlogSection = dynamic(() => import('@/components/BlogSection'));
-const ContactSupportPopup = dynamic(() => import('@/components/ContactSupportPopup'));
+const ContactSupportSection = dynamic(() => import('@/components/ContactSupportSection'));
 const ExploreCoursesSection = dynamic(() => import('@/components/ExploreCoursesSection'));
+const WhatsAppCarousel = dynamic(() => import('@/components/WhatsAppCarousel'));
 
 // Static generation - this page will be pre-rendered at build time
 export const metadata: Metadata = {
@@ -296,7 +297,7 @@ export default async function Home() {
 
         {/* Explore Our Courses Section */}
         <section className="py-12 sm:py-16 bg-white">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <ScrollReveal>
               <div className="mb-6">
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 uppercase tracking-wide">
@@ -330,29 +331,14 @@ export default async function Home() {
           showViewAll={true}
         />
 
-        {/* Featured Image Section */}
-        <section className="py-8 sm:py-12 bg-gray-50">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <ScrollReveal>
-              <div className="relative w-full max-w-6xl mx-auto rounded-lg overflow-hidden shadow-lg">
-                <Image
-                  src="/WhatsApp Image 2026-03-06 at 13.32.53.jpeg"
-                  alt="Featured content"
-                  width={1200}
-                  height={600}
-                  className="w-full h-auto object-cover"
-                  priority={false}
-                />
-              </div>
-            </ScrollReveal>
-          </div>
-        </section>
+        {/* WhatsApp Chat Carousel */}
+        <WhatsAppCarousel />
 
         {/* Blog Section */}
         <BlogSection posts={blogPosts} />
 
-        {/* Contact Support Popup - Before Footer */}
-        <ContactSupportPopup />
+        {/* Contact Support Section - Before Footer */}
+        <ContactSupportSection />
 
         {/* Navigation Flow */}
         <NavigationFlow />

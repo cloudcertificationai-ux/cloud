@@ -65,27 +65,26 @@ const coursesByCategory: Record<string, Course[]> = {
   ],
 };
 
-// Fallback placeholder image using a colored div with initials
 function CourseImage({ src, alt }: { src: string; alt: string }) {
   const [error, setError] = useState(false);
 
   if (error) {
     return (
-      <div className="w-full h-32 bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center rounded-t-lg">
-        <span className="text-blue-600 text-xs font-semibold text-center px-2">{alt}</span>
+      <div style={{ width: "100%", height: "110px", background: "linear-gradient(135deg, #dbeafe, #bfdbfe)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <span style={{ color: "#1d4ed8", fontSize: "11px", fontWeight: 600, textAlign: "center", padding: "0 8px" }}>{alt}</span>
       </div>
     );
   }
 
   return (
-    <div className="relative w-full h-32 rounded-t-lg overflow-hidden">
+    <div style={{ position: "relative", width: "100%", height: "110px", overflow: "hidden" }}>
       <Image
         src={src}
         alt={alt}
         fill
-        className="object-cover"
+        style={{ objectFit: "cover" }}
         onError={() => setError(true)}
-        sizes="(max-width: 768px) 50vw, 20vw"
+        sizes="200px"
       />
     </div>
   );
@@ -96,41 +95,69 @@ export default function ExploreCoursesSection() {
   const courses = coursesByCategory[activeCategory] ?? [];
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 w-full">
+    <div style={{ display: "flex", gap: "24px", width: "100%", alignItems: "flex-start" }}>
+
       {/* Sidebar */}
-      <div className="lg:w-52 flex-shrink-0">
-        <ul className="border border-gray-200 rounded-lg overflow-hidden">
-          {categories.map((cat) => (
-            <li key={cat.id}>
-              <button
-                onClick={() => setActiveCategory(cat.id)}
-                className={`w-full text-left px-4 py-3 text-sm font-medium transition-colors duration-150 border-b border-gray-100 last:border-b-0 ${
-                  activeCategory === cat.id
-                    ? "bg-blue-700 text-white"
-                    : "bg-white text-gray-700 hover:bg-blue-50 hover:text-blue-700"
-                }`}
-              >
-                {cat.label}
-              </button>
-            </li>
-          ))}
-        </ul>
+      <div style={{ width: "200px", flexShrink: 0, border: "1px solid #e5e7eb", borderRadius: "8px", overflow: "hidden" }}>
+        {categories.map((cat, i) => (
+          <button
+            key={cat.id}
+            onClick={() => setActiveCategory(cat.id)}
+            style={{
+              display: "block",
+              width: "100%",
+              textAlign: "left",
+              padding: "12px 16px",
+              fontSize: "14px",
+              fontWeight: 500,
+              cursor: "pointer",
+              borderBottom: i < categories.length - 1 ? "1px solid #f3f4f6" : "none",
+              background: activeCategory === cat.id ? "#1d4ed8" : "#ffffff",
+              color: activeCategory === cat.id ? "#ffffff" : "#374151",
+              transition: "background 0.15s",
+            }}
+          >
+            {cat.label}
+          </button>
+        ))}
       </div>
 
       {/* Course Grid */}
-      <div className="flex-1">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(5, 1fr)",
+          gap: "20px",
+        }}>
           {courses.map((course) => (
             <div
               key={course.id}
-              className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col"
+              style={{
+                background: "#ffffff",
+                border: "1px solid #e5e7eb",
+                borderRadius: "10px",
+                boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+                overflow: "hidden",
+                display: "flex",
+                flexDirection: "column",
+              }}
             >
               <CourseImage src={course.image} alt={course.name} />
-              <div className="p-3 flex flex-col flex-1">
-                <p className="text-sm font-semibold text-gray-800 leading-tight">{course.name}</p>
-                <p className="text-xs text-gray-500 mt-1">Duration: {course.duration}</p>
-                <div className="mt-auto pt-3">
-                  <button className="w-full bg-blue-100 hover:bg-blue-200 text-blue-700 text-xs font-medium py-1.5 rounded transition-colors duration-150">
+              <div style={{ padding: "12px", display: "flex", flexDirection: "column", gap: "4px", flex: 1 }}>
+                <p style={{ fontSize: "13px", fontWeight: 700, color: "#111827", margin: 0, lineHeight: 1.4 }}>{course.name}</p>
+                <p style={{ fontSize: "12px", color: "#6b7280", margin: 0 }}>Duration: {course.duration}</p>
+                <div style={{ marginTop: "10px" }}>
+                  <button style={{
+                    width: "100%",
+                    background: "#dbeafe",
+                    color: "#1d4ed8",
+                    border: "none",
+                    borderRadius: "6px",
+                    padding: "7px 0",
+                    fontSize: "12px",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                  }}>
                     Read More
                   </button>
                 </div>
@@ -139,6 +166,7 @@ export default function ExploreCoursesSection() {
           ))}
         </div>
       </div>
+
     </div>
   );
 }
