@@ -11,7 +11,6 @@ const ScrollReveal = dynamic(() => import('@/components/EnhancedAnimations').the
 const StaggerContainer = dynamic(() => import('@/components/EnhancedAnimations').then(mod => ({ default: mod.StaggerContainer })));
 const AnimatedCard = dynamic(() => import('@/components/EnhancedAnimations').then(mod => ({ default: mod.AnimatedCard })));
 const AnimatedButton = dynamic(() => import('@/components/EnhancedAnimations').then(mod => ({ default: mod.AnimatedButton })));
-const TrustIndicators = dynamic(() => import('@/components/TrustIndicators'));
 const TestimonialsSection = dynamic(() => import('@/components/TestimonialsSection').then(mod => ({ default: mod.TestimonialsSection })));
 const WelcomePopup = dynamic(() => import('@/components/WelcomePopup'));
 const BlogSection = dynamic(() => import('@/components/BlogSection'));
@@ -313,14 +312,6 @@ export default async function Home() {
             </div>
           </div>
         </section>
-
-        {/* Trust Indicators Section - Integrated Component */}
-        <TrustIndicators
-          metrics={successMetrics}
-          showPartnerLogos={true}
-          showCertifications={true}
-          showStatistics={true}
-        />
 
         {/* Testimonials Section - Integrated Component */}
         <TestimonialsSection

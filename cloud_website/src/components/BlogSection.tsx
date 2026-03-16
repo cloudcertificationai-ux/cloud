@@ -133,7 +133,7 @@ export default function BlogSection({ posts }: BlogSectionProps) {
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollContainerRef.current) {
-      const scrollAmount = 320; // Width of one card + gap
+      const scrollAmount = 240; // Width of one card + gap
       const newScrollLeft = scrollContainerRef.current.scrollLeft + (direction === 'right' ? scrollAmount : -scrollAmount);
       
       scrollContainerRef.current.scrollTo({
@@ -215,7 +215,7 @@ export default function BlogSection({ posts }: BlogSectionProps) {
           >
             {displayPosts.map((post) => (
               <Link key={post.id} href={`/blog/${post.slug}`} className="flex-shrink-0">
-                <article className="w-[280px] bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col group">
+                <article className="w-[220px] bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col group">
                   {/* Cover Image */}
                   <div className="relative h-40 overflow-hidden">
                     {post.coverImageUrl ? (

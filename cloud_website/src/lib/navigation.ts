@@ -20,11 +20,6 @@ export interface BreadcrumbItem {
  */
 export const mainNavigation: NavigationItem[] = [
   { 
-    href: '/', 
-    label: 'Home', 
-    description: 'Homepage with featured courses and statistics' 
-  },
-  { 
     href: '/courses', 
     label: 'Courses', 
     description: 'Browse all available courses',
