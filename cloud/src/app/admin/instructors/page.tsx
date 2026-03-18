@@ -115,7 +115,7 @@ export default function InstructorsPage() {
                 <div className="flex items-center mt-1">
                   <StarIcon className="h-4 w-4 text-yellow-400 fill-current" />
                   <span className="ml-1 text-sm text-gray-600">
-                    {instructor.rating.average} ({instructor.rating.count} reviews)
+                    {instructor.rating?.average ?? 'N/A'} ({instructor.rating?.count ?? 0} reviews)
                   </span>
                 </div>
               </div>

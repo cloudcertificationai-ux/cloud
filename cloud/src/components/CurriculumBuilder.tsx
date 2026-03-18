@@ -719,7 +719,7 @@ export function CurriculumBuilder({
             placeholder="Module title"
             className="input-field mb-4"
             onKeyDown={(e) => {
-              if (e.key === 'Enter' && moduleTitle.trim()) {
+              if (e.key === 'Enter' && moduleTitle.trim().length >= 3) {
                 createModuleMutation.mutate(moduleTitle.trim());
               }
             }}
@@ -727,14 +727,17 @@ export function CurriculumBuilder({
           <div className="flex gap-2">
             <button
               onClick={() => {
-                if (moduleTitle.trim()) {
-                  createModuleMutation.mutate(moduleTitle.trim());
-                } else {
+                const trimmed = moduleTitle.trim();
+                if (!trimmed) {
                   toast.error('Module title is required');
+                } else if (trimmed.length < 3) {
+                  toast.error('Module title must be at least 3 characters');
+                } else {
+                  createModuleMutation.mutate(trimmed);
                 }
               }}
               className="btn-primary"
-              disabled={createModuleMutation.isPending || !moduleTitle.trim()}
+              disabled={createModuleMutation.isPending || moduleTitle.trim().length < 3}
             >
               {createModuleMutation.isPending ? 'Creating...' : 'Create Module'}
             </button>
@@ -832,10 +835,10 @@ export function CurriculumBuilder({
                 isExpanded={expandedModules.has(module.id)}
                 onToggle={() => toggleModule(module.id)}
                 onEdit={() => {
-                  const module = modules.find((m) => m.id === module.id);
-                  if (module) {
-                    setModuleTitle(module.title);
-                    setEditingModule(module.id);
+                  const found = modules.find((m) => m.id === module.id);
+                  if (found) {
+                    setModuleTitle(found.title);
+                    setEditingModule(found.id);
                   }
                 }}
                 onDelete={() =>

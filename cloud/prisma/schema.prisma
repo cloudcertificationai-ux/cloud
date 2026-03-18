@@ -67,23 +67,32 @@ model Category {
 }
 
 model Course {
-  id             String           @id
-  title          String
-  slug           String           @unique
-  summary        String?
-  description    String?
-  priceCents     Int              @default(0)
-  currency       String           @default("INR")
-  published      Boolean          @default(false)
-  featured       Boolean          @default(false)
-  level          String?
-  durationMin    Int?
-  rating         Float?           @default(0)
-  thumbnailUrl   String?
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime
-  instructorId   String?
-  categoryId     String?
+  id                String           @id
+  title             String
+  slug              String           @unique
+  summary           String?
+  description       String?
+  priceCents        Int              @default(0)
+  currency          String           @default("INR")
+  published         Boolean          @default(false)
+  featured          Boolean          @default(false)
+  level             String?
+  durationMin       Int?
+  rating            Float?           @default(0)
+  thumbnailUrl      String?
+  videoUrl          String?
+  documentUrl       String?
+  language          String?          @default("English")
+  learningOutcomes  Json?            @default("[]")
+  handsOnProjects   Json?            @default("[]")
+  caseStudies       Json?            @default("[]")
+  courseFeatures    Json?            @default("[]")
+  requirements      Json?            @default("[]")
+  certifications    Json?            @default("[]")
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime
+  instructorId      String?
+  categoryId        String?
   Category       Category?        @relation(fields: [categoryId], references: [id])
   Instructor     Instructor?      @relation(fields: [instructorId], references: [id])
   CourseProgress CourseProgress[]

@@ -50,6 +50,15 @@ export async function POST(request: NextRequest) {
         level: validatedData.level,
         durationMin: validatedData.durationMin,
         thumbnailUrl: validatedData.thumbnailUrl,
+        videoUrls: validatedData.videoUrls ?? [],
+        documentUrl: validatedData.documentUrl,
+        language: validatedData.language || 'English',
+        learningOutcomes: validatedData.learningOutcomes ?? [],
+        handsOnProjects: validatedData.handsOnProjects ?? [],
+        caseStudies: validatedData.caseStudies ?? [],
+        courseFeatures: validatedData.courseFeatures ?? [],
+        requirements: validatedData.requirements ?? [],
+        certifications: validatedData.certifications ?? [],
         ...(validatedData.categoryId && {
           Category: { connect: { id: validatedData.categoryId } }
         }),

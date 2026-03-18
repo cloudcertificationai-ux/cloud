@@ -24,6 +24,28 @@ export function generateSlug(title: string): string {
     .replace(/^-+|-+$/g, '') // Remove leading/trailing hyphens
 }
 
+// Shared rich-content sub-schemas
+const handsOnProjectSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  skills: z.array(z.string()),
+  duration: z.string(),
+})
+
+const caseStudySchema = z.object({
+  company: z.string(),
+  industry: z.string(),
+  challenge: z.string(),
+  solution: z.string(),
+  outcome: z.string(),
+})
+
+const certificationSchema = z.object({
+  title: z.string(),
+  issuer: z.string(),
+  description: z.string(),
+})
+
 /**
  * Course creation schema
  */
@@ -42,8 +64,17 @@ export const createCourseSchema = z.object({
   level: z.enum(['Beginner', 'Intermediate', 'Advanced']).optional().nullable(),
   durationMin: z.number().int('Duration must be an integer').positive('Duration must be positive').optional().nullable(),
   thumbnailUrl: z.string().url('Thumbnail must be a valid URL').optional().nullable().or(z.literal('')),
+  videoUrls: z.array(z.string().url()).optional(),
+  documentUrl: z.string().url('Document must be a valid URL').optional().nullable().or(z.literal('')),
   categoryId: z.string().optional().nullable(),
   instructorId: z.string().optional().nullable(),
+  language: z.string().optional().nullable(),
+  learningOutcomes: z.array(z.string()).optional(),
+  handsOnProjects: z.array(handsOnProjectSchema).optional(),
+  caseStudies: z.array(caseStudySchema).optional(),
+  courseFeatures: z.array(z.string()).optional(),
+  requirements: z.array(z.string()).optional(),
+  certifications: z.array(certificationSchema).optional(),
 })
 
 /**
@@ -59,8 +90,17 @@ export const updateCourseSchema = z.object({
   level: z.enum(['Beginner', 'Intermediate', 'Advanced']).optional().nullable().or(z.literal('')),
   durationMin: z.number().int().positive().optional().nullable(),
   thumbnailUrl: z.string().url().optional().nullable().or(z.literal('')),
+  videoUrls: z.array(z.string().url()).optional(),
+  documentUrl: z.string().url().optional().nullable().or(z.literal('')),
   categoryId: z.string().optional().nullable().or(z.literal('')),
   instructorId: z.string().optional().nullable().or(z.literal('')),
+  language: z.string().optional().nullable(),
+  learningOutcomes: z.array(z.string()).optional(),
+  handsOnProjects: z.array(handsOnProjectSchema).optional(),
+  caseStudies: z.array(caseStudySchema).optional(),
+  courseFeatures: z.array(z.string()).optional(),
+  requirements: z.array(z.string()).optional(),
+  certifications: z.array(certificationSchema).optional(),
 })
 
 /**

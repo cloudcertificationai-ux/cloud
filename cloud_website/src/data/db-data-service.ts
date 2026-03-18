@@ -149,6 +149,13 @@ export class DbDataService {
           thumbnailUrl: true,
           createdAt: true,
           updatedAt: true,
+          language: true,
+          learningOutcomes: true,
+          handsOnProjects: true,
+          caseStudies: true,
+          courseFeatures: true,
+          requirements: true,
+          certifications: true,
           Instructor: {
             select: {
               id: true,

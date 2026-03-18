@@ -20,30 +20,6 @@ export default function CourseHero({ course, instructors }: CourseHeroProps) {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Course Information */}
             <div className="lg:col-span-2">
-              {/* Breadcrumb */}
-              <nav className="mb-6">
-                <ol className="flex flex-wrap items-center gap-2 text-sm text-gray-600">
-                  <li>
-                    <a href="/" className="hover:text-blue-600">Home</a>
-                  </li>
-                  <li className="text-gray-400">/</li>
-                  <li>
-                    <a href="/courses" className="hover:text-blue-600">Courses</a>
-                  </li>
-                  <li className="text-gray-400">/</li>
-                  <li>
-                    <a 
-                      href={`/courses?category=${course.category.slug}`}
-                      className="hover:text-blue-600"
-                    >
-                      {course.category.name}
-                    </a>
-                  </li>
-                  <li className="text-gray-400 hidden sm:inline">/</li>
-                  <li className="text-gray-900 font-medium truncate max-w-xs hidden sm:block">{course.title}</li>
-                </ol>
-              </nav>
-
               {/* Course Title and Description */}
               <div className="mb-8">
                 <div className="flex flex-wrap items-center gap-3 mb-4">

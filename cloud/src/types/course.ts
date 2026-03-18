@@ -31,6 +31,28 @@ export interface CourseFormData {
   thumbnailUrl?: string
   categoryId?: string
   instructorId?: string
+  language?: string
+  learningOutcomes?: string[]
+  handsOnProjects?: Array<{
+    title: string
+    description: string
+    skills: string[]
+    duration: string
+  }>
+  caseStudies?: Array<{
+    company: string
+    industry: string
+    challenge: string
+    solution: string
+    outcome: string
+  }>
+  courseFeatures?: string[]
+  requirements?: string[]
+  certifications?: Array<{
+    title: string
+    issuer: string
+    description: string
+  }>
 }
 
 /**

@@ -1,4 +1,5 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { createId } from '@paralleldrive/cuid2';
 import prisma from '@/lib/db';
 
 export async function GET() {
@@ -30,6 +31,30 @@ export async function GET() {
     console.error('Error fetching instructors:', error);
     return NextResponse.json(
       { error: 'Failed to fetch instructors' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { name } = body;
+
+    if (!name || typeof name !== 'string' || name.trim().length === 0) {
+      return NextResponse.json({ error: 'Name is required' }, { status: 400 });
+    }
+
+    const instructor = await prisma.instructor.create({
+      data: { id: createId(), name: name.trim() },
+      select: { id: true, name: true },
+    });
+
+    return NextResponse.json(instructor, { status: 201 });
+  } catch (error) {
+    console.error('Error creating instructor:', error);
+    return NextResponse.json(
+      { error: 'Failed to create instructor' },
       { status: 500 }
     );
   }

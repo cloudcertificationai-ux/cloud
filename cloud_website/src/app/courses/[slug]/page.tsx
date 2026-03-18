@@ -130,17 +130,87 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
     notFound();
   }
 
-  // Get instructors for this course - already included in the query
-  const instructors = course.Instructor ? [course.Instructor] : [];
+  // Map Prisma instructor shape to the Instructor type expected by components
+  const instructors = course.Instructor
+    ? [{
+        ...course.Instructor,
+        title: course.Instructor.company ?? '',
+        profileImageUrl: course.Instructor.avatar || '/images/default-avatar.png',
+        expertise: [],
+        experience: { years: 0, companies: course.Instructor.company ? [course.Instructor.company] : [] },
+        socialLinks: {},
+        courseIds: [],
+        rating: { average: 0, count: 0 },
+      }]
+    : [];
   
   // Get testimonials for this course - already included in the query
   const testimonials = course.Testimonial || [];
 
+  // Map Prisma result shape to the Course type expected by components
+  const reviewCount = course._count?.Review ?? 0;
+  const mappedCourse = {
+    ...course,
+    shortDescription: course.summary ?? '',
+    longDescription: course.description ?? '',
+    category: course.Category
+      ? { ...course.Category, description: '', color: '#3B82F6' }
+      : { id: '', name: 'Uncategorized', slug: '', description: '', color: '#6B7280' },
+    rating: {
+      average: typeof course.rating === 'number' ? course.rating : 0,
+      count: reviewCount,
+    },
+    duration: {
+      hours: course.durationMin ? Math.round(course.durationMin / 60) : 0,
+      weeks: course.durationMin ? Math.round(course.durationMin / 60 / 5) : 0,
+    },
+    price: {
+      amount: course.priceCents ? course.priceCents / 100 : 0,
+      currency: course.currency ?? 'USD',
+      originalPrice: undefined,
+    },
+    mode: (course.level === 'Beginner' ? 'Self-Paced' : 'Live') as 'Live' | 'Self-Paced' | 'Hybrid',
+    enrollmentCount: course._count?.Enrollment ?? 0,
+    curriculum: (course.Module ?? []).map((mod: any) => ({
+      id: mod.id,
+      title: mod.title,
+      description: '',
+      order: mod.order,
+      estimatedHours: 0,
+      lessons: (mod.Lesson ?? []).map((lesson: any) => ({
+        id: lesson.id,
+        title: lesson.title,
+        type: 'Video' as const,
+        duration: lesson.duration ?? 0,
+        isPreview: false,
+      })),
+    })),
+    thumbnailUrl: course.thumbnailUrl || '/images/course-placeholder.jpg',
+    tags: [],
+    isActive: course.published ?? false,
+    instructorIds: course.Instructor ? [course.Instructor.id] : [],
+    cohorts: [],
+    // Rich content fields
+    language: (course as any).language ?? 'English',
+    learningOutcomes: (course as any).learningOutcomes ?? [],
+    handsOnProjects: (course as any).handsOnProjects ?? [],
+    caseStudies: (course as any).caseStudies ?? [],
+    courseFeatures: (course as any).courseFeatures ?? [],
+    requirements: (course as any).requirements ?? [],
+    certifications: (course as any).certifications ?? [],
+  };
+
   // Check enrollment status (requirement 8.1)
   const { getServerSession } = await import('next-auth');
   const { authOptions } = await import('@/lib/auth');
-  const session = await getServerSession(authOptions);
-  
+
+  let session = null;
+  try {
+    session = await getServerSession(authOptions);
+  } catch {
+    // JWT decryption can fail when NEXTAUTH_SECRET rotates or cookie is stale — treat as unauthenticated
+  }
+
   let isEnrolled = false;
   if (session?.user?.id) {
     try {
@@ -157,7 +227,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
   // Generate breadcrumb data
   const breadcrumbItems = [
     { label: 'Courses', href: '/courses' },
-    { label: course.Category?.name || 'Uncategorized', href: `/courses?category=${course.Category?.slug || ''}` },
+    { label: mappedCourse.category.name, href: `/courses?category=${mappedCourse.category.slug}` },
     { label: course.title }
   ];
 
@@ -183,18 +253,18 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
         </div>
         
         {/* Course Hero Section */}
-        <CourseHero course={course as any} instructors={instructors as any} />
+        <CourseHero course={mappedCourse as any} instructors={instructors as any} />
         
         {/* Course Content with Tabs */}
         <CourseContent 
-          course={course as any} 
+          course={mappedCourse as any} 
           instructors={instructors as any} 
           testimonials={testimonials as any}
           isEnrolled={isEnrolled}
         />
         
         {/* Sticky Enrollment CTA */}
-        <StickyEnrollment course={course as any} />
+        <StickyEnrollment course={mappedCourse as any} />
 
         {/* Navigation Flow */}
         <NavigationFlow />

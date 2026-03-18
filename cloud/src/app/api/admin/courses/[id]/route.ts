@@ -121,6 +121,7 @@ export async function PUT(
       instructorId: validatedData.instructorId === '' ? undefined : validatedData.instructorId,
       categoryId: validatedData.categoryId === '' ? undefined : validatedData.categoryId,
       thumbnailUrl: validatedData.thumbnailUrl === '' ? null : validatedData.thumbnailUrl,
+      documentUrl: validatedData.documentUrl === '' ? null : validatedData.documentUrl,
       summary: validatedData.summary === '' ? null : validatedData.summary,
       description: validatedData.description === '' ? null : validatedData.description,
       level: validatedData.level === '' ? null : validatedData.level,

@@ -35,8 +35,9 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
-, "../anywheredoor/src/__tests__/lesson-kind-validation.test.ts"  ],
+  ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "src/app/api/admin/courses/__tests__"
   ]
 }

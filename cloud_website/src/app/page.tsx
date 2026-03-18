@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import prisma from '@/lib/db';
+import { CategoryWithCourses } from '@/types/categories';
 
 // Dynamically import client components to keep this page as a server component
 const NavigationFlow = dynamic(() => import('@/components/NavigationFlow'));
@@ -70,7 +71,8 @@ const structuredData = {
 
 export default async function Home() {
   // Fetch real data from database with fallbacks for build time
-  let categories: Array<{
+  let categories: CategoryWithCourses[] = [];
+  let rawCategories: Array<{
     id: string;
     name: string;
     slug: string;
@@ -100,7 +102,30 @@ export default async function Home() {
   }> = [];
 
   try {
-    [categories, testimonials, courseStats, blogPosts] = await Promise.all([
+    [categories, rawCategories, testimonials, courseStats, blogPosts] = await Promise.all([
+      prisma.category.findMany({
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          Course: {
+            where: { published: true },
+            select: {
+              id: true,
+              title: true,
+              slug: true,
+              thumbnailUrl: true,
+              durationMin: true,
+            },
+          },
+        },
+        orderBy: { name: 'asc' },
+      }).then(rows => rows.map(row => ({
+        id: row.id,
+        name: row.name,
+        slug: row.slug,
+        courses: row.Course,
+      }))),
       prisma.category.findMany({
         select: {
           id: true,
@@ -186,7 +211,7 @@ export default async function Home() {
     'Cloud Computing': 'Gain cloud architecture expertise for senior engineering and DevOps leadership positions',
   };
 
-  const enrichedCategories = categories.map(cat => ({
+  const enrichedCategories = rawCategories.map(cat => ({
     ...cat,
     color: categoryColors[cat.name] || '#6B7280',
     description: categoryDescriptions[cat.name] || `Explore ${cat.name} courses and advance your career`,
@@ -308,7 +333,7 @@ export default async function Home() {
 
             <div className="flex flex-col lg:flex-row gap-6">
               {/* Left Sidebar */}
-              <ExploreCoursesSection />
+              <ExploreCoursesSection categories={categories} />
             </div>
           </div>
         </section>

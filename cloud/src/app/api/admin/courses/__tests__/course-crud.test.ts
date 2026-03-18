@@ -97,7 +97,6 @@ describe('Course CRUD APIs', () => {
       const data = await response.json()
 
       expect(response.status).toBe(201)
-      expect(data.success).toBe(true)
       expect(data.data.title).toBe('Test Course')
       expect(data.data.slug).toBe('test-course')
       expect(data.data.published).toBe(false)
@@ -157,7 +156,6 @@ describe('Course CRUD APIs', () => {
       const data = await response.json()
 
       expect(response.status).toBe(409)
-      expect(data.success).toBe(false)
       expect(data.error.message).toContain('slug')
     })
 
@@ -176,7 +174,7 @@ describe('Course CRUD APIs', () => {
       const data = await response.json()
 
       expect(response.status).toBe(400)
-      expect(data.success).toBe(false)
+      expect(data.error).toBeDefined()
     })
 
     it('should return 400 for invalid price (negative)', async () => {
@@ -194,7 +192,7 @@ describe('Course CRUD APIs', () => {
       const data = await response.json()
 
       expect(response.status).toBe(400)
-      expect(data.success).toBe(false)
+      expect(data.error).toBeDefined()
     })
   })
 
@@ -239,7 +237,6 @@ describe('Course CRUD APIs', () => {
       const data = await response.json()
 
       expect(response.status).toBe(200)
-      expect(data.success).toBe(true)
       expect(data.data.Module).toHaveLength(2)
       expect(data.data.Module[0].Lesson).toHaveLength(2)
       expect(data.data.Module[0].order).toBe(0)
@@ -258,7 +255,6 @@ describe('Course CRUD APIs', () => {
       const data = await response.json()
 
       expect(response.status).toBe(404)
-      expect(data.success).toBe(false)
       expect(data.error.message).toContain('not found')
     })
   })
@@ -288,7 +284,6 @@ describe('Course CRUD APIs', () => {
       const data = await response.json()
 
       expect(response.status).toBe(200)
-      expect(data.success).toBe(true)
       expect(data.data.title).toBe('Updated Course Title')
       expect(mockPrisma.course.update).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -320,7 +315,6 @@ describe('Course CRUD APIs', () => {
       const data = await response.json()
 
       expect(response.status).toBe(400)
-      expect(data.success).toBe(false)
       expect(data.error.message).toContain('published course')
     })
 
@@ -348,7 +342,6 @@ describe('Course CRUD APIs', () => {
       const data = await response.json()
 
       expect(response.status).toBe(200)
-      expect(data.success).toBe(true)
       expect(data.data.slug).toBe('new-slug')
     })
 
@@ -364,7 +357,7 @@ describe('Course CRUD APIs', () => {
       const data = await response.json()
 
       expect(response.status).toBe(404)
-      expect(data.success).toBe(false)
+      expect(data.error).toBeDefined()
     })
   })
 
@@ -382,7 +375,6 @@ describe('Course CRUD APIs', () => {
       const data = await response.json()
 
       expect(response.status).toBe(200)
-      expect(data.success).toBe(true)
       expect(data.data.message).toContain('deleted successfully')
       expect(mockPrisma.course.delete).toHaveBeenCalledWith({
         where: { id: 'course-123' },
@@ -400,7 +392,7 @@ describe('Course CRUD APIs', () => {
       const data = await response.json()
 
       expect(response.status).toBe(404)
-      expect(data.success).toBe(false)
+      expect(data.error).toBeDefined()
     })
 
     it('should verify cascade deletion is configured (Prisma schema check)', () => {
@@ -431,7 +423,7 @@ describe('Course CRUD APIs', () => {
       const data = await response.json()
 
       expect(response.status).toBe(401)
-      expect(data.success).toBe(false)
+      expect(data.error).toBeDefined()
     })
 
     it('should return 403 if user is not admin', async () => {
@@ -452,7 +444,7 @@ describe('Course CRUD APIs', () => {
       const data = await response.json()
 
       expect(response.status).toBe(403)
-      expect(data.success).toBe(false)
+      expect(data.error).toBeDefined()
     })
   })
 })

@@ -32,23 +32,23 @@ export function generateCourseStructuredData(course: Course, instructors: Instru
     })),
     courseCode: course.id,
     educationalLevel: course.level,
-    timeRequired: `PT${course.duration.hours}H`,
-    numberOfCredits: course.duration.weeks,
+    timeRequired: course.duration?.hours ? `PT${course.duration.hours}H` : undefined,
+    numberOfCredits: course.duration?.weeks,
     coursePrerequisites: course.level === 'Beginner' ? 'None' : 'Basic programming knowledge',
-    aggregateRating: {
+    aggregateRating: course.rating ? {
       '@type': 'AggregateRating',
       ratingValue: course.rating.average,
       reviewCount: course.rating.count,
       bestRating: 5,
       worstRating: 1,
-    },
-    offers: {
+    } : undefined,
+    offers: course.price ? {
       '@type': 'Offer',
       price: course.price.amount,
       priceCurrency: course.price.currency,
       availability: 'https://schema.org/InStock',
       validFrom: now,
-    },
+    } : undefined,
     image: course.thumbnailUrl,
     url: `${baseUrl}/courses/${course.slug}`,
     dateCreated: course.createdAt instanceof Date && !isNaN(course.createdAt.getTime()) 
@@ -57,17 +57,17 @@ export function generateCourseStructuredData(course: Course, instructors: Instru
     dateModified: course.updatedAt instanceof Date && !isNaN(course.updatedAt.getTime()) 
       ? course.updatedAt.toISOString() 
       : now,
-    keywords: course.tags.join(', '),
-    about: course.category.name,
+    keywords: course.tags?.join(', '),
+    about: course.category?.name,
     teaches: course.tags,
-    hasCourseInstance: {
+    hasCourseInstance: course.mode ? {
       '@type': 'CourseInstance',
       courseMode: course.mode.toLowerCase(),
       instructor: instructors.map(instructor => ({
         '@type': 'Person',
         name: instructor.name,
       })),
-    },
+    } : undefined,
   };
 }
 
@@ -277,16 +277,16 @@ export function extractKeywords(course: Course): string[] {
   const keywords = new Set<string>();
   
   // Add explicit tags
-  course.tags.forEach(tag => keywords.add(tag.toLowerCase()));
+  course.tags?.forEach(tag => keywords.add(tag.toLowerCase()));
   
   // Add category
-  keywords.add(course.category.name.toLowerCase());
+  if (course.category?.name) keywords.add(course.category.name.toLowerCase());
   
   // Add level
-  keywords.add(course.level.toLowerCase());
+  if (course.level) keywords.add(course.level.toLowerCase());
   
   // Add mode
-  keywords.add(course.mode.toLowerCase());
+  if (course.mode) keywords.add(course.mode.toLowerCase());
   
   // Add common course-related keywords
   keywords.add('online course');
@@ -320,16 +320,19 @@ export function generateCourseSEOMetadata(course: Course, instructors: Instructo
   const canonicalUrl = `${baseUrl}/courses/${course.slug}`;
   const keywords = extractKeywords(course);
   
+  const categoryName = course.category?.name ?? 'Cloud';
+  const durationWeeks = course.duration?.weeks ?? '';
+
   const title = `${course.title} - Online Course | Cloud Certification`;
   const description = optimizeMetaDescription(
-    `Master ${course.category.name} with ${course.title}. ${course.shortDescription} Get certified in ${course.duration.weeks} weeks with expert instruction.`
+    `Master ${categoryName} with ${course.title}. ${course.shortDescription} Get certified${durationWeeks ? ` in ${durationWeeks} weeks` : ''} with expert instruction.`
   );
   
   // Generate dynamic OG image
   const ogImageUrl = generateOGImageUrl(
     course.title,
     'course',
-    `${course.category.name} • ${course.duration.weeks} weeks • ${instructors[0]?.name || 'Expert Instructor'}`
+    `${categoryName}${durationWeeks ? ` • ${durationWeeks} weeks` : ''} • ${instructors[0]?.name || 'Expert Instructor'}`
   );
   
   return {

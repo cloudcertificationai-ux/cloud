@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Course" ADD COLUMN IF NOT EXISTS "videoUrl" TEXT;
+ALTER TABLE "Course" ADD COLUMN IF NOT EXISTS "documentUrl" TEXT;
