@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
         level: validatedData.level,
         durationMin: validatedData.durationMin,
         thumbnailUrl: validatedData.thumbnailUrl,
-        videoUrls: validatedData.videoUrls ?? [],
+        videoUrl: validatedData.videoUrls?.[0] ?? null,
         documentUrl: validatedData.documentUrl,
         language: validatedData.language || 'English',
         learningOutcomes: validatedData.learningOutcomes ?? [],
