@@ -43,15 +43,15 @@ export default function LearningPathsMarquee() {
             <div
               key={`${logo.name}-${idx}`}
               className="flex-shrink-0 flex items-center justify-center"
-              style={{ height: '48px', width: '120px' }}
+              style={{ height: '80px', width: '180px' }}
             >
               <Image
                 src={logo.src}
                 alt={`${logo.name} logo`}
-                width={120}
-                height={48}
+                width={180}
+                height={80}
                 className="object-contain grayscale hover:grayscale-0 transition-all duration-300"
-                style={{ maxHeight: '48px', width: 'auto' }}
+                style={{ maxHeight: '80px', width: 'auto' }}
               />
             </div>
           ))}
