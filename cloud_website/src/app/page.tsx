@@ -18,6 +18,7 @@ const BlogSection = dynamic(() => import('@/components/BlogSection'));
 const ContactSupportSection = dynamic(() => import('@/components/ContactSupportSection'));
 const ExploreCoursesSection = dynamic(() => import('@/components/ExploreCoursesSection'));
 const WhatsAppCarousel = dynamic(() => import('@/components/WhatsAppCarousel'));
+const LearningPathsMarquee = dynamic(() => import('@/components/LearningPathsMarquee'));
 
 // Static generation - this page will be pre-rendered at build time
 export const metadata: Metadata = {
@@ -229,7 +230,7 @@ export default async function Home() {
           headline="Be a Leader in Your Field with Industry-Certified Tech Skills"
           subheadline={`Join ${successMetrics.totalStudents.toLocaleString()}+ professionals who've advanced to senior roles with our job-ready courses in programming, data science, and cybersecurity. Get industry-recognized certifications that Fortune 500 companies trust.`}
           primaryCTA={{
-            text: "Explore Career Paths",
+            text: "Start 7-day Free Trial",
             href: "/courses"
           }}
           secondaryCTA={{
@@ -268,56 +269,8 @@ export default async function Home() {
           ]}
         />
 
-        {/* Featured Categories Preview */}
-        <section className="py-12 sm:py-16 bg-white">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <ScrollReveal>
-              <div className="text-center mb-8 sm:mb-12">
-                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">
-                  Career-Focused Learning Paths
-                </h2>
-                <p className="text-gray-600 max-w-2xl mx-auto text-sm sm:text-base">
-                  Master the exact skills that top employers are hiring for. Our industry-aligned courses 
-                  are designed with Fortune 500 companies to ensure you're job-ready from day one.
-                </p>
-              </div>
-            </ScrollReveal>
-            
-            <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-              {enrichedCategories.map((category) => (
-                <Link
-                  key={category.id}
-                  href={`/courses?category=${category.slug}`}
-                  className="block"
-                >
-                  <AnimatedCard className="p-4 sm:p-6 border border-gray-200 hover:border-blue-300 h-full">
-                    <div 
-                      className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg mb-3 sm:mb-4 flex items-center justify-center transition-transform duration-300 hover:scale-110"
-                      style={{ backgroundColor: `${category.color}20` }}
-                    >
-                      <div 
-                        className="w-5 h-5 sm:w-6 sm:h-6 rounded transition-all duration-300"
-                        style={{ backgroundColor: category.color }}
-                      />
-                    </div>
-                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 hover:text-blue-600 transition-colors duration-300">
-                      {category.name}
-                    </h3>
-                    <p className="text-gray-600 text-sm hover:text-gray-700 transition-colors duration-300 line-clamp-2">
-                      {category.description}
-                    </p>
-                    <div className="mt-3 sm:mt-4 flex items-center text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <span className="text-sm font-medium">Explore courses</span>
-                      <svg className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </div>
-                  </AnimatedCard>
-                </Link>
-              ))}
-            </StaggerContainer>
-          </div>
-        </section>
+        {/* Career-Focused Learning Paths — RTL marquee */}
+        <LearningPathsMarquee />
 
         {/* Explore Our Courses Section */}
         <section className="py-12 sm:py-16 bg-white">

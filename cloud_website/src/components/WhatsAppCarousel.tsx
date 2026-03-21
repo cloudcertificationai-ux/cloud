@@ -134,12 +134,24 @@ function PhoneCarousel() {
 
   useEffect(() => { startAuto(); return stopAuto; }, [startAuto, stopAuto]);
 
+  const stageRef = useRef<HTMLDivElement>(null);
+
+  // Passive touch listeners so they never block page scroll
+  useEffect(() => {
+    const el = stageRef.current;
+    if (!el) return;
+    const ts = (e: TouchEvent) => { startX.current = e.touches[0].clientX; delta.current = 0; stopAuto(); };
+    const tm = (e: TouchEvent) => { delta.current = e.touches[0].clientX - startX.current; };
+    const te = () => { if (delta.current < -40) next(); else if (delta.current > 40) prev(); startAuto(); };
+    el.addEventListener('touchstart', ts, { passive: true });
+    el.addEventListener('touchmove', tm, { passive: true });
+    el.addEventListener('touchend', te, { passive: true });
+    return () => { el.removeEventListener('touchstart', ts); el.removeEventListener('touchmove', tm); el.removeEventListener('touchend', te); };
+  }, [next, prev, startAuto, stopAuto]);
+
   const onMD = (e: React.MouseEvent) => { setDragging(true); startX.current = e.clientX; delta.current = 0; stopAuto(); };
   const onMM = (e: React.MouseEvent) => { if (dragging) delta.current = e.clientX - startX.current; };
   const onMU = () => { if (!dragging) return; setDragging(false); if (delta.current < -40) next(); else if (delta.current > 40) prev(); startAuto(); };
-  const onTS = (e: React.TouchEvent) => { startX.current = e.touches[0].clientX; delta.current = 0; stopAuto(); };
-  const onTM = (e: React.TouchEvent) => { delta.current = e.touches[0].clientX - startX.current; };
-  const onTE = () => { if (delta.current < -40) next(); else if (delta.current > 40) prev(); startAuto(); };
 
   // Each phone slot: center=0, sides=±1,±2
   // Container is 340px wide, phones are 140px wide
@@ -168,9 +180,9 @@ function PhoneCarousel() {
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       {/* fixed-size stage — phones stay inside this box */}
       <div
+        ref={stageRef}
         style={{ width: 340, height: 380, position: 'relative', perspective: 800, cursor: dragging ? 'grabbing' : 'grab', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
         onMouseDown={onMD} onMouseMove={onMM} onMouseUp={onMU} onMouseLeave={onMU}
-        onTouchStart={onTS} onTouchMove={onTM} onTouchEnd={onTE}
       >
         {chatScreens.map((chat, i) => (
           <div key={chat.id} style={getStyle(i)}>
@@ -257,7 +269,7 @@ function Watermark() {
 // Main export
 export default function WhatsAppCarousel() {
   return (
-    <section style={{ background: 'linear-gradient(135deg,#1a56db 0%,#1e40af 45%,#1e3a8a 100%)', position: 'relative', overflow: 'hidden', padding: '72px 0' }}>
+    <section style={{ background: 'linear-gradient(135deg,#1a56db 0%,#1e40af 45%,#1e3a8a 100%)', position: 'relative', overflow: 'clip', padding: '72px 0' }}>
       <Watermark />
       <div style={{
         maxWidth: 1100, margin: '0 auto', padding: '0 32px',
