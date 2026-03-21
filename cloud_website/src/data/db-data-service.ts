@@ -28,7 +28,7 @@ export class DbDataService {
       const where: Prisma.CourseWhereInput = {
         published: filters?.published ?? true,
         ...(filters?.featured !== undefined && { featured: filters.featured }),
-        ...(filters?.category && { category: { slug: filters.category } }),
+        ...(filters?.category && { Category: { slug: filters.category } }),
         ...(filters?.level && { level: filters.level }),
         ...(filters?.search && {
           OR: [

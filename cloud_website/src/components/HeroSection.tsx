@@ -56,7 +56,7 @@ export default function HeroSection({
         <div className="max-w-lg">
           {/* Badge */}
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-blue-600 font-bold text-lg tracking-tight">Cloudcertification Online Trainings</span>
+            {/* <span className="text-blue-600 font-bold text-lg tracking-tight">Cloudcertification Online Trainings</span> */}
             {/* <span className="bg-blue-600 text-white text-xs font-semibold px-2 py-0.5 rounded">Online Trainning</span> */}
           </div>
 
