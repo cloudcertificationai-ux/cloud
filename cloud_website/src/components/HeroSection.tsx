@@ -1,16 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ChevronRightIcon, PlayIcon } from '@heroicons/react/24/outline';
-import { 
-  AcademicCapIcon, 
-  TrophyIcon, 
-  UserGroupIcon, 
-  ChartBarIcon 
-} from '@heroicons/react/24/solid';
-import { responsiveSpacing, responsiveTypography, touchUtils } from '@/lib/responsive-utils';
-import { usePreloadOnHover, usePerformanceMonitor } from '@/hooks/useLazyLoading';
+import Image from 'next/image';
 
 interface SuccessMetric {
   id: string;
@@ -39,189 +30,68 @@ export default function HeroSection({
   headline,
   subheadline,
   primaryCTA,
-  secondaryCTA,
-  successMetrics,
-  backgroundImage
 }: HeroSectionProps) {
-  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
-  const { handleMouseEnter } = usePreloadOnHover();
-  const { measureOperation } = usePerformanceMonitor('HeroSection');
-
-  // Preload critical resources
-  useEffect(() => {
-    measureOperation('preload-resources', async () => {
-      // Only preload resources in the browser
-      if (typeof window !== 'undefined') {
-        // Preload next likely page
-        if (primaryCTA.href) {
-          const jsLink = document.createElement('link');
-          jsLink.rel = 'modulepreload';
-          jsLink.href = primaryCTA.href;
-          document.head.appendChild(jsLink);
-        }
-      }
-    });
-  }, [primaryCTA.href, measureOperation]);
-
-  const handleVideoModalOpen = () => {
-    measureOperation('video-modal-open', () => {
-      setIsVideoModalOpen(true);
-      document.body.style.overflow = 'hidden';
-    });
-  };
-
-  const handleVideoModalClose = () => {
-    measureOperation('video-modal-close', () => {
-      setIsVideoModalOpen(false);
-      document.body.style.overflow = '';
-    });
-  };
-
   return (
-    <section className="relative bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 text-white">
-      {/* Background Pattern - CSS gradient pattern */}
-      <div className="absolute inset-0 opacity-10 overflow-hidden pointer-events-none" style={{
-        backgroundImage: 'radial-gradient(circle at 25px 25px, rgba(255, 255, 255, 0.2) 2%, transparent 0%), radial-gradient(circle at 75px 75px, rgba(255, 255, 255, 0.2) 2%, transparent 0%)',
-        backgroundSize: '100px 100px'
-      }}></div>
-      
-      {/* Background Image Overlay - Progressive loading */}
-      {backgroundImage && (
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
-          style={{ backgroundImage: `url(${backgroundImage})` }}
+    <section
+      className="relative w-full"
+      style={{ background: 'linear-gradient(135deg, #e8f0fe 0%, #dce8fb 50%, #cfe0f8 100%)', minHeight: '220px', overflow: 'clip' }}
+    >
+      {/* Hero image — absolute, bottom-right, overflows bottom edge */}
+      <div
+        className="hidden md:block absolute bottom-0 pointer-events-none select-none"
+        style={{ width: '620px', height: '100%', right: '5%' }}
+      >
+        <Image
+          src="https://d3njjcbhbojbot.cloudfront.net/api/utilities/v1/imageproxy/https://images.ctfassets.net/wp1lcwdav1p1/DMFk42PH8L9y9MeQ5xc7I/c55cade640bb097b0e5429b780ff7c98/redesigned-hero-image.png?auto=format%2Ccompress&dpr=1&w=679"
+          alt="Cloud Certification hero"
+          fill
+          className="object-contain object-bottom object-right"
+          priority
+          unoptimized
         />
-      )}
+      </div>
 
-      <div className={`relative max-w-7xl mx-auto ${responsiveSpacing.containerPadding} ${responsiveSpacing.sectionSpacing}`}>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-          {/* Content Section */}
-          <div className="space-y-6 lg:space-y-8 text-center lg:text-left">
-            {/* Main Headline */}
-            <div className="space-y-4 lg:space-y-6">
-              <h1 className={`${responsiveTypography.heading.h1} font-bold ${responsiveTypography.lineHeight.tight}`}>
-                {headline}
-              </h1>
-              
-              <p className={`${responsiveTypography.body.large} text-white ${responsiveTypography.lineHeight.normal} max-w-2xl mx-auto lg:mx-0`}>
-                {subheadline}
-              </p>
-            </div>
-
-            {/* CTA Buttons with preloading */}
-            <div className="flex flex-col sm:flex-row gap-4 items-center justify-center lg:justify-start">
-              <Link
-                href={primaryCTA.href}
-                onMouseEnter={handleMouseEnter(primaryCTA.href, 'page')}
-                className={`${touchUtils.getTapTargetClasses('lg')} ${touchUtils.getTouchClasses('group inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl touch-feedback')}`}
-              >
-                {primaryCTA.text}
-                <ChevronRightIcon className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-              </Link>
-              
-              <button
-                onClick={handleVideoModalOpen}
-                className={`${touchUtils.getTapTargetClasses('lg')} ${touchUtils.getTouchClasses('group inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 border-2 border-white/30 hover:border-white text-white font-semibold rounded-lg transition-all duration-300 hover:bg-white/10 touch-feedback')}`}
-              >
-                <PlayIcon className="mr-2 w-5 h-5" />
-                {secondaryCTA.text}
-              </button>
-            </div>
-
-            {/* Trust Indicators Preview */}
-            <div className="pt-6 lg:pt-8 border-t border-white/20">
-              <p className="text-white text-sm mb-4 text-center lg:text-left">Graduates now lead teams at:</p>
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 lg:gap-6">
-                {['Google', 'Microsoft', 'Amazon', 'Netflix'].map((company) => (
-                  <div key={company} className="text-white font-medium text-sm">
-                    {company}
-                  </div>
-                ))}
-              </div>
-            </div>
+      {/* Content — sits on top of the image */}
+      <div className="relative max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-10 sm:py-14 lg:py-16">
+        <div className="max-w-lg">
+          {/* Badge */}
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-blue-600 font-bold text-lg tracking-tight">Cloudcertification Online Trainings</span>
+            {/* <span className="bg-blue-600 text-white text-xs font-semibold px-2 py-0.5 rounded">Online Trainning</span> */}
           </div>
 
-          {/* Success Metrics Section - Optimized rendering */}
-          <div className="space-y-6 order-first lg:order-last">
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 lg:p-8 border border-white/20">
-              <h3 className="text-xl lg:text-2xl font-bold mb-4 lg:mb-6 text-center">
-                Career Success Metrics
-              </h3>
-              
-              <div className="grid grid-cols-2 gap-4 lg:gap-6">
-                  {successMetrics.map((metric) => {
-                    const IconComponent = {
-                      users: UserGroupIcon,
-                      trophy: TrophyIcon,
-                      chart: ChartBarIcon,
-                      academic: AcademicCapIcon
-                    }[metric.iconName];
-                    
-                    return (
-                      <div key={metric.id} className="text-center">
-                        <div className="flex justify-center mb-2 lg:mb-3">
-                          <div className="p-2 lg:p-3 bg-white/20 rounded-full">
-                            <IconComponent className="w-5 h-5 lg:w-6 lg:h-6 text-orange-400" />
-                          </div>
-                        </div>
-                        <div className="text-2xl lg:text-3xl font-bold text-white mb-1">
-                          {metric.value}
-                        </div>
-                        <div className="text-white text-xs lg:text-sm font-medium">
-                          {metric.label}
-                        </div>
-                        <div className="text-white/90 text-xs mt-1 hidden sm:block">
-                          {metric.description}
-                        </div>
-                      </div>
-                    );
-                  })}
-              </div>
-            </div>
+          {/* Headline */}
+          <h1 className="text-3xl sm:text-4xl lg:text-[2.6rem] font-bold text-gray-900 leading-tight mb-3">
+            {headline}
+          </h1>
 
-            {/* Additional CTA with preloading */}
-            <div className="text-center">
-              <Link
-                href="/testimonials"
-                onMouseEnter={handleMouseEnter('/testimonials', 'page')}
-                className="inline-flex items-center text-white hover:text-white/80 transition-colors duration-300 text-sm lg:text-base"
-              >
-                View all success stories
-                <ChevronRightIcon className="ml-1 w-4 h-4" />
-              </Link>
-            </div>
+          {/* Subheadline */}
+          <p className="text-gray-600 text-sm sm:text-base mb-1">
+            {subheadline}
+          </p>
+
+          {/* Pricing hint */}
+          <p className="text-gray-700 text-sm font-medium mb-6">
+            Flexible plans · cancel anytime
+          </p>
+
+          {/* CTAs */}
+          <div className="flex items-center gap-3 flex-wrap">
+            <Link
+              href={primaryCTA.href}
+              className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm sm:text-base px-6 py-3 rounded-md transition-colors duration-200"
+            >
+              {primaryCTA.text}
+            </Link>
+            <Link
+              href="/courses?filter=free"
+              className="inline-block border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-semibold text-sm sm:text-base px-6 py-3 rounded-md transition-colors duration-200"
+            >
+              Free Courses
+            </Link>
           </div>
         </div>
       </div>
-
-      {/* Video Modal - Lazy loaded */}
-      {isVideoModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="relative max-w-4xl w-full">
-            <button
-              onClick={handleVideoModalClose}
-              className={`${touchUtils.getTapTargetClasses('md')} ${touchUtils.getTouchClasses('absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors touch-feedback')}`}
-              aria-label="Close video"
-            >
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-            
-            <div className="bg-black rounded-lg overflow-hidden aspect-video">
-              <iframe
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                title="Platform Overview Video"
-                className="w-full h-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                loading="lazy"
-              />
-            </div>
-          </div>
-        </div>
-      )}
     </section>
   );
 }
-

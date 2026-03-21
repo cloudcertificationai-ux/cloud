@@ -301,7 +301,7 @@ class MediaService {
         await this.redis.setex(
           `media:${mediaId}`,
           MEDIA_CACHE_TTL,
-          JSON.stringify(media)
+          JSON.stringify(media, (_, v) => (typeof v === 'bigint' ? v.toString() : v))
         );
       } catch (error) {
         console.error('Redis set error:', error);

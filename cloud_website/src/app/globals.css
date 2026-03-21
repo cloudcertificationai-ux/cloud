@@ -1039,3 +1039,23 @@ html {
     transform: none;
   }
 }
+
+/* Career-Focused Learning Paths — right-to-left marquee */
+@keyframes marquee-rtl {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee-rtl {
+  animation: marquee-rtl 30s linear infinite;
+}
+
+.animate-marquee-rtl:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee-rtl {
+    animation: none;
+  }
+}
