@@ -227,8 +227,8 @@ export default async function Home() {
       <div className="min-h-screen bg-white">
         {/* Hero Section - Integrated Component */}
         <HeroSection
-          headline="Be a Leader in Your Field with Industry-Certified Tech Skills"
-          subheadline={`Join ${successMetrics.totalStudents.toLocaleString()}+ professionals who've advanced to senior roles with our job-ready courses in programming, data science, and cybersecurity. Get industry-recognized certifications that Fortune 500 companies trust.`}
+          headline="Learn with CloudCertificaiton.io"
+          subheadline={`Join ${successMetrics.totalStudents.toLocaleString()}+ professionals who've advanced to senior roles with our job-ready courses in programming, data science, and cybersecurity. Take control of your career`}
           primaryCTA={{
             text: "Start 7-day Free Trial",
             href: "/courses"

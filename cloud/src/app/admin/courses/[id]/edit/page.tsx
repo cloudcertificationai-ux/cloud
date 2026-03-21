@@ -311,26 +311,28 @@ export default function EditCoursePage() {
                   {unpublishMutation.isPending ? 'Unpublishing...' : 'Unpublish'}
                 </button>
               ) : (
-                <button
-                  onClick={handlePublish}
-                  disabled={
-                    publishMutation.isPending ||
-                    !course.Module ||
-                    course.Module.length === 0 ||
-                    course.Module.reduce((sum, m) => sum + (m.Lesson?.length || 0), 0) === 0
-                  }
-                  className="btn-primary inline-flex items-center"
-                  title={
-                    !course.Module || course.Module.length === 0
-                      ? 'Add at least one module to publish'
-                      : course.Module.reduce((sum, m) => sum + (m.Lesson?.length || 0), 0) === 0
-                      ? 'Add at least one lesson to publish'
-                      : ''
-                  }
-                >
-                  <CheckCircleIcon className="h-4 w-4 mr-2" />
-                  {publishMutation.isPending ? 'Publishing...' : 'Publish'}
-                </button>
+                <div className="flex flex-col items-end gap-1">
+                  <button
+                    onClick={handlePublish}
+                    disabled={
+                      publishMutation.isPending ||
+                      !course.Module ||
+                      course.Module.length === 0 ||
+                      course.Module.reduce((sum, m) => sum + (m.Lesson?.length || 0), 0) === 0
+                    }
+                    className="btn-primary inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <CheckCircleIcon className="h-4 w-4 mr-2" />
+                    {publishMutation.isPending ? 'Publishing...' : 'Publish'}
+                  </button>
+                  {(!course.Module || course.Module.length === 0) && (
+                    <p className="text-xs text-amber-600">Add a module &amp; lesson first</p>
+                  )}
+                  {course.Module && course.Module.length > 0 &&
+                    course.Module.reduce((sum, m) => sum + (m.Lesson?.length || 0), 0) === 0 && (
+                    <p className="text-xs text-amber-600">Add at least one lesson first</p>
+                  )}
+                </div>
               )}
 
               <button
