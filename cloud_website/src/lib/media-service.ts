@@ -3,6 +3,7 @@ import { prisma } from '@/lib/db';
 import { getR2Client } from '@/lib/r2-client';
 import { Redis } from 'ioredis';
 import { MediaStatus } from '@prisma/client';
+import { transcodeService } from '@/lib/transcode-service';
 
 /**
  * Allowed MIME types for media uploads
@@ -249,9 +250,8 @@ class MediaService {
         data: { status: MediaStatus.PROCESSING },
       });
 
-      // TODO: Enqueue transcode job (will be implemented in Task 4)
-      // For now, we'll just update the status
-      // await transcodeService.enqueueTranscode(mediaId);
+      // Enqueue transcode job
+      await transcodeService.enqueueTranscode(mediaId, media.r2Key);
 
       return updatedMedia;
     }
