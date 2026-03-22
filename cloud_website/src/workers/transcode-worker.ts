@@ -100,7 +100,12 @@ class TranscodeWorker {
     });
 
     try {
-      // Update media status to PROCESSING
+      // Update media status to PROCESSING (skip if record doesn't exist)
+      const mediaExists = await prisma.media.findUnique({ where: { id: mediaId }, select: { id: true } });
+      if (!mediaExists) {
+        console.warn(`[Transcode] Media record ${mediaId} not found in DB, skipping job`);
+        return { manifestUrl: '', thumbnails: [], duration: 0, width: 0, height: 0 };
+      }
       await prisma.media.update({
         where: { id: mediaId },
         data: { status: MediaStatus.PROCESSING },
@@ -228,7 +233,7 @@ class TranscodeWorker {
       });
 
       // Update media status to FAILED
-      await prisma.media.update({
+      await prisma.media.updateMany({
         where: { id: mediaId },
         data: {
           status: MediaStatus.FAILED,

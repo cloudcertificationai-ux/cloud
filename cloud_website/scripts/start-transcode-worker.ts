@@ -1,5 +1,6 @@
 #!/usr/bin/env tsx
 // scripts/start-transcode-worker.ts
+import 'dotenv/config';
 import { createTranscodeWorker } from '../src/workers/transcode-worker';
 
 console.log('Starting transcode worker...');
