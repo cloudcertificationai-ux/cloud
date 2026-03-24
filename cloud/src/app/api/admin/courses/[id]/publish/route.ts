@@ -44,14 +44,14 @@ export async function PUT(
 
     // Validate course has required content
     if (course.Module.length === 0) {
-      throw new ValidationError('Cannot publish course without at least one module', {
+      throw new ValidationError('Cannot publish: add at least one module in the Curriculum tab first', {
         modules: ['Course must have at least one module'],
       })
     }
 
     const totalLessons = course.Module.reduce((sum, module) => sum + module.Lesson.length, 0)
     if (totalLessons === 0) {
-      throw new ValidationError('Cannot publish course without at least one lesson', {
+      throw new ValidationError('Cannot publish: add at least one lesson to a module in the Curriculum tab first', {
         lessons: ['Course must have at least one lesson'],
       })
     }
@@ -68,6 +68,20 @@ export async function PUT(
         Instructor: true,
       },
     })
+
+    // Fire-and-forget revalidation call to website
+    const revalidationUrl = process.env.WEBSITE_REVALIDATION_URL
+    const revalidationSecret = process.env.REVALIDATION_SECRET
+    if (revalidationUrl && revalidationSecret) {
+      fetch(`${revalidationUrl}/api/revalidate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${revalidationSecret}`,
+        },
+        body: JSON.stringify({ path: '/courses' }),
+      }).catch((err) => console.error('[publish] revalidation call failed:', err))
+    }
 
     // Create audit log
     await prisma.auditLog.create({

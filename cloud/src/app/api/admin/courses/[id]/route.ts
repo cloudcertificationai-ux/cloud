@@ -116,8 +116,11 @@ export async function PUT(
     }
 
     // Transform empty strings to undefined for foreign keys
+    // Note: videoUrls (array from form) maps to videoUrl (single string in DB)
+    const { videoUrls, ...restValidatedData } = validatedData
     const updateData = {
-      ...validatedData,
+      ...restValidatedData,
+      videoUrl: videoUrls && videoUrls.length > 0 ? videoUrls[0] : undefined,
       instructorId: validatedData.instructorId === '' ? undefined : validatedData.instructorId,
       categoryId: validatedData.categoryId === '' ? undefined : validatedData.categoryId,
       thumbnailUrl: validatedData.thumbnailUrl === '' ? null : validatedData.thumbnailUrl,
