@@ -262,6 +262,10 @@ export function getR2Client(): R2Client {
 export { R2Client };
 
 /**
- * Export singleton instance for direct use
+ * Export singleton instance for direct use (lazy - initialized on first access)
  */
-export const r2Client = getR2Client();
+export const r2Client = new Proxy({} as R2Client, {
+  get(_target, prop) {
+    return (getR2Client() as any)[prop];
+  },
+});
