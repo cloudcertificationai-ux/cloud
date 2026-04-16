@@ -4,54 +4,49 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import prisma from '@/lib/db'
 import Stripe from 'stripe'
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2026-01-28.clover',
-})
+import { getPaymentConfig } from '@/lib/site-settings'
 
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
-    
+
     if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     const body = await request.json()
     const { purchaseId } = body
 
     if (!purchaseId) {
-      return NextResponse.json(
-        { error: 'Purchase ID is required' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Purchase ID is required' }, { status: 400 })
     }
+
+    // Load Stripe config from DB (falls back to env vars)
+    const config = await getPaymentConfig()
+
+    if (!config.stripe.enabled) {
+      return NextResponse.json({ error: 'Stripe payment is not enabled' }, { status: 400 })
+    }
+
+    const stripeSecretKey = config.stripe.secretKey
+    if (!stripeSecretKey) {
+      return NextResponse.json({ error: 'Stripe secret key not configured' }, { status: 500 })
+    }
+
+    const stripe = new Stripe(stripeSecretKey, { apiVersion: '2026-01-28.clover' })
 
     // Get purchase details
     const purchase = await prisma.purchase.findUnique({
       where: { id: purchaseId },
-      include: {
-        Course: true,
-        User: true,
-      },
+      include: { Course: true, User: true },
     })
 
     if (!purchase) {
-      return NextResponse.json(
-        { error: 'Purchase not found' },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: 'Purchase not found' }, { status: 404 })
     }
 
-    // Verify purchase belongs to current user
     if (purchase.User.email !== session.user.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
     }
 
     // Create Stripe checkout session
@@ -82,10 +77,11 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    // Update purchase with Stripe session ID
+    // Update purchase with Stripe session ID and set provider
     await prisma.purchase.update({
       where: { id: purchaseId },
       data: {
+        provider: 'stripe',
         providerId: checkoutSession.id,
       },
     })
@@ -96,9 +92,6 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     console.error('Stripe checkout error:', error)
-    return NextResponse.json(
-      { error: 'Failed to create checkout session' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Failed to create checkout session' }, { status: 500 })
   }
 }

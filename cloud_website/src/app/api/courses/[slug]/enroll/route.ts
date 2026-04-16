@@ -172,7 +172,7 @@ export async function POST(
             },
             amountCents: course.priceCents,
             currency: course.currency,
-            provider: 'stripe',
+            provider: 'pending', // Updated when user selects payment method
             status: 'PENDING',
           },
         })

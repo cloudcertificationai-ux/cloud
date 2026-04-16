@@ -76,13 +76,14 @@ export async function POST(request: NextRequest) {
 
     // If course is paid, create pending purchase
     if (course.priceCents > 0) {
+      // provider will be updated when user selects a payment method
       const purchase = await prisma.purchase.create({
         data: {
           userId: user.id,
           courseId: course.id,
           amountCents: course.priceCents,
           currency: course.currency,
-          provider: 'stripe',
+          provider: 'pending', // Will be set when payment method is chosen
           status: 'PENDING',
         },
       })

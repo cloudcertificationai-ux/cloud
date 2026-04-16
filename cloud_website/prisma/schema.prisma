@@ -157,6 +157,17 @@ model BlogPost {
   @@index([publishedAt])
 }
 
+model SiteSetting {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       String?  @db.Text
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([key])
+}
+
 model Category {
   id     String   @id @default(cuid())
   name   String   @unique

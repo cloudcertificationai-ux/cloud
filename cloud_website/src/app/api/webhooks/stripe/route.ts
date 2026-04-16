@@ -4,15 +4,17 @@ import Stripe from 'stripe'
 import prisma from '@/lib/db'
 import { dbDataService } from '@/data/db-data-service'
 import { SyncService } from '@/lib/sync-service'
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2026-01-28.clover',
-})
-
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || ''
+import { getPaymentConfig } from '@/lib/site-settings'
 
 export async function POST(request: NextRequest) {
   try {
+    // Load stripe config from DB (fallback to env vars)
+    const config = await getPaymentConfig()
+    const stripeSecretKey = config.stripe.secretKey || process.env.STRIPE_SECRET_KEY || ''
+    const webhookSecret = config.stripe.webhookSecret || process.env.STRIPE_WEBHOOK_SECRET || ''
+
+    const stripe = new Stripe(stripeSecretKey, { apiVersion: '2026-01-28.clover' })
+
     const body = await request.text()
     const signature = request.headers.get('stripe-signature')
 

@@ -4,10 +4,75 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { dbDataService } from '@/data/db-data-service';
 import LessonPlayerPage from './components/LessonPlayerPage';
+import prisma from '@/lib/db';
+import { getPaymentConfig } from '@/lib/site-settings';
+
+// Handle PayPal return after approval
+async function handlePayPalReturn(purchaseId: string, sessionUserId: string) {
+  try {
+    const config = await getPaymentConfig();
+    if (!config.paypal.enabled || !config.paypal.clientId || !config.paypal.clientSecret) return;
+
+    const purchase = await prisma.purchase.findUnique({
+      where: { id: purchaseId },
+      include: { User: true },
+    });
+
+    if (!purchase || purchase.userId !== sessionUserId) return;
+    if (purchase.status === 'COMPLETED') return;
+
+    const baseUrl = config.paypal.mode === 'live'
+      ? 'https://api-m.paypal.com'
+      : 'https://api-m.sandbox.paypal.com';
+
+    const credentials = Buffer.from(`${config.paypal.clientId}:${config.paypal.clientSecret}`).toString('base64');
+    const tokenRes = await fetch(`${baseUrl}/v1/oauth2/token`, {
+      method: 'POST',
+      headers: { Authorization: `Basic ${credentials}`, 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: 'grant_type=client_credentials',
+    });
+
+    if (!tokenRes.ok) return;
+    const { access_token } = await tokenRes.json();
+
+    const orderId = purchase.providerId;
+    if (!orderId) return;
+
+    const captureRes = await fetch(`${baseUrl}/v2/checkout/orders/${orderId}/capture`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${access_token}`, 'Content-Type': 'application/json' },
+    });
+
+    if (!captureRes.ok) return;
+    const captureData = await captureRes.json();
+
+    if (captureData.status === 'COMPLETED') {
+      await prisma.purchase.update({
+        where: { id: purchaseId },
+        data: { status: 'COMPLETED' },
+      });
+
+      const existing = await dbDataService.checkEnrollment(sessionUserId, purchase.courseId);
+      if (!existing) {
+        await prisma.enrollment.create({
+          data: {
+            User: { connect: { id: sessionUserId } },
+            Course: { connect: { id: purchase.courseId } },
+            source: 'paypal',
+            status: 'ACTIVE',
+            Purchase: { connect: { id: purchase.id } },
+          },
+        });
+      }
+    }
+  } catch (err) {
+    console.error('[learn] PayPal capture error:', err);
+  }
+}
 
 interface LearnPageProps {
   params: { slug: string };
-  searchParams: { lesson?: string };
+  searchParams: { lesson?: string; payment?: string; provider?: string; purchaseId?: string; token?: string; PayerID?: string };
 }
 
 export async function generateMetadata({ params }: LearnPageProps): Promise<Metadata> {
@@ -36,6 +101,11 @@ export default async function LearnPage({ params, searchParams }: LearnPageProps
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
     redirect(`/auth/signin?callbackUrl=/courses/${resolvedParams.slug}/learn`);
+  }
+
+  // Handle PayPal return (capture payment server-side)
+  if (resolvedSearchParams.provider === 'paypal' && resolvedSearchParams.purchaseId && session?.user?.id) {
+    await handlePayPalReturn(resolvedSearchParams.purchaseId, session.user.id);
   }
 
   // Fetch course with curriculum
