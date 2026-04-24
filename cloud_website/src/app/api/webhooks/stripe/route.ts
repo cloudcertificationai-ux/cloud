@@ -3,8 +3,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import prisma from '@/lib/db'
 import { dbDataService } from '@/data/db-data-service'
-import { SyncService } from '@/lib/sync-service'
+import { SyncService, SyncEventType } from '@/lib/sync-service'
 import { getPaymentConfig } from '@/lib/site-settings'
+import { enqueueEmail } from '@/lib/queue'
 
 export async function POST(request: NextRequest) {
   try {
@@ -108,12 +109,43 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 
     // Emit sync event
     await SyncService.emitEnrollmentEvent(
-      'enrollment.created' as any,
-      enrollment.id,
-      enrollment
+      SyncEventType.ENROLLMENT_CREATED,
+      enrollment.id
     ).catch((error) => {
       console.error('Failed to emit enrollment sync event:', error)
     })
+
+    // Queue confirmation + receipt emails
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { email: true, name: true },
+    })
+    const course = await prisma.course.findUnique({
+      where: { id: courseId },
+      select: { title: true, slug: true },
+    })
+    if (user?.email && course) {
+      await Promise.allSettled([
+        enqueueEmail({
+          type: 'enrollment.confirmation',
+          to: user.email,
+          name: user.name || undefined,
+          courseTitle: course.title,
+          courseSlug: course.slug,
+        }),
+        enqueueEmail({
+          type: 'payment.receipt',
+          to: user.email,
+          name: user.name || undefined,
+          courseTitle: course.title,
+          courseSlug: course.slug,
+          amount: session.amount_total ?? 0,
+          currency: session.currency ?? 'usd',
+          paymentMethod: 'Stripe',
+          purchaseId: purchase.id,
+        }),
+      ])
+    }
 
     console.log(`Enrollment created for user ${userId} in course ${courseId}`)
   } catch (error) {

@@ -21,6 +21,7 @@ import {
   DocumentTextIcon,
   EnvelopeIcon,
   VideoCameraIcon,
+  QueueListIcon,
 } from '@heroicons/react/24/outline'
 
 interface AdminLayoutProps {
@@ -38,6 +39,7 @@ const navigation = [
   { name: 'Analytics', href: '/admin/analytics', icon: ChartBarIcon },
   { name: 'Audit Logs', href: '/admin/audit-logs', icon: DocumentTextIcon },
   { name: 'Security', href: '/admin/security', icon: ShieldCheckIcon },
+  { name: 'Job Queues', href: '/admin/jobs', icon: QueueListIcon },
   { name: 'Settings', href: '/admin/settings', icon: CogIcon },
 ]
 

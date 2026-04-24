@@ -5,6 +5,21 @@ import { handleApiError } from '@/lib/api-errors'
 import { getAllSettings, updateSettings, SettingKey } from '@/lib/settings'
 import { ensureDatabaseTables } from '@/lib/db-init'
 
+// Bust payment-config cache on the website after settings are saved
+async function bustWebsitePaymentCache() {
+  const websiteUrl = process.env.MAIN_WEBSITE_URL || process.env.WEBSITE_REVALIDATION_URL || 'http://localhost:3000'
+  const secret = process.env.REVALIDATION_SECRET
+  if (!secret) return
+  fetch(`${websiteUrl}/api/revalidate`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${secret}`,
+    },
+    body: JSON.stringify({ tag: 'payment-config' }),
+  }).catch(() => {/* non-fatal */})
+}
+
 /**
  * GET /api/admin/settings
  * Fetch all site settings
@@ -64,6 +79,17 @@ export async function PUT(request: NextRequest) {
     }
 
     await updateSettings(updates)
+
+    // If payment-related keys changed, bust the website's payment config cache
+    const paymentKeys: SettingKey[] = [
+      'stripe_enabled', 'stripe_publishable_key', 'stripe_secret_key',
+      'paypal_enabled', 'paypal_client_id', 'paypal_mode',
+      'razorpay_enabled', 'razorpay_key_id',
+    ]
+    const hasPaymentChanges = paymentKeys.some((k) => k in updates)
+    if (hasPaymentChanges) {
+      bustWebsitePaymentCache()
+    }
 
     return NextResponse.json({ success: true, message: 'Settings updated successfully' })
   } catch (error) {

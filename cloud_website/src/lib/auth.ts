@@ -4,6 +4,7 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import Auth0Provider from 'next-auth/providers/auth0'
 import prisma from '@/lib/db'
 import type { Adapter } from 'next-auth/adapters'
+import { enqueueEmail } from '@/lib/queue'
 
 // Custom adapter that handles account linking gracefully
 function CustomPrismaAdapter(p: typeof prisma): Adapter {
@@ -162,6 +163,23 @@ export const authOptions: NextAuthOptions = {
         console.error('[SignIn] Error:', error)
         // Don't block sign in if profile update fails
         return true
+      }
+    },
+  },
+  events: {
+    // Fires exactly once when a brand-new user is created — perfect for welcome email
+    async createUser({ user }) {
+      if (!user.email) return
+      try {
+        await enqueueEmail({
+          type: 'welcome',
+          to: user.email,
+          name: user.name || undefined,
+        })
+        console.log('[auth] Welcome email queued for', user.email)
+      } catch (err) {
+        // Non-fatal — don't block auth
+        console.error('[auth] Failed to queue welcome email:', (err as Error).message)
       }
     },
   },

@@ -7,7 +7,8 @@ import { authOptions } from '@/lib/auth'
 import prisma from '@/lib/db'
 import { dbDataService } from '@/data/db-data-service'
 import { getPaymentConfig } from '@/lib/site-settings'
-import { SyncService } from '@/lib/sync-service'
+import { SyncService, SyncEventType } from '@/lib/sync-service'
+import { enqueueEmail } from '@/lib/queue'
 import crypto from 'crypto'
 
 /**
@@ -84,7 +85,29 @@ export async function POST(request: NextRequest) {
         },
       })
 
-      await SyncService.emitEnrollmentEvent('enrollment.created' as any, enrollment.id, enrollment).catch(console.error)
+      await SyncService.emitEnrollmentEvent(SyncEventType.ENROLLMENT_CREATED, enrollment.id).catch(console.error)
+
+      // Queue enrollment confirmation + payment receipt emails
+      await Promise.allSettled([
+        enqueueEmail({
+          type: 'enrollment.confirmation',
+          to: user.email!,
+          name: user.name || undefined,
+          courseTitle: purchase.Course.title,
+          courseSlug: purchase.Course.slug,
+        }),
+        enqueueEmail({
+          type: 'payment.receipt',
+          to: user.email!,
+          name: user.name || undefined,
+          courseTitle: purchase.Course.title,
+          courseSlug: purchase.Course.slug,
+          amount: purchase.amount ? Number(purchase.amount) : 0,
+          currency: 'inr',
+          paymentMethod: 'Razorpay',
+          purchaseId: purchase.id,
+        }),
+      ])
     }
 
     return NextResponse.json({ success: true, courseSlug: purchase.Course.slug })

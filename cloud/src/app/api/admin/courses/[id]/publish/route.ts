@@ -9,6 +9,7 @@ import prisma from '@/lib/db'
 import { requireAdmin } from '@/lib/api-utils'
 import { handleApiError, NotFoundError, ValidationError, SuccessResponseBuilder } from '@/lib/api-errors'
 import { createId } from '@paralleldrive/cuid2'
+import { notifyCourseChanged } from '@/lib/queue-client'
 
 /**
  * PUT /api/admin/courses/:id/publish
@@ -69,19 +70,11 @@ export async function PUT(
       },
     })
 
-    // Fire-and-forget revalidation call to website
-    const revalidationUrl = process.env.WEBSITE_REVALIDATION_URL
-    const revalidationSecret = process.env.REVALIDATION_SECRET
-    if (revalidationUrl && revalidationSecret) {
-      fetch(`${revalidationUrl}/api/revalidate`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${revalidationSecret}`,
-        },
-        body: JSON.stringify({ path: '/courses' }),
-      }).catch((err) => console.error('[publish] revalidation call failed:', err))
-    }
+    // Queue a persistent sync job — survives restarts, auto-retried on failure.
+    // The sync-worker on the website will call revalidatePath for these pages.
+    notifyCourseChanged('course.published', updatedCourse.id, updatedCourse.slug).catch(
+      (err) => console.error('[publish] sync queue failed:', err)
+    )
 
     // Create audit log
     await prisma.auditLog.create({

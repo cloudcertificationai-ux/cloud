@@ -40,7 +40,9 @@
     "db:reset:dev": "tsx scripts/reset-database.ts",
     "aggregate-stats": "tsx src/scripts/aggregate-daily-stats.ts",
     "worker": "tsx scripts/start-transcode-worker.ts",
-    "worker:dev": "tsx watch scripts/start-transcode-worker.ts"
+    "worker:dev": "tsx watch scripts/start-transcode-worker.ts",
+    "workers": "tsx scripts/start-workers.ts",
+    "workers:dev": "tsx watch scripts/start-workers.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.990.0",

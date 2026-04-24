@@ -12,6 +12,7 @@ import { requireAdmin } from '@/lib/api-utils'
 import { handleApiError, NotFoundError, SuccessResponseBuilder, ValidationError } from '@/lib/api-errors'
 import { updateCourseSchema } from '@/lib/validations/course'
 import { createId } from '@paralleldrive/cuid2'
+import { notifyCourseChanged } from '@/lib/queue-client'
 
 /**
  * GET /api/admin/courses/:id
@@ -141,6 +142,13 @@ export async function PUT(
       },
     })
 
+    // Queue sync job — website ISR revalidation for updated course pages
+    if (updatedCourse.published) {
+      notifyCourseChanged('course.updated', updatedCourse.id, updatedCourse.slug).catch(
+        (err) => console.error('[course update] sync queue failed:', err)
+      )
+    }
+
     // Create audit log
     await prisma.auditLog.create({
       data: {
@@ -193,6 +201,11 @@ export async function DELETE(
     await prisma.course.delete({
       where: { id },
     })
+
+    // Queue sync job to remove the course from website cache / revalidate listing
+    notifyCourseChanged('course.deleted', existingCourse.id, existingCourse.slug).catch(
+      (err) => console.error('[course delete] sync queue failed:', err)
+    )
 
     // Create audit log
     await prisma.auditLog.create({

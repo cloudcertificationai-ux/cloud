@@ -92,10 +92,10 @@ export function createCacheKey(prefix: string, params: Record<string, any>): str
   return `${prefix}:${sortedParams}`;
 }
 
-// In-memory cache for server-side caching
+// In-memory cache for server-side caching (L1 — per-process, ultra-fast)
 class MemoryCache {
   private cache = new Map<string, { data: any; expires: number; tags: string[] }>();
-  private maxSize = 1000;
+  private maxSize = 500; // Lowered: L2 Redis handles overflow
 
   set(key: string, data: any, ttl: number, tags: string[] = []): void {
     // Don't cache undefined or null values, or empty keys
@@ -180,34 +180,79 @@ class MemoryCache {
 
 export const memoryCache = new MemoryCache();
 
-// Cache wrapper for API functions
+// Cache wrapper — L1 in-memory → L2 Redis → fetcher
 export async function withCache<T>(
   key: string,
   fetcher: () => Promise<T>,
   config: CacheConfig
 ): Promise<T> {
-  // Normalize and validate cache key
   const normalizedKey = key.trim();
   if (!normalizedKey) {
-    // For empty or whitespace-only keys, bypass cache and fetch directly
     return await fetcher();
   }
 
-  // Try memory cache first
-  const cached = memoryCache.get(normalizedKey);
-  if (cached !== null) {
-    return cached;
+  // L1: in-memory (fastest, per-process)
+  const l1 = memoryCache.get(normalizedKey);
+  if (l1 !== null) {
+    return l1;
   }
 
-  // Fetch fresh data
-  const data = await fetcher();
+  // L2: Redis (shared across all Next.js instances / serverless invocations)
+  try {
+    const { redisGet, redisSet } = await import('./redis');
+    const l2 = await redisGet<T>(normalizedKey);
+    if (l2 !== null) {
+      // Promote to L1
+      memoryCache.set(normalizedKey, l2, Math.min(config.maxAge, 60), [...(config.tags || [])]);
+      return l2;
+    }
 
-  // Only cache non-undefined, non-null values with valid keys
-  if (data !== undefined && data !== null && normalizedKey) {
-    memoryCache.set(normalizedKey, data, config.maxAge, [...(config.tags || [])]);
+    // Fetch fresh data
+    const data = await fetcher();
+
+    if (data !== undefined && data !== null) {
+      // Populate both layers
+      await redisSet(normalizedKey, data, config.maxAge);
+      memoryCache.set(normalizedKey, data, Math.min(config.maxAge, 60), [...(config.tags || [])]);
+    }
+
+    return data;
+  } catch {
+    // Redis unavailable — fall through to direct fetch
+    const data = await fetcher();
+    if (data !== undefined && data !== null) {
+      memoryCache.set(normalizedKey, data, config.maxAge, [...(config.tags || [])]);
+    }
+    return data;
   }
+}
 
-  return data;
+/**
+ * Invalidate a cache key in both L1 (memory) and L2 (Redis)
+ */
+export async function invalidateCacheKey(key: string): Promise<void> {
+  memoryCache.delete(key);
+  try {
+    const { redisDel } = await import('./redis');
+    await redisDel(key);
+  } catch {
+    // Non-fatal
+  }
+}
+
+/**
+ * Invalidate all keys matching a pattern in both caches
+ */
+export async function invalidateCachePattern(pattern: string): Promise<void> {
+  // L1: iterate and delete matching
+  memoryCache.invalidateByTag(pattern);
+  // L2: Redis SCAN + DEL
+  try {
+    const { redisDelPattern } = await import('./redis');
+    await redisDelPattern(pattern);
+  } catch {
+    // Non-fatal
+  }
 }
 
 // Response wrapper with cache headers
@@ -223,14 +268,12 @@ export function withCacheHeaders(data: any, config: CacheConfig): Response {
   });
 }
 
-// Cache invalidation utilities
+// Cache invalidation utilities (L1 only — use invalidateCachePattern for L2)
 export function invalidateCache(tags: string[]): number {
   let totalInvalidated = 0;
-  
   for (const tag of tags) {
     totalInvalidated += memoryCache.invalidateByTag(tag);
   }
-
   return totalInvalidated;
 }
 

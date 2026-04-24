@@ -9,6 +9,7 @@ import prisma from '@/lib/db'
 import { requireAdmin } from '@/lib/api-utils'
 import { handleApiError, NotFoundError, SuccessResponseBuilder } from '@/lib/api-errors'
 import { createId } from '@paralleldrive/cuid2'
+import { notifyCourseChanged } from '@/lib/queue-client'
 
 /**
  * PUT /api/admin/courses/:id/unpublish
@@ -51,6 +52,11 @@ export async function PUT(
         Instructor: true,
       },
     })
+
+    // Queue sync job to revalidate course pages on website
+    notifyCourseChanged('course.unpublished', updatedCourse.id, updatedCourse.slug).catch(
+      (err) => console.error('[unpublish] sync queue failed:', err)
+    )
 
     // Create audit log
     await prisma.auditLog.create({
