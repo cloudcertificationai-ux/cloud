@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
   const tags = body.tags ?? (body.tag ? [body.tag] : [])
   for (const tag of tags) {
     try {
-      revalidateTag(tag)
+      revalidateTag(tag, 'default')
       revalidated.push(`tag:${tag}`)
     } catch (err) {
       console.error(`[revalidate] Failed to revalidate tag "${tag}":`, (err as Error).message)

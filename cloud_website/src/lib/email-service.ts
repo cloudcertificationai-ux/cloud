@@ -77,8 +77,8 @@ async function sendViaSMTP(payload: EmailPayload): Promise<EmailResult> {
   if (!host || !user || !pass) throw new Error('SMTP_HOST / SMTP_USER / SMTP_PASS not set')
 
   // Dynamic require — only works if nodemailer is installed
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const nodemailer = await import('nodemailer').catch(() => null)
+  // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-explicit-any
+  const nodemailer: any = await import(/* webpackIgnore: true */ 'nodemailer' as string).catch(() => null)
   if (!nodemailer) throw new Error('nodemailer not installed (run: npm install nodemailer)')
 
   const transporter = nodemailer.createTransport({

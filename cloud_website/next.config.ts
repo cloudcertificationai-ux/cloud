@@ -41,6 +41,38 @@ const nextConfig: NextConfig = {
         hostname: 'images.unsplash.com',
         pathname: '/**',
       },
+      // ── Cloudflare R2 ─────────────────────────────────────────────────────
+      // Course thumbnails, blog covers, profile avatars stored in R2
+      {
+        protocol: 'https',
+        hostname: 'pub-4d620ea0c6324b51995d1a6c696ab8e6.r2.dev',
+        pathname: '/**',
+      },
+      // Wildcard covers any custom R2 dev subdomain
+      {
+        protocol: 'https',
+        hostname: '**.r2.dev',
+        pathname: '/**',
+      },
+      // ── Social login profile pictures ──────────────────────────────────────
+      // Google profile pictures (returned by Auth0 social login)
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+        pathname: '/**',
+      },
+      // Gravatar (Auth0 fallback avatars)
+      {
+        protocol: 'https',
+        hostname: 's.gravatar.com',
+        pathname: '/**',
+      },
+      // Auth0 CDN avatars
+      {
+        protocol: 'https',
+        hostname: '**.auth0.com',
+        pathname: '/**',
+      },
     ],
   },
 
@@ -146,22 +178,78 @@ const nextConfig: NextConfig = {
           },
         ],
       },
-      // API routes - short-term caching with CDN optimization
+      // ── Sensitive API routes — MUST NOT be cached ─────────────────────────
+      // Auth, payments, enrollments, profile, webhooks: always private/dynamic
+      {
+        source: '/api/auth/(.*)',
+        headers: [
+          { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate, private' },
+          { key: 'Pragma', value: 'no-cache' },
+        ],
+      },
+      {
+        source: '/api/payments/(.*)',
+        headers: [
+          { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate, private' },
+          { key: 'Pragma', value: 'no-cache' },
+        ],
+      },
+      {
+        source: '/api/webhooks/(.*)',
+        headers: [
+          { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate, private' },
+          { key: 'Pragma', value: 'no-cache' },
+        ],
+      },
+      {
+        source: '/api/enrollments/(.*)',
+        headers: [
+          { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate, private' },
+          { key: 'Pragma', value: 'no-cache' },
+        ],
+      },
+      {
+        source: '/api/profile/(.*)',
+        headers: [
+          { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate, private' },
+          { key: 'Pragma', value: 'no-cache' },
+        ],
+      },
+      {
+        source: '/api/progress/(.*)',
+        headers: [
+          { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate, private' },
+          { key: 'Pragma', value: 'no-cache' },
+        ],
+      },
+      {
+        source: '/api/revalidate',
+        headers: [
+          { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate, private' },
+          { key: 'Pragma', value: 'no-cache' },
+        ],
+      },
+      // ── Public read API routes — short-term caching OK ────────────────────
+      {
+        source: '/api/courses/(.*)',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=60, s-maxage=300, stale-while-revalidate=86400' },
+          { key: 'Vary', value: 'Accept-Encoding, Accept' },
+        ],
+      },
+      {
+        source: '/api/blog/(.*)',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=60, s-maxage=300, stale-while-revalidate=86400' },
+          { key: 'Vary', value: 'Accept-Encoding, Accept' },
+        ],
+      },
+      // ── All other API routes — safe conservative default ──────────────────
       {
         source: '/api/(.*)',
         headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=300, s-maxage=300, stale-while-revalidate=86400',
-          },
-          {
-            key: 'CDN-Cache-Control',
-            value: 'public, max-age=300',
-          },
-          {
-            key: 'Vary',
-            value: 'Accept-Encoding, Accept',
-          },
+          { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate' },
+          { key: 'Vary', value: 'Accept-Encoding, Accept, Authorization' },
         ],
       },
       // Static pages - medium-term caching with ISR support

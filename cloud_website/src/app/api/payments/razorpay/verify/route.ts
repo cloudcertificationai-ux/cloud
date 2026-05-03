@@ -102,7 +102,7 @@ export async function POST(request: NextRequest) {
           name: user.name || undefined,
           courseTitle: purchase.Course.title,
           courseSlug: purchase.Course.slug,
-          amount: purchase.amount ? Number(purchase.amount) : 0,
+          amount: purchase.amountCents ? Number(purchase.amountCents) / 100 : 0,
           currency: 'inr',
           paymentMethod: 'Razorpay',
           purchaseId: purchase.id,

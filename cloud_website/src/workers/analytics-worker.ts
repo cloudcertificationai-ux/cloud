@@ -45,23 +45,22 @@ async function flushProgressBuffer(): Promise<void> {
         updates.map((item) =>
           prisma.courseProgress.upsert({
             where: {
-              userId_courseId_lessonId: {
+              userId_lessonId: {
                 userId: item.userId,
-                courseId: item.courseId,
                 lessonId: item.lessonId || '',
               },
             },
             update: {
-              progress: item.progress,
-              timeSpentSecs: { increment: item.timeSpentSecs || 0 },
+              timeSpent: { increment: item.timeSpentSecs || 0 },
+              watchedSec: { increment: item.timeSpentSecs || 0 },
               updatedAt: new Date(),
             },
             create: {
               userId: item.userId,
               courseId: item.courseId,
               lessonId: item.lessonId || '',
-              progress: item.progress || 0,
-              timeSpentSecs: item.timeSpentSecs || 0,
+              timeSpent: item.timeSpentSecs || 0,
+              watchedSec: item.timeSpentSecs || 0,
             },
           }).catch((err: Error) => {
             // Ignore "relation not found" — schema mismatch, non-fatal
@@ -95,14 +94,13 @@ async function processAnalytics(job: Job<AnalyticsJobData>): Promise<void> {
       // Lesson completions are important — write immediately
       await prisma.courseProgress.upsert({
         where: {
-          userId_courseId_lessonId: {
+          userId_lessonId: {
             userId: data.userId,
-            courseId: data.courseId,
             lessonId: data.lessonId || '',
           },
         },
         update: {
-          progress: 100,
+          completed: true,
           completedAt: data.completedAt ? new Date(data.completedAt) : new Date(),
           updatedAt: new Date(),
         },
@@ -110,7 +108,7 @@ async function processAnalytics(job: Job<AnalyticsJobData>): Promise<void> {
           userId: data.userId,
           courseId: data.courseId,
           lessonId: data.lessonId || '',
-          progress: 100,
+          completed: true,
           completedAt: data.completedAt ? new Date(data.completedAt) : new Date(),
         },
       }).catch((err: Error) => {
@@ -132,7 +130,7 @@ async function processAnalytics(job: Job<AnalyticsJobData>): Promise<void> {
           quizId: data.quizId || '',
           score: data.score || 0,
           passed: data.passed || false,
-          completedAt: data.completedAt ? new Date(data.completedAt) : new Date(),
+          submittedAt: data.completedAt ? new Date(data.completedAt) : new Date(),
         },
       }).catch((err: Error) => {
         // QuizAttempt may not exist in all schema versions
@@ -161,7 +159,7 @@ async function checkCourseCompletion(userId: string, courseId: string): Promise<
     const [totalLessons, completedLessons] = await Promise.all([
       prisma.lesson.count({ where: { Module: { courseId } } }),
       prisma.courseProgress.count({
-        where: { userId, courseId, progress: 100 },
+        where: { userId, courseId, completed: true },
       }),
     ])
 
@@ -169,7 +167,7 @@ async function checkCourseCompletion(userId: string, courseId: string): Promise<
       // Mark enrollment as completed
       await prisma.enrollment.updateMany({
         where: { userId, courseId, status: { not: 'COMPLETED' } },
-        data: { status: 'COMPLETED', completedAt: new Date() },
+        data: { status: 'COMPLETED' },
       })
 
       // Trigger completion email via the email queue
