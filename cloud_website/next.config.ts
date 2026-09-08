@@ -245,8 +245,8 @@ const nextConfig: NextConfig = {
     optimizeServerReact: true,
   },
 
-  // Server external packages (moved from experimental)
-  serverExternalPackages: ['@vercel/analytics', '@vercel/speed-insights'],
+  // Do not externalize @vercel/analytics or @vercel/speed-insights.
+  // Turbopack hashed aliases for those packages 500 ISR/course routes on Vercel.
 
   // Cache components configuration (moved from experimental)
   // Disabled temporarily due to prerendering issues

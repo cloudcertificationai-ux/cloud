@@ -8,6 +8,8 @@ import { ErrorBoundary } from '@/components/ErrorBoundary';
 import ClientProviders from '@/components/ClientProviders';
 import SessionProvider from '@/components/SessionProvider';
 import { generateOGImageUrl } from '@/lib/seo';
+import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import './globals.css';
 
 // Font optimization with next/font
@@ -150,6 +152,8 @@ export default function RootLayout({
         
         {/* Client-side components */}
         <ClientProviders />
+        <Analytics />
+        <SpeedInsights />
         
         {/* Performance monitoring initialization */}
         <script

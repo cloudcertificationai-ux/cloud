@@ -1,7 +1,7 @@
 {
   "framework": "nextjs",
   "installCommand": "npm install",
-  "buildCommand": "npx prisma generate && npx next build",
+  "buildCommand": "npx prisma generate && NODE_OPTIONS='--max-old-space-size=8192' npx next build --webpack",
   "crons": [
     {
       "path": "/api/cron/daily-stats",
