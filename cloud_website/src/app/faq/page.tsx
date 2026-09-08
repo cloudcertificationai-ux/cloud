@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Frequently Asked Questions | Anywheredoor',
+  title: 'Frequently Asked Questions | Cloud Certification',
   description: 'Find answers to common questions about our courses, pricing, and learning platform.',
 };
 

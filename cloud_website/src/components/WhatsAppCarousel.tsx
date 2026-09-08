@@ -64,9 +64,23 @@ const chatScreens: ChatScreen[] = [
 function PhoneCard({ chat }: { chat: ChatScreen }) {
   const W = 140, H = 280;
   return (
-    <div style={{ width: W, height: H, borderRadius: 22, background: 'linear-gradient(160deg,#2c2c2c,#1a1a1a)', boxShadow: '0 16px 40px rgba(0,0,0,0.55)', position: 'relative', flexShrink: 0 }}>
+    <div
+      className="wa-phone-card"
+      style={{
+        width: W,
+        height: H,
+        borderRadius: 22,
+        background: 'linear-gradient(160deg,#2c2c2c,#1a1a1a)',
+        boxShadow: '0 16px 40px rgba(0,0,0,0.55)',
+        position: 'relative',
+        flexShrink: 0,
+        overscrollBehavior: 'auto',
+        touchAction: 'pan-y',
+        pointerEvents: 'none', // let page scroll through; carousel stage handles drag
+      }}
+    >
       {/* screen */}
-      <div style={{ position: 'absolute', top: 7, left: 5, right: 5, bottom: 7, borderRadius: 17, overflow: 'hidden', background: '#ECE5DD', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ position: 'absolute', top: 7, left: 5, right: 5, bottom: 7, borderRadius: 17, overflow: 'clip', background: '#ECE5DD', display: 'flex', flexDirection: 'column', overscrollBehavior: 'auto' }}>
         {/* status bar */}
         <div style={{ background: '#075E54', padding: '2px 6px', display: 'flex', justifyContent: 'space-between' }}>
           <span style={{ color: 'white', fontSize: 6 }}>9:41</span>
@@ -85,7 +99,7 @@ function PhoneCard({ chat }: { chat: ChatScreen }) {
           <span style={{ background: 'rgba(255,255,255,0.7)', color: '#666', fontSize: 6, padding: '1px 5px', borderRadius: 6 }}>Thursday</span>
         </div>
         {/* messages */}
-        <div style={{ flex: 1, overflow: 'hidden', padding: '0 5px', display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <div style={{ flex: 1, overflow: 'clip', padding: '0 5px', display: 'flex', flexDirection: 'column', gap: 2, overscrollBehavior: 'auto' }}>
           {chat.messages.slice(0, 6).map(msg => (
             <div key={msg.id} style={{ display: 'flex', justifyContent: msg.isMe ? 'flex-end' : 'flex-start' }}>
               <div style={{ maxWidth: '80%', background: msg.isMe ? '#DCF8C6' : '#fff', borderRadius: msg.isMe ? '7px 7px 2px 7px' : '7px 7px 7px 2px', padding: '2px 4px', boxShadow: '0 1px 1px rgba(0,0,0,0.08)' }}>
@@ -149,9 +163,25 @@ function PhoneCarousel() {
     return () => { el.removeEventListener('touchstart', ts); el.removeEventListener('touchmove', tm); el.removeEventListener('touchend', te); };
   }, [next, prev, startAuto, stopAuto]);
 
-  const onMD = (e: React.MouseEvent) => { setDragging(true); startX.current = e.clientX; delta.current = 0; stopAuto(); };
-  const onMM = (e: React.MouseEvent) => { if (dragging) delta.current = e.clientX - startX.current; };
-  const onMU = () => { if (!dragging) return; setDragging(false); if (delta.current < -40) next(); else if (delta.current > 40) prev(); startAuto(); };
+  const onMD = (e: React.MouseEvent) => {
+    // Only start drag with primary button — don't interfere with page scroll
+    if (e.button !== 0) return;
+    setDragging(true);
+    startX.current = e.clientX;
+    delta.current = 0;
+    stopAuto();
+  };
+  const onMM = (e: React.MouseEvent) => {
+    if (!dragging) return;
+    delta.current = e.clientX - startX.current;
+  };
+  const onMU = () => {
+    if (!dragging) return;
+    setDragging(false);
+    if (delta.current < -40) next();
+    else if (delta.current > 40) prev();
+    startAuto();
+  };
 
   // Each phone slot: center=0, sides=±1,±2
   // Container is 340px wide, phones are 140px wide
@@ -173,16 +203,34 @@ function PhoneCarousel() {
       opacity: c.opacity,
       zIndex: c.z,
       transition: 'all 0.5s cubic-bezier(0.25,0.46,0.45,0.94)',
+      pointerEvents: 'none' as const,
     };
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      {/* fixed-size stage — phones stay inside this box */}
+    <div
+      className="wa-phone-carousel"
+      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', overscrollBehavior: 'auto' }}
+    >
+      {/* fixed-size stage — phones stay inside this box; vertical wheel scroll passes to page */}
       <div
         ref={stageRef}
-        style={{ width: 340, height: 380, position: 'relative', perspective: 800, cursor: dragging ? 'grabbing' : 'grab', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-        onMouseDown={onMD} onMouseMove={onMM} onMouseUp={onMU} onMouseLeave={onMU}
+        style={{
+          width: 340,
+          height: 380,
+          position: 'relative',
+          perspective: 800,
+          cursor: dragging ? 'grabbing' : 'grab',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          overscrollBehavior: 'auto',
+          touchAction: 'pan-y',
+        }}
+        onMouseDown={onMD}
+        onMouseMove={onMM}
+        onMouseUp={onMU}
+        onMouseLeave={() => { if (dragging) onMU(); }}
       >
         {chatScreens.map((chat, i) => (
           <div key={chat.id} style={getStyle(i)}>
@@ -247,20 +295,65 @@ function BeyondCourses() {
   );
 }
 
-// Watermark
+// Watermark — smaller labels, spaced across full section (no overlap)
 function Watermark() {
   const words = [
-    { text: 'TOWNS', top: '5%',  left: '2%',  size: 48, rot: -15 },
-    { text: 'SAP',   top: '8%',  left: '38%', size: 36, rot: 0   },
-    { text: 'workday', top: '60%', left: '72%', size: 32, rot: -10 },
-    { text: 'TOWNS', top: '65%', left: '0%',  size: 44, rot: -15 },
-    { text: 'SAP',   top: '10%', left: '78%', size: 40, rot: 5   },
-    { text: 'N',     top: '40%', left: '88%', size: 60, rot: 0   },
+    // Top row
+    { text: 'Cloud Computing', top: '6%', left: '3%', size: 18, rot: -8 },
+    { text: 'Generative AI', top: '5%', left: '38%', size: 18, rot: 4 },
+    { text: 'Cybersecurity', top: '7%', left: '68%', size: 17, rot: -5 },
+
+    // Upper-mid row
+    { text: 'AWS Architect', top: '22%', left: '5%', size: 17, rot: -10 },
+    { text: 'Artificial Intelligence', top: '20%', left: '36%', size: 16, rot: 3 },
+    { text: 'Kubernetes', top: '23%', left: '72%', size: 18, rot: 6 },
+
+    // Mid row (around phones — keep sides clear)
+    { text: 'SAP S/4HANA', top: '40%', left: '2%', size: 17, rot: -7 },
+    { text: 'Terraform', top: '42%', left: '80%', size: 17, rot: 5 },
+
+    // Lower-mid row
+    { text: 'Data & Analytics', top: '58%', left: '4%', size: 16, rot: -6 },
+    { text: 'Workday HCM', top: '56%', left: '38%', size: 17, rot: 4 },
+    { text: 'DevSecOps', top: '59%', left: '70%', size: 17, rot: -4 },
+
+    // Bottom row
+    { text: 'Azure DevOps', top: '78%', left: '6%', size: 16, rot: -5 },
+    { text: 'Software Engineering', top: '76%', left: '34%', size: 15, rot: 3 },
+    { text: 'MLOps', top: '80%', left: '68%', size: 18, rot: -6 },
+    { text: 'Zero Trust', top: '90%', left: '48%', size: 16, rot: 5 },
   ];
+
   return (
-    <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', opacity: 0.13 }}>
+    <div
+      style={{
+        position: 'absolute',
+        inset: 0,
+        overflow: 'hidden',
+        pointerEvents: 'none',
+        opacity: 0.16,
+      }}
+      aria-hidden="true"
+    >
       {words.map((w, i) => (
-        <span key={i} style={{ position: 'absolute', color: 'white', fontSize: w.size, fontWeight: 900, top: w.top, left: w.left, transform: `rotate(${w.rot}deg)`, whiteSpace: 'nowrap' }}>{w.text}</span>
+        <span
+          key={`${w.text}-${i}`}
+          style={{
+            position: 'absolute',
+            color: 'white',
+            fontSize: w.size,
+            fontWeight: 800,
+            top: w.top,
+            left: w.left,
+            transform: `rotate(${w.rot}deg)`,
+            whiteSpace: 'nowrap',
+            letterSpacing: '0.04em',
+            userSelect: 'none',
+            lineHeight: 1,
+          }}
+        >
+          {w.text}
+        </span>
       ))}
     </div>
   );
@@ -269,7 +362,16 @@ function Watermark() {
 // Main export
 export default function WhatsAppCarousel() {
   return (
-    <section style={{ background: 'linear-gradient(135deg,#1a56db 0%,#1e40af 45%,#1e3a8a 100%)', position: 'relative', overflow: 'clip', padding: '72px 0' }}>
+    <section
+      className="wa-success-section"
+      style={{
+        background: 'linear-gradient(135deg,#1a56db 0%,#1e40af 45%,#1e3a8a 100%)',
+        position: 'relative',
+        overflow: 'clip',
+        padding: '72px 0',
+        overscrollBehavior: 'auto',
+      }}
+    >
       <Watermark />
       <div style={{
         maxWidth: 1100, margin: '0 auto', padding: '0 32px',

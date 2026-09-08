@@ -20,7 +20,7 @@ export default function ContactSupportSection() {
               FOR QUERIES, FEEDBACK OR ASSISTANCE
             </p>
             <h2 className="text-xl sm:text-2xl font-bold mb-1" style={{ color: '#FFFFFF' }}>
-              Contact Croma Campus Learner Support
+              Contact Cloud Certification Learner Support
             </h2>
             <p className="text-sm" style={{ color: '#FFFFFF' }}>Best of support with us</p>
           </div>

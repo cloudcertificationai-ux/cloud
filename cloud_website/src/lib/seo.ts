@@ -27,7 +27,7 @@ export function generateCourseStructuredData(course: Course, instructors: Instru
       image: instructor.profileImageUrl,
       worksFor: {
         '@type': 'Organization',
-        name: 'Anywheredoor',
+        name: 'Cloud Certification',
       },
     })),
     courseCode: course.id,

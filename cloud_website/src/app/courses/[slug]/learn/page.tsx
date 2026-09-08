@@ -16,13 +16,13 @@ export async function generateMetadata({ params }: LearnPageProps): Promise<Meta
   
   if (!course) {
     return {
-      title: 'Course Not Found | Anywheredoor',
+      title: 'Course Not Found | Cloud Certification',
       robots: { index: false, follow: false },
     };
   }
 
   return {
-    title: `Learn ${course.title} | Anywheredoor`,
+    title: `Learn ${course.title} | Cloud Certification`,
     description: `Continue learning ${course.title}`,
     robots: { index: false, follow: false }, // Don't index lesson pages
   };

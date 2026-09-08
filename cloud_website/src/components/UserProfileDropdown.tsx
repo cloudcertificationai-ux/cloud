@@ -57,10 +57,10 @@ export default function UserProfileDropdown() {
 
   if (!isAuthenticated || !user) {
     return (
-      <div className="flex items-center">
+      <div className="flex h-9 items-center">
         <Link
-          href="/auth/signin"
-          className={`${focusUtils.classes.focusVisible} px-6 py-2.5 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition-all duration-200 shadow-sm hover:shadow-md`}
+          href="/auth/signin?callbackUrl=/dashboard"
+          className={`${focusUtils.classes.focusVisible} btn-get-started`}
         >
           Get Started
         </Link>

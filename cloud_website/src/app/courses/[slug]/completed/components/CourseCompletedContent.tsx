@@ -59,7 +59,7 @@ export default function CourseCompletedContent({
     if (navigator.share) {
       navigator.share({
         title: `I completed ${course.title}!`,
-        text: `I just completed ${course.title} on Anywheredoor!`,
+        text: `I just completed ${course.title} on Cloud Certification!`,
         url: window.location.href,
       }).catch(err => console.log('Error sharing:', err));
     } else {

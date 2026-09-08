@@ -1,4 +1,4 @@
-// Core data models for the Anywheredoor platform
+// Core data models for the Cloud Certification platform
 
 export interface Course {
   id: string;

@@ -22,26 +22,26 @@ const LearningPathsMarquee = dynamic(() => import('@/components/LearningPathsMar
 
 // Static generation - this page will be pre-rendered at build time
 export const metadata: Metadata = {
-  title: 'Anywheredoor - Be a Leader in Your Field with Industry-Certified Skills',
+  title: 'Cloud Certification - Be a Leader in Your Field with Industry-Certified Skills',
   description: 'Advance to senior roles at Fortune 500 companies with job-ready certifications in programming, data science, and cybersecurity. Join 50K+ professionals who achieved 75% average salary increases and leadership positions.',
   keywords: ['career advancement', 'industry certification', 'senior developer roles', 'Fortune 500 careers', 'tech leadership', 'job-ready skills', 'salary increase'],
   openGraph: {
-    title: 'Anywheredoor - Industry-Certified Tech Leadership Training',
+    title: 'Cloud Certification - Industry-Certified Tech Leadership Training',
     description: 'Advance to senior roles at Fortune 500 companies with job-ready skills and industry-recognized certifications',
     type: 'website',
-    url: 'https://anywheredoor.com',
+    url: 'https://Cloud Certification.com',
     images: [
       {
         url: '/og-homepage.jpg',
         width: 1200,
         height: 630,
-        alt: 'Anywheredoor Learning Platform',
+        alt: 'Cloud Certification Learning Platform',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Anywheredoor - Industry-Certified Tech Leadership Training',
+    title: 'Cloud Certification - Industry-Certified Tech Leadership Training',
     description: 'Advance to senior roles at Fortune 500 companies with job-ready skills and industry-recognized certifications',
     images: ['/og-homepage.jpg'],
   },
@@ -51,13 +51,13 @@ export const metadata: Metadata = {
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'EducationalOrganization',
-  name: 'Anywheredoor',
+  name: 'Cloud Certification',
   description: 'Online learning platform for tech careers',
-  url: 'https://anywheredoor.com',
-  logo: 'https://anywheredoor.com/logo.png',
+  url: 'https://Cloud Certification.com',
+  logo: 'https://Cloud Certification.com/logo.png',
   sameAs: [
-    'https://twitter.com/anywheredoor',
-    'https://linkedin.com/company/anywheredoor',
+    'https://twitter.com/Cloud Certification',
+    'https://linkedin.com/company/Cloud Certification',
   ],
   offers: {
     '@type': 'Course',
@@ -65,7 +65,7 @@ const structuredData = {
     description: 'Professional courses in programming, data science, and cybersecurity',
     provider: {
       '@type': 'Organization',
-      name: 'Anywheredoor',
+      name: 'Cloud Certification',
     },
   },
 };
@@ -118,6 +118,7 @@ export default async function Home() {
               thumbnailUrl: true,
               durationMin: true,
             },
+            orderBy: [{ featured: 'desc' }, { title: 'asc' }],
           },
         },
         orderBy: { name: 'asc' },
@@ -203,6 +204,10 @@ export default async function Home() {
     'Data Science': '#10B981',
     'Cybersecurity': '#F59E0B',
     'Cloud Computing': '#8B5CF6',
+    'Artificial Intelligence': '#6366F1',
+    'Data & Analytics': '#059669',
+    'Enterprise Applications': '#0EA5E9',
+    'Software Engineering': '#2563EB',
   };
 
   const categoryDescriptions: Record<string, string> = {
@@ -210,6 +215,10 @@ export default async function Home() {
     'Data Science': 'Build career-advancing expertise in AI, ML, and data analytics for Fortune 500 companies',
     'Cybersecurity': 'Develop industry-certified security skills for leadership roles in enterprise protection',
     'Cloud Computing': 'Gain cloud architecture expertise for senior engineering and DevOps leadership positions',
+    'Artificial Intelligence': 'Learn GenAI, agents, and LLM systems driving 2026 enterprise transformation',
+    'Data & Analytics': 'Build lakehouse, MLOps, and BI skills for data-driven organizations',
+    'Enterprise Applications': 'ServiceNow, SAP, Salesforce, and Workday skills for MNC digital programs',
+    'Software Engineering': 'Modern full-stack and platform engineering for product teams',
   };
 
   const enrichedCategories = rawCategories.map(cat => ({

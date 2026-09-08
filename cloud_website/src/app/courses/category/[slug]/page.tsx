@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 
   if (!category) {
     return {
-      title: 'Category Not Found | Anywheredoor',
+      title: 'Category Not Found | Cloud Certification',
       robots: { index: false, follow: false },
     };
   }
@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   const canonicalUrl = generateCanonicalUrl(`/courses/category/${category.slug}`);
 
   return {
-    title: `${category.name} Courses - Online Training & Certification | Anywheredoor`,
+    title: `${category.name} Courses - Online Training & Certification | Cloud Certification`,
     description: `Master ${category.name.toLowerCase()} with expert-led online courses. Get certified and advance your career with hands-on training in ${category.name.toLowerCase()}.`,
     keywords: [
       category.name.toLowerCase(),
@@ -50,19 +50,19 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
       canonical: canonicalUrl,
     },
     openGraph: {
-      title: `${category.name} Courses - Anywheredoor`,
+      title: `${category.name} Courses - Cloud Certification`,
       description: `Master ${category.name.toLowerCase()} with expert-led online courses`,
       type: 'website',
       images: ['/og-courses.jpg'],
       url: canonicalUrl,
-      siteName: 'Anywheredoor',
+      siteName: 'Cloud Certification',
     },
     twitter: {
       card: 'summary_large_image',
       title: `${category.name} Courses`,
       description: `Master ${category.name.toLowerCase()} with expert-led online courses`,
       images: ['/og-courses.jpg'],
-      creator: '@anywheredoor',
+      creator: '@Cloud Certification',
     },
     robots: {
       index: true,

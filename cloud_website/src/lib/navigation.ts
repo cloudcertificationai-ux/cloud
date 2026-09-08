@@ -31,8 +31,8 @@ export const mainNavigation: NavigationItem[] = [
     ]
   },
   { 
-    href: '/for-business', 
-    label: 'For Business', 
+    href: '/corporate-training', 
+    label: 'Corporate Training', 
     description: 'Enterprise learning solutions and corporate training' 
   },
   { 
@@ -41,14 +41,14 @@ export const mainNavigation: NavigationItem[] = [
     description: 'Learn about our mission and success stories' 
   },
   { 
-    href: '/contact', 
-    label: 'Contact', 
-    description: 'Get in touch with our team' 
-  },
-  { 
     href: '/blog', 
     label: 'Blog', 
     description: 'Read our latest articles and insights' 
+  },
+  { 
+    href: '/contact', 
+    label: 'Contact', 
+    description: 'Get in touch with our team' 
   },
 ];
 
@@ -102,8 +102,17 @@ export function generateBreadcrumbs(pathname: string, courseTitle?: string, cate
       breadcrumbs.push({ label: 'Contact Us' });
       break;
 
+    case 'blog':
+      breadcrumbs.push({ label: 'Blog' });
+      break;
+
+    case 'free-lms':
+      breadcrumbs.push({ label: 'Free LMS' });
+      break;
+
     case 'for-business':
-      breadcrumbs.push({ label: 'For Business' });
+    case 'corporate-training':
+      breadcrumbs.push({ label: 'Corporate Training' });
       break;
 
     case 'resources':
@@ -157,7 +166,7 @@ export function getRelatedNavigation(currentPath: string): NavigationItem[] {
   if (currentPath.startsWith('/courses')) {
     related.push(
       { href: '/about', label: 'About Our Platform', description: 'Our mission and success stories' },
-      { href: '/for-business', label: 'Enterprise Solutions', description: 'Corporate training programs' }
+      { href: '/corporate-training', label: 'Enterprise Solutions', description: 'Corporate training programs' }
     );
   } else if (currentPath === '/about') {
     related.push(
@@ -169,7 +178,7 @@ export function getRelatedNavigation(currentPath: string): NavigationItem[] {
       { href: '/courses', label: 'Browse Courses', description: 'Discover our programs' },
       { href: '/about', label: 'Learn About Us', description: 'Our story and mission' }
     );
-  } else if (currentPath === '/for-business') {
+  } else if (currentPath === '/for-business' || currentPath === '/corporate-training') {
     related.push(
       { href: '/courses', label: 'View Course Catalog', description: 'Explore training options' },
       { href: '/contact', label: 'Contact Sales', description: 'Discuss enterprise needs' }
@@ -178,7 +187,7 @@ export function getRelatedNavigation(currentPath: string): NavigationItem[] {
     related.push(
       { href: '/courses', label: 'Start Learning', description: 'Browse our course catalog' },
       { href: '/about', label: 'Why Choose Us', description: 'See our success stories' },
-      { href: '/for-business', label: 'Enterprise Training', description: 'Corporate learning solutions' }
+      { href: '/corporate-training', label: 'Corporate Training', description: 'Enterprise learning solutions' }
     );
   }
 
@@ -210,7 +219,7 @@ export function getContextualCTA(currentPath: string): { primary: NavigationItem
       primary: { href: '/courses', label: 'Browse Courses', description: 'Explore our programs' },
       secondary: { href: '/about', label: 'Learn More About Us', description: 'Our story and mission' }
     };
-  } else if (currentPath === '/for-business') {
+  } else if (currentPath === '/for-business' || currentPath === '/corporate-training') {
     return {
       primary: { href: '/contact', label: 'Contact Sales', description: 'Discuss your training needs' },
       secondary: { href: '/courses', label: 'View Course Catalog', description: 'Explore training options' }
@@ -235,7 +244,7 @@ export function generateNavigationStructuredData() {
     url: mainNavigation.map(item => ({
       '@type': 'WebPage',
       name: item.label,
-      url: `https://anywheredoor.com${item.href}`,
+      url: `https://cloudcertification.com${item.href}`,
       description: item.description,
     })),
   };

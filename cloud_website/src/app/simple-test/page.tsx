@@ -15,7 +15,7 @@ export default function SimpleTestPage() {
           marginBottom: '2rem',
           textAlign: 'center'
         }}>
-          Anywheredoor - Simple Test Page
+          Cloud Certification - Simple Test Page
         </h1>
         
         <div style={{ 

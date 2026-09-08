@@ -1,61 +1,35 @@
-'use client';
-
-import Image from 'next/image';
-
-const logos = [
-  { name: 'Google',      src: '/partners/google-logo.svg' },
-  { name: 'Microsoft',   src: '/partners/microsoft-logo.svg' },
-  { name: 'Amazon',      src: '/partners/amazon-logo.svg' },
-  { name: 'Meta',        src: '/partners/meta-logo.svg' },
-  { name: 'Netflix',     src: '/partners/netflix-logo.svg' },
-  { name: 'Spotify',     src: '/partners/spotify-logo.svg' },
-  { name: 'Airbnb',      src: '/partners/airbnb-logo.svg' },
-  { name: 'Uber',        src: '/partners/uber-logo.svg' },
+const companies = [
+  'Deloitte',
+  'Accenture',
+  'IBM',
+  'Cognizant',
+  'Infosys',
+  'Capgemini',
+  'TCS',
 ];
-
-// Duplicate for seamless infinite loop
-const items = [...logos, ...logos];
 
 export default function LearningPathsMarquee() {
   return (
-    <section className="py-10 bg-white" style={{ overflowX: 'clip' }}>
-      {/* Heading */}
-      <div className="text-center mb-8 px-4">
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-          Career-Focused Learning Paths
-        </h2>
-        <p className="text-gray-500 text-sm sm:text-base max-w-xl mx-auto">
+    <section className="border-y border-slate-100 bg-slate-50 py-10 sm:py-12">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <p className="text-center text-sm font-medium text-slate-500 sm:text-base">
+          Trusted by professionals from
+        </p>
+        <p className="mx-auto mt-2 max-w-2xl text-center text-sm text-slate-400 sm:text-[15px]">
           Master skills that top employers are hiring for — designed with industry leaders.
         </p>
-      </div>
 
-      {/* Marquee strip */}
-      <div className="relative w-full flex items-center">
-        {/* Fade edges */}
-        <div className="pointer-events-none absolute left-0 top-0 h-full w-20 z-10 bg-gradient-to-r from-white to-transparent" />
-        <div className="pointer-events-none absolute right-0 top-0 h-full w-20 z-10 bg-gradient-to-l from-white to-transparent" />
-
-        <div
-          className="flex items-center gap-12 animate-marquee-rtl"
-          style={{ width: 'max-content' }}
-        >
-          {items.map((logo, idx) => (
-            <div
-              key={`${logo.name}-${idx}`}
-              className="flex-shrink-0 flex items-center justify-center"
-              style={{ height: '70px', width: '200px' }}
+        <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-8 gap-y-4 sm:gap-x-10 md:justify-between md:gap-x-4">
+          {companies.map((name) => (
+            <li
+              key={name}
+              className="text-lg font-bold tracking-tight text-slate-400 sm:text-xl md:text-[1.35rem]"
+              style={{ fontFamily: 'Arial, Helvetica, sans-serif' }}
             >
-              <Image
-                src={logo.src}
-                alt={`${logo.name} logo`}
-                width={200}
-                height={70}
-                className="object-contain grayscale hover:grayscale-0 transition-all duration-300"
-                style={{ height: '70px', width: 'auto' }}
-              />
-            </div>
+              {name}
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );

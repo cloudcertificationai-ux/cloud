@@ -19,12 +19,13 @@ interface CourseReviewsProps {
 
 export default function CourseReviews({ course, testimonials }: CourseReviewsProps) {
   // Generate rating distribution for visualization
+  const total = Math.max(course.rating.count, 1);
   const ratingDistribution = {
-    5: Math.floor(course.rating.count * 0.65),
-    4: Math.floor(course.rating.count * 0.20),
-    3: Math.floor(course.rating.count * 0.10),
-    2: Math.floor(course.rating.count * 0.03),
-    1: Math.floor(course.rating.count * 0.02),
+    5: Math.floor(total * 0.65),
+    4: Math.floor(total * 0.20),
+    3: Math.floor(total * 0.10),
+    2: Math.floor(total * 0.03),
+    1: Math.max(0, total - Math.floor(total * 0.65) - Math.floor(total * 0.20) - Math.floor(total * 0.10) - Math.floor(total * 0.03)),
   };
 
   const formatDate = (date: Date): string => {
@@ -159,7 +160,7 @@ export default function CourseReviews({ course, testimonials }: CourseReviewsPro
                 <div className="flex-shrink-0">
                   <div className="relative w-16 h-16 rounded-full overflow-hidden mx-auto sm:mx-0">
                     <Image
-                      src={testimonial.studentPhoto}
+                      src={testimonial.studentPhoto || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop'}
                       alt={testimonial.studentName}
                       fill
                       className="object-cover"

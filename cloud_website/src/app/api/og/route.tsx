@@ -7,7 +7,7 @@ export const runtime = 'edge';
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const title = searchParams.get('title') || 'Anywheredoor - Online Learning Platform';
+    const title = searchParams.get('title') || 'Cloud Certification - Online Learning Platform';
     const type = searchParams.get('type') || 'page';
     const subtitle = searchParams.get('subtitle') || 'Transform your career with expert-led online courses';
 
@@ -147,7 +147,7 @@ export async function GET(request: NextRequest) {
                   color: 'white',
                 }}
               >
-                Anywheredoor
+                Cloud Certification
               </span>
             </div>
           </div>

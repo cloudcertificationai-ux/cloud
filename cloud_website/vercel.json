@@ -1,4 +1,7 @@
 {
+  "framework": "nextjs",
+  "installCommand": "npm install",
+  "buildCommand": "npx prisma generate && npx next build",
   "crons": [
     {
       "path": "/api/cron/daily-stats",

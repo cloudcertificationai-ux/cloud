@@ -12,14 +12,14 @@ export default function SortControls() {
 
   return (
     <div className="flex items-center gap-2">
-      <label htmlFor="sort" className="text-sm text-gray-600 whitespace-nowrap">
-        Sort by:
-      </label>
+      <svg className="w-4 h-4 text-slate-400 hidden sm:block" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 4h13M3 8h9M3 12h5m5-4v12m0 0l-3-3m3 3l3-3" />
+      </svg>
       <select
         id="sort"
         value={`${sortBy}-${sortOrder}`}
         onChange={handleSortChange}
-        className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+        className="text-sm font-semibold text-slate-700 bg-slate-100 border-0 rounded-xl pl-3 pr-8 py-2.5 focus:ring-2 focus:ring-blue-500 cursor-pointer transition-colors hover:bg-slate-200/70"
       >
         <option value="relevance-desc">Relevance</option>
         <option value="rating-desc">Highest Rated</option>

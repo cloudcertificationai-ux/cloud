@@ -1,0 +1,11 @@
+node_modules
+.next
+.env
+.env.*
+!.env.example
+.git
+coverage
+*.log
+playwright-report
+test-results
+public/cloud-certification-logo.old.png

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Help Center | Anywheredoor',
+  title: 'Help Center | Cloud Certification',
   description: 'Get help with your courses, account, and technical issues.',
 };
 

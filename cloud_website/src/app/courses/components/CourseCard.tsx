@@ -41,8 +41,8 @@ export default function CourseCard({
     "description": course.shortDescription,
     "provider": {
       "@type": "Organization",
-      "name": "Anywheredoor",
-      "url": "https://anywheredoor.com"
+      "name": "Cloud Certification",
+      "url": "https://Cloud Certification.com"
     },
     "instructor": instructors.map(instructor => ({
       "@type": "Person",

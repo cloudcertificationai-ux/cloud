@@ -16,13 +16,13 @@ export async function generateMetadata({ params }: CourseCompletedPageProps): Pr
   
   if (!course) {
     return {
-      title: 'Course Not Found | Anywheredoor',
+      title: 'Course Not Found | Cloud Certification',
       robots: { index: false, follow: false },
     };
   }
 
   return {
-    title: `Congratulations! - ${course.title} | Anywheredoor`,
+    title: `Congratulations! - ${course.title} | Cloud Certification`,
     description: `You've completed ${course.title}!`,
     robots: { index: false, follow: false },
   };

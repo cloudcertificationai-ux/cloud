@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Accessibility Statement | Anywheredoor',
+  title: 'Accessibility Statement | Cloud Certification',
   description: 'Our commitment to making online learning accessible to everyone.',
 };
 
@@ -15,7 +15,7 @@ export default function AccessibilityPage() {
         
         <div className="prose prose-lg max-w-none">
           <p className="text-lg text-gray-600 mb-8">
-            At Anywheredoor, we are committed to ensuring digital accessibility for people with disabilities. 
+            At Cloud Certification, we are committed to ensuring digital accessibility for people with disabilities. 
             We are continually improving the user experience for everyone and applying the relevant accessibility standards.
           </p>
 
@@ -39,8 +39,8 @@ export default function AccessibilityPage() {
           <p className="text-gray-600">
             If you encounter any accessibility barriers or have suggestions for improvement, 
             please contact us at{' '}
-            <a href="mailto:accessibility@anywheredoor.com" className="text-primary-600 hover:text-primary-700">
-              accessibility@anywheredoor.com
+            <a href="mailto:accessibility@Cloud Certification.com" className="text-primary-600 hover:text-primary-700">
+              accessibility@Cloud Certification.com
             </a>
           </p>
         </div>

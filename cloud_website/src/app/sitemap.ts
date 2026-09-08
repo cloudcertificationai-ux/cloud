@@ -13,7 +13,7 @@ import prisma from '@/lib/db';
  * Requirements: 13.1 - Generate sitemap.xml with all published courses
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://anywheredoor.com';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://Cloud Certification.com';
   
   // Static pages with high priority
   const staticPages: MetadataRoute.Sitemap = [

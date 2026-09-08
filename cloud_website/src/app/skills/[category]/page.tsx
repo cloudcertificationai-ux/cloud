@@ -168,7 +168,7 @@ export async function generateMetadata({ params }: SkillPageProps): Promise<Meta
       ...skill.skills.map(s => s.toLowerCase()),
     ],
     openGraph: {
-      title: `Learn ${skill.title} | Anywheredoor`,
+      title: `Learn ${skill.title} | Cloud Certification`,
       description: skill.description,
       type: 'website',
       images: [skill.hero.image],
@@ -193,8 +193,8 @@ export default function SkillPage({ params }: SkillPageProps) {
     description: skill.description,
     provider: {
       '@type': 'Organization',
-      name: 'Anywheredoor',
-      url: 'https://anywheredoor.com',
+      name: 'Cloud Certification',
+      url: 'https://Cloud Certification.com',
     },
     educationalLevel: 'Beginner to Advanced',
     teaches: skill.skills,

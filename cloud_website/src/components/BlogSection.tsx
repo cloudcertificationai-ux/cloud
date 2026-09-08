@@ -131,6 +131,21 @@ export default function BlogSection({ posts }: BlogSectionProps) {
     return () => window.removeEventListener('resize', checkScrollButtons);
   }, [displayPosts]);
 
+  // Vertical wheel over horizontal carousel must scroll the page (not get trapped)
+  useEffect(() => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+
+    const onWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+      e.preventDefault();
+      window.scrollBy({ top: e.deltaY, left: 0, behavior: 'auto' });
+    };
+
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
+  }, [displayPosts]);
+
   const scroll = (direction: 'left' | 'right') => {
     if (scrollContainerRef.current) {
       const scrollAmount = 240; // Width of one card + gap
@@ -146,7 +161,7 @@ export default function BlogSection({ posts }: BlogSectionProps) {
   };
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="blog-section py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-12">
@@ -210,14 +225,25 @@ export default function BlogSection({ posts }: BlogSectionProps) {
           <div
             ref={scrollContainerRef}
             onScroll={checkScrollButtons}
-            className="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth pb-4"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            className="blog-carousel flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth pb-4"
+            style={{
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+              overscrollBehaviorY: 'auto',
+              overscrollBehaviorX: 'contain',
+              touchAction: 'pan-x pan-y',
+            }}
           >
             {displayPosts.map((post) => (
-              <Link key={post.id} href={`/blog/${post.slug}`} className="flex-shrink-0">
-                <article className="w-[220px] bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col group">
+              <Link
+                key={post.id}
+                href={`/blog/${post.slug}`}
+                className="blog-carousel-card flex-shrink-0"
+                style={{ overscrollBehavior: 'auto', touchAction: 'pan-y' }}
+              >
+                <article className="w-[220px] bg-white rounded-lg shadow-md overflow-clip hover:shadow-xl transition-all duration-300 flex flex-col group">
                   {/* Cover Image */}
-                  <div className="relative h-40 overflow-hidden">
+                  <div className="relative h-40 overflow-clip">
                     {post.coverImageUrl ? (
                       <Image
                         src={post.coverImageUrl}

@@ -61,7 +61,7 @@ export default function SignInPage() {
       <div className="w-full max-w-md space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-            Get Started with AnyWhereDoor
+            Get Started with Cloud Certification
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
             Sign in or create a new account - we'll handle it automatically
@@ -86,7 +86,7 @@ export default function SignInPage() {
               </div>
               <div className="ml-3">
                 <p className="text-sm text-blue-700">
-                  New to AnyWhereDoor? No worries! When you click continue, we'll automatically create your account if you don't have one yet.
+                  New to Cloud Certification? No worries! When you click continue, we'll automatically create your account if you don't have one yet.
                 </p>
               </div>
             </div>

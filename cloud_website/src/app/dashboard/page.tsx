@@ -7,7 +7,7 @@ import EnrolledCoursesList from '@/components/EnrolledCoursesList'
 import { EmptyEnrollmentsState } from '@/components/ui/EmptyStates'
 
 export const metadata: Metadata = {
-  title: 'My Dashboard | Anywheredoor',
+  title: 'My Dashboard | Cloud Certification',
   description: 'View your enrolled courses and track your learning progress',
 }
 

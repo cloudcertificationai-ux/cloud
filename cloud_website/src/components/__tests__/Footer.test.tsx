@@ -30,6 +30,7 @@ describe('Footer Component', () => {
   it('displays certification course links', () => {
     render(<Footer />);
     
+    expect(screen.getByText('ServiceNow Training Program')).toBeInTheDocument();
     expect(screen.getByText('Cloud Computing Training Program')).toBeInTheDocument();
     expect(screen.getByText('DevOps Training Program')).toBeInTheDocument();
     expect(screen.getByText('Data Science Training Program')).toBeInTheDocument();

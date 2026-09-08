@@ -3,14 +3,15 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import prisma from '@/lib/db'
-import Stripe from 'stripe'
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2026-01-28.clover',
-})
+import { getStripe, isStripeConfigured } from '@/lib/stripe'
 
 export async function POST(request: NextRequest) {
   try {
+    if (!isStripeConfigured()) {
+      return NextResponse.json({ error: 'Stripe is not configured' }, { status: 503 })
+    }
+
+    const stripe = getStripe()
     const session = await getServerSession(authOptions)
     
     if (!session?.user?.email) {

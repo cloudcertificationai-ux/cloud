@@ -1,7 +1,7 @@
 'use client';
 
 import Image, { ImageProps } from 'next/image';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useLazyLoading, useProgressiveImage, usePerformanceMonitor } from '@/hooks/useLazyLoading';
 
 interface OptimizedImageProps extends Omit<ImageProps, 'onLoad' | 'onError'> {
@@ -45,8 +45,6 @@ export default function OptimizedImage({
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [shouldLoad, setShouldLoad] = useState(!lazyLoad || priority);
-  
-  const imageRef = useRef<HTMLDivElement>(null);
   
   // Lazy loading with intersection observer
   const { elementRef, isIntersecting } = useLazyLoading({
@@ -114,16 +112,9 @@ export default function OptimizedImage({
       : undefined
     );
 
-  // Combine refs for lazy loading
-  useEffect(() => {
-    if (imageRef.current && elementRef.current !== imageRef.current) {
-      (elementRef as React.MutableRefObject<HTMLDivElement | null>).current = imageRef.current;
-    }
-  }, [elementRef]);
-
   return (
     <div 
-      ref={imageRef}
+      ref={elementRef as React.RefObject<HTMLDivElement>}
       className={`relative ${className}`}
       onMouseEnter={handleMouseEnter}
     >

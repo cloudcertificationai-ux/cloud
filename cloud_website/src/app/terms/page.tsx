@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Terms of Service | Anywheredoor',
+  title: 'Terms of Service | Cloud Certification',
   description: 'Read our terms of service and user agreement.',
 };
 
@@ -19,7 +19,7 @@ export default function TermsPage() {
           </p>
 
           <p className="text-lg text-gray-600 mb-8">
-            Welcome to Anywheredoor. These Terms of Service govern your use of our platform and services. 
+            Welcome to Cloud Certification. These Terms of Service govern your use of our platform and services. 
             By accessing or using our services, you agree to be bound by these terms.
           </p>
 
@@ -74,8 +74,8 @@ export default function TermsPage() {
           <h2 className="text-2xl font-semibold text-navy-800 mt-8 mb-4">Contact Information</h2>
           <p className="text-gray-600">
             If you have questions about these Terms of Service, please contact us at{' '}
-            <a href="mailto:legal@anywheredoor.com" className="text-primary-600 hover:text-primary-700">
-              legal@anywheredoor.com
+            <a href="mailto:legal@Cloud Certification.com" className="text-primary-600 hover:text-primary-700">
+              legal@Cloud Certification.com
             </a>
           </p>
         </div>

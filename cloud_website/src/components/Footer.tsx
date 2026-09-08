@@ -1,61 +1,62 @@
-'use client';
-
 import Link from 'next/link';
 
+const FOOTER_LINK_CLASS = 'text-[12px] no-underline text-[#bbb] hover:text-white';
+
+const certificationCourses = [
+  { href: '/courses/servicenow', label: 'ServiceNow Training Program' },
+  { href: '/courses/cloud-computing', label: 'Cloud Computing Training Program' },
+  { href: '/courses/devops', label: 'DevOps Training Program' },
+  { href: '/courses/microsoft-azure', label: 'Microsoft Azure Training Program' },
+  { href: '/courses/salesforce', label: 'Salesforce Training Program' },
+  { href: '/courses/data-science', label: 'Data Science Training Program' },
+  { href: '/courses/data-analytics', label: 'Data Analytics Training Program' },
+  { href: '/courses/full-stack', label: 'Full Stack Development Training Program' },
+  { href: '/courses/blockchain', label: 'Blockchain Certification Training Program' },
+  { href: '/courses/python', label: 'Python Training Program' },
+  { href: '/courses/software-testing', label: 'Software Testing With Gen AI Training Program' },
+];
+
+const masterCourses = [
+  { href: '/masters/cloud-computing', label: 'Master Program in Cloud Computing' },
+  { href: '/masters/devops', label: 'Master in DevOps Engineering' },
+  { href: '/masters/software-testing', label: 'Master in Software Testing' },
+  { href: '/masters/ai', label: 'Masters in Artificial Intelligence' },
+  { href: '/masters/data-analytics', label: 'Masters in Data Analytics' },
+  { href: '/masters/data-science', label: 'Masters in Data Science Program' },
+  { href: '/masters/full-stack', label: 'Masters in Full Stack Development Training' },
+  { href: '/masters/generative-ai', label: 'Masters in Generative AI' },
+  { href: '/masters/professional-data-analytics', label: 'Professional in Data Analytics' },
+  { href: '/masters/professional-data-science', label: 'Professional in Data Science' },
+];
+
+const companyLinks = [
+  { href: '/about', label: 'About Us' },
+  { href: '/reviews', label: 'Reviews' },
+  { href: '/contact', label: 'Contact Us' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/web-stories', label: 'Web Stories' },
+  { href: '/faq', label: "FAQ's" },
+  { href: '/terms', label: 'Terms & Conditions' },
+  { href: '/privacy', label: 'Privacy Policy' },
+  { href: '/press-release', label: 'Press Release' },
+  { href: '/grievance', label: 'Grievance' },
+];
+
+const workWithUsLinks = [
+  { href: '/service', label: 'Service' },
+  { href: '/placement', label: 'Placement' },
+  { href: '/career', label: 'Career with Cloud Certification' },
+  { href: '/clients', label: 'Our Clients' },
+  { href: '/corporate-training', label: 'Corporate Training' },
+  { href: '/become-instructor', label: 'Become an Instructor' },
+  { href: '/hire', label: 'Hire from Cloud Certification' },
+  { href: '/join-us', label: 'Join Us' },
+  { href: '/brochure', label: 'Download Brochure' },
+  { href: '/refund', label: 'Refund' },
+  { href: '/shipping', label: 'Shipping & Delivery Policy' },
+];
+
 export default function Footer() {
-  const certificationCourses = [
-    { href: '/courses/cloud-computing', label: 'Cloud Computing Training Program' },
-    { href: '/courses/devops', label: 'DevOps Training Program' },
-    { href: '/courses/microsoft-azure', label: 'Microsoft Azure Training Program' },
-    { href: '/courses/salesforce', label: 'Salesforce Training Program' },
-    { href: '/courses/data-science', label: 'Data Science Training Program' },
-    { href: '/courses/data-analytics', label: 'Data Analytics Training Program' },
-    { href: '/courses/full-stack', label: 'Full Stack Development Training Program' },
-    { href: '/courses/blockchain', label: 'Blockchain Certification Training Program' },
-    { href: '/courses/python', label: 'Python Training Program' },
-    { href: '/courses/software-testing', label: 'Software Testing With Gen AI Training Program' },
-  ];
-
-  const masterCourses = [
-    { href: '/masters/cloud-computing', label: 'Master Program in Cloud Computing' },
-    { href: '/masters/devops', label: 'Master in DevOps Engineering' },
-    { href: '/masters/software-testing', label: 'Master in Software Testing' },
-    { href: '/masters/ai', label: 'Masters in Artificial Intelligence' },
-    { href: '/masters/data-analytics', label: 'Masters in Data Analytics' },
-    { href: '/masters/data-science', label: 'Masters in Data Science Program' },
-    { href: '/masters/full-stack', label: 'Masters in Full Stack Development Training' },
-    { href: '/masters/generative-ai', label: 'Masters in Generative AI' },
-    { href: '/masters/professional-data-analytics', label: 'Professional in Data Analytics' },
-    { href: '/masters/professional-data-science', label: 'Professional in Data Science' },
-  ];
-
-  const companyLinks = [
-    { href: '/about', label: 'About Us' },
-    { href: '/reviews', label: 'Reviews' },
-    { href: '/contact', label: 'Contact Us' },
-    { href: '/blog', label: 'Blog' },
-    { href: '/web-stories', label: 'Web Stories' },
-    { href: '/faq', label: "FAQ's" },
-    { href: '/terms', label: 'Terms & Conditions' },
-    { href: '/privacy', label: 'Privacy Policy' },
-    { href: '/press-release', label: 'Press Release' },
-    { href: '/grievance', label: 'Grievance' },
-  ];
-
-  const workWithUsLinks = [
-    { href: '/service', label: 'Service' },
-    { href: '/placement', label: 'Placement' },
-    { href: '/career', label: 'Career with Croma Campus' },
-    { href: '/clients', label: 'Our Clients' },
-    { href: '/corporate-training', label: 'Corporate Training' },
-    { href: '/become-instructor', label: 'Become an Instructor' },
-    { href: '/hire', label: 'Hire from Croma Campus' },
-    { href: '/join-us', label: 'Join Us' },
-    { href: '/brochure', label: 'Download Brochure' },
-    { href: '/refund', label: 'Refund' },
-    { href: '/shipping', label: 'Shipping & Delivery Policy' },
-  ];
-
   return (
     <footer className="bg-gray-900" style={{ color: '#ccc', fontFamily: 'sans-serif' }}>
       {/* Top section: logo + description */}
@@ -65,11 +66,13 @@ export default function Footer() {
             <img
               src="/cloud-certification-logo.png"
               alt="Cloud Certification"
-              style={{ width: '120px', height: 'auto' }}
+              style={{ height: '56px', width: 'auto', objectFit: 'contain' }}
+              width={220}
+              height={56}
             />
           </div>
           <p style={{ fontSize: '13px', lineHeight: '1.7', color: '#bbb', maxWidth: '700px', margin: 0 }}>
-            Croma Campus is an education platform providing rigorous industry-relevant programs designed and delivered in
+            Cloud Certification is an education platform providing rigorous industry-relevant programs designed and delivered in
             collaboration with world-class faculty, industry &amp; Infrastructure. In the past 15 years we have trained
             18000+ candidates and out of which we are able to place 12000+ professionals in various industries successfully.
           </p>
@@ -85,9 +88,7 @@ export default function Footer() {
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
               {certificationCourses.map((link) => (
                 <li key={link.href} style={{ marginBottom: '6px' }}>
-                  <Link href={link.href} style={{ color: '#bbb', fontSize: '12px', textDecoration: 'none' }}
-                    onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
-                    onMouseLeave={e => (e.currentTarget.style.color = '#bbb')}>
+                  <Link href={link.href} className={FOOTER_LINK_CLASS}>
                     {link.label}
                   </Link>
                 </li>
@@ -103,9 +104,7 @@ export default function Footer() {
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
               {masterCourses.map((link) => (
                 <li key={link.href} style={{ marginBottom: '6px' }}>
-                  <Link href={link.href} style={{ color: '#bbb', fontSize: '12px', textDecoration: 'none' }}
-                    onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
-                    onMouseLeave={e => (e.currentTarget.style.color = '#bbb')}>
+                  <Link href={link.href} className={FOOTER_LINK_CLASS}>
                     {link.label}
                   </Link>
                 </li>
@@ -121,9 +120,7 @@ export default function Footer() {
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
               {companyLinks.map((link) => (
                 <li key={link.href} style={{ marginBottom: '6px' }}>
-                  <Link href={link.href} style={{ color: '#bbb', fontSize: '12px', textDecoration: 'none' }}
-                    onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
-                    onMouseLeave={e => (e.currentTarget.style.color = '#bbb')}>
+                  <Link href={link.href} className={FOOTER_LINK_CLASS}>
                     {link.label}
                   </Link>
                 </li>
@@ -139,9 +136,7 @@ export default function Footer() {
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
               {workWithUsLinks.map((link) => (
                 <li key={link.href} style={{ marginBottom: '6px' }}>
-                  <Link href={link.href} style={{ color: '#bbb', fontSize: '12px', textDecoration: 'none' }}
-                    onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
-                    onMouseLeave={e => (e.currentTarget.style.color = '#bbb')}>
+                  <Link href={link.href} className={FOOTER_LINK_CLASS}>
                     {link.label}
                   </Link>
                 </li>

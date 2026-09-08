@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 140" role="img" aria-label="Cloud Certification">
+  <!-- Orange growth mark -->
+  <g fill="#ff6a00" transform="translate(8,12)">
+    <!-- outer ring -->
+    <path d="M58 8c27.6 0 50 22.4 50 50s-22.4 50-50 50S8 85.6 8 58 30.4 8 58 8zm0 18c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32z"/>
+    <!-- upward arrow integrated with ring base -->
+    <path d="M58 28l28 42H74v26H42V70H30l28-42z"/>
+  </g>
+
+  <!-- Wordmark -->
+  <g font-family="Arial Black, Arial, Helvetica, sans-serif" fill="#2f7cff">
+    <text x="140" y="72" font-size="56" font-weight="900" letter-spacing="1.5">CLOUD</text>
+    <text x="140" y="112" font-size="28" font-weight="700" letter-spacing="4.2">CERTIFICATION</text>
+  </g>
+</svg>

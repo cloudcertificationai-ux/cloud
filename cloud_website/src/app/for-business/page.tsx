@@ -13,7 +13,7 @@ import { EnterpriseInquiry } from '@/types';
 
 // Note: This would normally be generated server-side
 // export const metadata: Metadata = {
-//   title: 'Enterprise Learning Solutions | AnyWhereDoor',
+//   title: 'Enterprise Learning Solutions | Cloud Certification',
 //   description: 'Transform your workforce with enterprise-grade learning solutions trusted by Fortune 500 companies.',
 // };
 
@@ -54,7 +54,7 @@ export default function ForBusinessPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">      
+    <div className="min-h-screen" style={{ background: '#f1f5f9' }}>
       <main>
         <EnterpriseSolutions
           solutions={enterpriseSolutions}
@@ -64,51 +64,57 @@ export default function ForBusinessPage() {
           onDemoClick={handleDemoClick}
         />
 
-        {/* Additional CTA Section */}
-        <section className="py-16 bg-blue-50">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">
-              Ready to Get Started?
-            </h2>
-            <p className="text-lg text-gray-600 mb-8">
-              Choose the option that best fits your organization's needs
-            </p>
-            
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-xl font-semibold mb-4">Schedule a Demo</h3>
-                <p className="text-gray-600 mb-4">
-                  See our platform in action with a personalized demonstration
+        {/* Additional CTA Section — SaaS dashboard action cards */}
+        <section className="pb-20">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-10">
+              <span className="text-xs font-bold uppercase tracking-widest" style={{ color: '#1d4ed8' }}>Get started</span>
+              <h2 className="text-2xl lg:text-3xl font-extrabold mt-2" style={{ color: '#0f172a', letterSpacing: '-0.02em' }}>
+                Choose the option that fits your team
+              </h2>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-5">
+              <div className="flex flex-col bg-white rounded-3xl p-7" style={{ border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(15,23,42,0.05)' }}>
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-xl mb-5" style={{ background: 'rgba(29,78,216,0.08)', border: '1px solid rgba(29,78,216,0.16)' }}>🖥️</div>
+                <h3 className="text-lg font-bold mb-2" style={{ color: '#0f172a' }}>Schedule a Demo</h3>
+                <p className="text-sm mb-6 flex-1" style={{ color: '#64748b' }}>
+                  See our platform in action with a personalized demonstration tailored to your organization.
                 </p>
                 <button
                   onClick={handleDemoClick}
-                  className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+                  className="w-full text-white text-sm font-bold py-3 rounded-xl transition-transform hover:scale-[1.02]"
+                  style={{ background: 'linear-gradient(90deg,#1d4ed8,#0ea5e9)' }}
                 >
                   Book Demo
                 </button>
               </div>
-              
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-xl font-semibold mb-4">Custom Training</h3>
-                <p className="text-gray-600 mb-4">
-                  Request a tailored training program for your specific needs
+
+              <div className="flex flex-col bg-white rounded-3xl p-7" style={{ border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(15,23,42,0.05)' }}>
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-xl mb-5" style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.16)' }}>🎓</div>
+                <h3 className="text-lg font-bold mb-2" style={{ color: '#0f172a' }}>Custom Training</h3>
+                <p className="text-sm mb-6 flex-1" style={{ color: '#64748b' }}>
+                  Request a tailored training program built around your team&rsquo;s specific skill gaps.
                 </p>
                 <button
                   onClick={handleCustomTrainingClick}
-                  className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors"
+                  className="w-full text-white text-sm font-bold py-3 rounded-xl transition-transform hover:scale-[1.02]"
+                  style={{ background: 'linear-gradient(90deg,#10b981,#0ea5e9)' }}
                 >
                   Request Training
                 </button>
               </div>
-              
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-xl font-semibold mb-4">Platform Access</h3>
-                <p className="text-gray-600 mb-4">
-                  Get access to our Learning Hub+ enterprise platform
+
+              <div className="flex flex-col bg-white rounded-3xl p-7" style={{ border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(15,23,42,0.05)' }}>
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-xl mb-5" style={{ background: 'rgba(124,58,237,0.08)', border: '1px solid rgba(124,58,237,0.16)' }}>🏢</div>
+                <h3 className="text-lg font-bold mb-2" style={{ color: '#0f172a' }}>Platform Access</h3>
+                <p className="text-sm mb-6 flex-1" style={{ color: '#64748b' }}>
+                  Get access to our Learning Hub+ enterprise platform with dedicated support.
                 </p>
                 <button
                   onClick={handlePlatformAccessClick}
-                  className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 transition-colors"
+                  className="w-full text-white text-sm font-bold py-3 rounded-xl transition-transform hover:scale-[1.02]"
+                  style={{ background: 'linear-gradient(90deg,#7c3aed,#1d4ed8)' }}
                 >
                   Get Access
                 </button>

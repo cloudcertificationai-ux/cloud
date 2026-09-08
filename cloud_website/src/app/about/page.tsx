@@ -8,9 +8,9 @@ const NavigationFlow = dynamic(() => import('@/components/NavigationFlow'));
 
 export const metadata: Metadata = {
   title: 'About Us - Transforming Careers Through Technology Education',
-  description: 'Learn about Anywheredoor\'s mission to provide world-class technology education. Discover our success stories, industry partnerships, and commitment to student career advancement.',
+  description: 'Learn about Cloud Certification\'s mission to provide world-class technology education. Discover our success stories, industry partnerships, and commitment to student career advancement.',
   keywords: [
-    'about anywheredoor',
+    'about Cloud Certification',
     'online learning platform',
     'tech education mission',
     'career transformation',
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     'industry partnerships'
   ],
   openGraph: {
-    title: 'About Anywheredoor - Technology Education Platform',
+    title: 'About Cloud Certification - Technology Education Platform',
     description: 'Transforming careers through expert-led technology courses with 92% job placement rate and 65% average salary increase.',
     images: ['/about-og-image.jpg'],
   },
@@ -52,7 +52,7 @@ export default function AboutPage() {
                 Our Mission
               </h2>
               <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-                At Anywheredoor, we're on a mission to democratize access to high-quality 
+                At Cloud Certification, we're on a mission to democratize access to high-quality 
                 technology education. We bridge the gap between traditional education and 
                 industry demands by providing practical, hands-on learning experiences 
                 that prepare students for real-world challenges.

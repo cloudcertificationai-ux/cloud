@@ -264,12 +264,11 @@ export function optimizeForMobile(config: MobileOptimizationConfig = DEFAULT_MOB
   // Optimize scrolling performance
   const style = document.createElement('style');
   style.textContent = `
-    /* Optimize scrolling */
-    * {
+    /* Optimize scrolling — do NOT set overscroll-behavior on * (blocks page scroll over overflow:hidden cards) */
+    html, body {
       -webkit-overflow-scrolling: touch;
-      overscroll-behavior: contain;
     }
-    
+
     /* Optimize transforms */
     .transform-gpu {
       transform: translateZ(0);

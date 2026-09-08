@@ -10,26 +10,26 @@ import dynamic from 'next/dynamic';
 const NavigationFlow = dynamic(() => import('@/components/NavigationFlow'));
 
 export const metadata: Metadata = {
-  title: 'Featured Courses - Top Rated Online Training | Anywheredoor',
+  title: 'Featured Courses - Top Rated Online Training | Cloud Certification',
   description: 'Explore our hand-picked featured courses. Learn from industry experts with our most popular and highly-rated online training programs.',
   keywords: ['featured courses', 'top courses', 'best online courses', 'popular courses', 'highly rated training'],
   alternates: {
     canonical: generateCanonicalUrl('/courses/featured'),
   },
   openGraph: {
-    title: 'Featured Courses - Anywheredoor',
+    title: 'Featured Courses - Cloud Certification',
     description: 'Explore our hand-picked featured courses. Learn from industry experts with our most popular and highly-rated online training programs.',
     type: 'website',
     images: ['/og-featured-courses.jpg'],
     url: generateCanonicalUrl('/courses/featured'),
-    siteName: 'Anywheredoor',
+    siteName: 'Cloud Certification',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Featured Courses',
     description: 'Explore our hand-picked featured courses',
     images: ['/og-featured-courses.jpg'],
-    creator: '@anywheredoor',
+    creator: '@Cloud Certification',
   },
   robots: {
     index: true,

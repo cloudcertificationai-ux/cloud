@@ -81,7 +81,7 @@ export default function ServiceWorkerManager({
               </div>
               <div>
                 <p className="text-sm font-medium">
-                  A new version of Anywheredoor is available!
+                  A new version of Cloud Certification is available!
                 </p>
                 <p className="text-xs opacity-90">
                   Update now to get the latest features and improvements.

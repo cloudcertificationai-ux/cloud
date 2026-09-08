@@ -1,15 +1,12 @@
 import type { Metadata } from 'next';
 import { Inter, Roboto, JetBrains_Mono } from 'next/font/google';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import SkipLink from '@/components/SkipLink';
 import { DataProvider } from '@/contexts/DataContext';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import ClientProviders from '@/components/ClientProviders';
 import SessionProvider from '@/components/SessionProvider';
-import dynamic from 'next/dynamic';
-
-// Dynamically import client components
-const Footer = dynamic(() => import('@/components/Footer'));
 import { generateOGImageUrl } from '@/lib/seo';
 import './globals.css';
 
@@ -74,7 +71,7 @@ export const metadata: Metadata = {
     images: [
       {
         url: generateOGImageUrl(
-          'Anywheredoor',
+          'Cloud Certification',
           'page',
           'Transform your career with expert-led online courses'
         ),
@@ -89,7 +86,7 @@ export const metadata: Metadata = {
     title: 'Cloud Certification - Industry-Certified Tech Leadership',
     description: 'Advance to senior roles at Fortune 500 companies with industry-recognized certifications and job-ready skills training.',
     images: [generateOGImageUrl(
-      'Anywheredoor',
+      'Cloud Certification',
       'page',
       'Transform your career with expert-led online courses'
     )],

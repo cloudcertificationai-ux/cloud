@@ -4,15 +4,17 @@ import Stripe from 'stripe'
 import prisma from '@/lib/db'
 import { dbDataService } from '@/data/db-data-service'
 import { SyncService } from '@/lib/sync-service'
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2026-01-28.clover',
-})
+import { getStripe, isStripeConfigured } from '@/lib/stripe'
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || ''
 
 export async function POST(request: NextRequest) {
   try {
+    if (!isStripeConfigured() || !webhookSecret || webhookSecret.includes('...')) {
+      return NextResponse.json({ error: 'Stripe is not configured' }, { status: 503 })
+    }
+
+    const stripe = getStripe()
     const body = await request.text()
     const signature = request.headers.get('stripe-signature')
 

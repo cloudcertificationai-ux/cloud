@@ -41,23 +41,6 @@ export const DynamicCourseFilters = dynamic(
   }
 );
 
-export const DynamicAdvancedFilters = dynamic(
-  () => import('@/app/courses/components/AdvancedFilters'),
-  {
-    loading: () => (
-      <div className="space-y-4">
-        <div className="h-8 bg-gray-200 rounded w-32 animate-pulse"></div>
-        <div className="space-y-2">
-          {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-10 bg-gray-200 rounded animate-pulse"></div>
-          ))}
-        </div>
-      </div>
-    ),
-    ssr: false,
-  }
-);
-
 // Course detail page dynamic imports
 export const DynamicEnrollmentModal = dynamic(
   () => import('@/app/courses/[slug]/components/EnrollmentModal'),

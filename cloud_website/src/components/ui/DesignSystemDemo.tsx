@@ -33,7 +33,7 @@ const DesignSystemDemo: React.FC = () => {
           Simplilearn Design System
         </Typography>
         <Typography variant="body1" color="neutral" className="mb-8">
-          Professional, enterprise-grade UI components for the anywheredoor platform
+          Professional, enterprise-grade UI components for the Cloud Certification platform
         </Typography>
 
         {/* Buttons Section */}

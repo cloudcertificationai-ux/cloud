@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | Anywheredoor',
+  title: 'Privacy Policy | Cloud Certification',
   description: 'Learn how we collect, use, and protect your personal information.',
 };
 
@@ -19,7 +19,7 @@ export default function PrivacyPage() {
           </p>
 
           <p className="text-lg text-gray-600 mb-8">
-            At Anywheredoor, we take your privacy seriously. This Privacy Policy explains how we collect, 
+            At Cloud Certification, we take your privacy seriously. This Privacy Policy explains how we collect, 
             use, disclose, and safeguard your information when you use our platform.
           </p>
 
@@ -76,8 +76,8 @@ export default function PrivacyPage() {
           <h2 className="text-2xl font-semibold text-navy-800 mt-8 mb-4">Contact Us</h2>
           <p className="text-gray-600">
             If you have questions about this Privacy Policy, please contact us at{' '}
-            <a href="mailto:privacy@anywheredoor.com" className="text-primary-600 hover:text-primary-700">
-              privacy@anywheredoor.com
+            <a href="mailto:privacy@Cloud Certification.com" className="text-primary-600 hover:text-primary-700">
+              privacy@Cloud Certification.com
             </a>
           </p>
         </div>

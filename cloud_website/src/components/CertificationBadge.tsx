@@ -214,14 +214,14 @@ export const CommonCertifications = {
   REACT_DEVELOPER: {
     type: 'course' as const,
     title: 'React Developer Certificate',
-    issuer: 'Anywheredoor',
+    issuer: 'Cloud Certification',
     description: 'Comprehensive certification covering React fundamentals to advanced concepts',
     variant: 'premium' as const
   },
   DATA_SCIENCE_PROFESSIONAL: {
     type: 'course' as const,
     title: 'Data Science Professional Certificate',
-    issuer: 'Anywheredoor',
+    issuer: 'Cloud Certification',
     description: 'Advanced certification in machine learning, statistics, and data analysis',
     variant: 'premium' as const
   }

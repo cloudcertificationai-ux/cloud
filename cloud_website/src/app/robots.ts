@@ -7,7 +7,7 @@ import { MetadataRoute } from 'next';
  * Requirements: 13.1 - Allow crawling of published courses, disallow admin panel
  */
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://anywheredoor.com';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://Cloud Certification.com';
 
   return {
     rules: [

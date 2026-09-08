@@ -5,7 +5,7 @@ import prisma from '@/lib/db';
 import { format } from 'date-fns';
 
 export const metadata: Metadata = {
-  title: 'Blog - Latest Articles & Insights | Anywheredoor',
+  title: 'Blog - Latest Articles & Insights | Cloud Certification',
   description: 'Read our latest articles on technology, career development, and learning strategies.',
 };
 

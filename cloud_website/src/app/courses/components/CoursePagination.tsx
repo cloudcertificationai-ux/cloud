@@ -15,7 +15,6 @@ export default function CoursePagination({
 }: CoursePaginationProps) {
   const createPageURL = (page: number) => {
     if (typeof window === 'undefined') {
-      // Server-side fallback
       const params = new URLSearchParams();
       Object.entries(searchParams).forEach(([key, value]) => {
         if (value && key !== 'page') {
@@ -25,7 +24,7 @@ export default function CoursePagination({
       params.set('page', page.toString());
       return `?${params.toString()}`;
     }
-    
+
     const url = new URL(window.location.href);
     url.searchParams.set('page', page.toString());
     return url.toString();
@@ -34,7 +33,7 @@ export default function CoursePagination({
   const getVisiblePages = () => {
     const delta = 2;
     const range = [];
-    const rangeWithDots = [];
+    const rangeWithDots: (number | string)[] = [];
 
     for (let i = Math.max(2, currentPage - delta); i <= Math.min(totalPages - 1, currentPage + delta); i++) {
       range.push(i);
@@ -59,109 +58,62 @@ export default function CoursePagination({
 
   const visiblePages = getVisiblePages();
 
+  const NavBtn = ({ href, disabled, children, label }: { href: string; disabled: boolean; children: React.ReactNode; label: string }) =>
+    disabled ? (
+      <span className="inline-flex items-center justify-center w-9 h-9 rounded-xl text-slate-300 cursor-not-allowed" aria-hidden>
+        {children}
+      </span>
+    ) : (
+      <a
+        href={href}
+        aria-label={label}
+        className="inline-flex items-center justify-center w-9 h-9 rounded-xl text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors"
+      >
+        {children}
+      </a>
+    );
+
   return (
-    <nav className="flex items-center justify-between border-t border-gray-200 px-4 py-3 sm:px-6">
-      <div className="flex flex-1 justify-between sm:hidden">
-        {/* Mobile pagination */}
-        {currentPage > 1 && (
-          <a
-            href={createPageURL(currentPage - 1)}
-            className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-          >
-            Previous
-          </a>
+    <nav className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white rounded-2xl border border-slate-200 px-5 py-4">
+      <p className="text-sm text-slate-500 order-2 sm:order-1">
+        Page <span className="font-semibold text-slate-900">{currentPage}</span> of{' '}
+        <span className="font-semibold text-slate-900">{totalPages}</span>
+      </p>
+
+      <div className="flex items-center gap-1 order-1 sm:order-2">
+        <NavBtn href={createPageURL(currentPage - 1)} disabled={currentPage <= 1} label="Previous page">
+          <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fillRule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clipRule="evenodd" />
+          </svg>
+        </NavBtn>
+
+        {visiblePages.map((page, index) =>
+          page === '...' ? (
+            <span key={`dots-${index}`} className="w-9 h-9 inline-flex items-center justify-center text-sm text-slate-400">
+              ···
+            </span>
+          ) : (
+            <a
+              key={page}
+              href={createPageURL(page as number)}
+              aria-current={page === currentPage ? 'page' : undefined}
+              className={`inline-flex items-center justify-center w-9 h-9 rounded-xl text-sm font-semibold transition-all ${
+                page === currentPage
+                  ? 'text-white shadow-md'
+                  : 'text-slate-600 hover:bg-slate-100'
+              }`}
+              style={page === currentPage ? { background: 'linear-gradient(90deg,#1d4ed8,#0ea5e9)' } : undefined}
+            >
+              {page}
+            </a>
+          )
         )}
-        {hasMore && (
-          <a
-            href={createPageURL(currentPage + 1)}
-            className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-          >
-            Next
-          </a>
-        )}
-      </div>
 
-      <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-        <div>
-          <p className="text-sm text-gray-700">
-            Showing page <span className="font-medium">{currentPage}</span> of{' '}
-            <span className="font-medium">{totalPages}</span>
-          </p>
-        </div>
-        <div>
-          <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
-            {/* Previous button */}
-            {currentPage > 1 ? (
-              <a
-                href={createPageURL(currentPage - 1)}
-                className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-              >
-                <span className="sr-only">Previous</span>
-                <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path fillRule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clipRule="evenodd" />
-                </svg>
-              </a>
-            ) : (
-              <span className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-300 ring-1 ring-inset ring-gray-300">
-                <span className="sr-only">Previous</span>
-                <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path fillRule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clipRule="evenodd" />
-                </svg>
-              </span>
-            )}
-
-            {/* Page numbers */}
-            {visiblePages.map((page, index) => {
-              if (page === '...') {
-                return (
-                  <span
-                    key={`dots-${index}`}
-                    className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300 focus:outline-offset-0"
-                  >
-                    ...
-                  </span>
-                );
-              }
-
-              const pageNum = page as number;
-              const isCurrentPage = pageNum === currentPage;
-
-              return (
-                <a
-                  key={pageNum}
-                  href={createPageURL(pageNum)}
-                  className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${
-                    isCurrentPage
-                      ? 'z-10 bg-blue-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600'
-                      : 'text-gray-900'
-                  }`}
-                >
-                  {pageNum}
-                </a>
-              );
-            })}
-
-            {/* Next button */}
-            {hasMore ? (
-              <a
-                href={createPageURL(currentPage + 1)}
-                className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-              >
-                <span className="sr-only">Next</span>
-                <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" />
-                </svg>
-              </a>
-            ) : (
-              <span className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-300 ring-1 ring-inset ring-gray-300">
-                <span className="sr-only">Next</span>
-                <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" />
-                </svg>
-              </span>
-            )}
-          </nav>
-        </div>
+        <NavBtn href={createPageURL(currentPage + 1)} disabled={!hasMore} label="Next page">
+          <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" />
+          </svg>
+        </NavBtn>
       </div>
     </nav>
   );

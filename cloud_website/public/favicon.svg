@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" role="img" aria-label="CloudCertification">
+  <defs>
+    <linearGradient id="cg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="50%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#14b8a6"/>
+    </linearGradient>
+  </defs>
+  <rect width="72" height="72" rx="18" fill="#0f172a"/>
+  <path fill="url(#cg)" d="M52.8 49.2H22.4c-6.4 0-11.6-5.1-11.6-11.4 0-5.7 4.2-10.5 9.8-11.3C22 19.8 28 14.8 35.2 14.8c5.5 0 10.3 2.9 12.9 7.3 1.4-.7 2.9-1 4.5-1 5.8 0 10.5 4.6 10.5 10.3 0 .8-.1 1.5-.3 2.2 3.9 1.4 6.7 5.1 6.7 9.4 0 5.5-4.6 10.2-10.7 10.2z"/>
+  <g fill="#fff">
+    <circle cx="30" cy="33" r="2.4"/>
+    <circle cx="40" cy="29.5" r="2"/>
+    <circle cx="37.5" cy="39" r="2.2"/>
+    <circle cx="47" cy="36" r="1.9"/>
+  </g>
+  <g stroke="#fff" stroke-width="1.6" stroke-linecap="round" fill="none" opacity="0.9">
+    <path d="M30 33l10-3.5M30 33l7.5 6M40 29.5l7 6.5M37.5 39l9.5-3"/>
+  </g>
+  <circle cx="52" cy="52" r="11" fill="#14b8a6" stroke="#fff" stroke-width="3"/>
+  <path d="M47.8 52.1l2.8 2.8 5.8-6" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

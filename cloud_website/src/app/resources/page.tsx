@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     'coding tips',
   ],
   openGraph: {
-    title: 'Learning Resources & Career Guides | Anywheredoor',
+    title: 'Learning Resources & Career Guides | Cloud Certification',
     description: 'Expert insights and career guides to help you advance in technology.',
     type: 'website',
   },
@@ -64,19 +64,19 @@ export default function ResourcesPage() {
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'Blog',
-    name: 'Anywheredoor Learning Resources',
+    name: 'Cloud Certification Learning Resources',
     description: 'Expert insights, career guides, and learning resources for technology professionals.',
-    url: 'https://anywheredoor.com/resources',
+    url: 'https://Cloud Certification.com/resources',
     publisher: {
       '@type': 'Organization',
-      name: 'Anywheredoor',
-      url: 'https://anywheredoor.com',
+      name: 'Cloud Certification',
+      url: 'https://Cloud Certification.com',
     },
     blogPost: blogPosts.map(post => ({
       '@type': 'BlogPosting',
       headline: post.title,
       description: post.excerpt,
-      url: `https://anywheredoor.com/resources/${post.slug}`,
+      url: `https://Cloud Certification.com/resources/${post.slug}`,
       datePublished: post.publishedAt,
       author: {
         '@type': 'Person',
@@ -84,7 +84,7 @@ export default function ResourcesPage() {
       },
       publisher: {
         '@type': 'Organization',
-        name: 'Anywheredoor',
+        name: 'Cloud Certification',
       },
     })),
   };

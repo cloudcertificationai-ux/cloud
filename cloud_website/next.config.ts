@@ -1,3 +1,4 @@
+import path from 'path';
 import type { NextConfig } from 'next';
 import createMDX from '@next/mdx';
 
@@ -53,6 +54,8 @@ const nextConfig: NextConfig = {
 
   // Bundle optimization
   turbopack: {
+    // Parent folder has other apps/lockfiles; keep resolution inside this project
+    root: path.join(__dirname),
     // Bundle analyzer in development
     ...(process.env.NODE_ENV === 'development' && {
       rules: {

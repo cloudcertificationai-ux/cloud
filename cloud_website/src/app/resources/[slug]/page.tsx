@@ -173,14 +173,14 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
     },
     publisher: {
       '@type': 'Organization',
-      name: 'Anywheredoor',
-      url: 'https://anywheredoor.com',
+      name: 'Cloud Certification',
+      url: 'https://Cloud Certification.com',
     },
     datePublished: post.publishedAt,
     dateModified: post.publishedAt,
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://anywheredoor.com/resources/${params.slug}`,
+      '@id': `https://Cloud Certification.com/resources/${params.slug}`,
     },
   };
 

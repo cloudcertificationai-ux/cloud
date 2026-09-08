@@ -130,14 +130,14 @@ export class NotificationService {
         <li>If the problem persists, contact support with the Media ID above</li>
       </ul>
       
-      <a href="${process.env.NEXTAUTH_URL || 'https://anywheredoor.com'}/admin/media" class="button">
+      <a href="${process.env.NEXTAUTH_URL || 'https://Cloud Certification.com'}/admin/media" class="button">
         Go to Media Library
       </a>
     </div>
     
     <div class="footer">
-      <p>This is an automated notification from AnyWhereDoor. Please do not reply to this email.</p>
-      <p>If you need assistance, please contact support at support@anywheredoor.com</p>
+      <p>This is an automated notification from Cloud Certification. Please do not reply to this email.</p>
+      <p>If you need assistance, please contact support at support@Cloud Certification.com</p>
     </div>
   </div>
 </body>
@@ -170,7 +170,7 @@ export class NotificationService {
     
     await sgMail.send({
       to,
-      from: 'noreply@anywheredoor.com',
+      from: 'noreply@Cloud Certification.com',
       subject,
       html,
     });
@@ -182,7 +182,7 @@ export class NotificationService {
     const ses = new AWS.SES({ region: 'us-east-1' });
     
     await ses.sendEmail({
-      Source: 'noreply@anywheredoor.com',
+      Source: 'noreply@Cloud Certification.com',
       Destination: { ToAddresses: [to] },
       Message: {
         Subject: { Data: subject },

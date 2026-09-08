@@ -3,7 +3,7 @@ import HeroSection from '@/components/HeroSection';
 import TrustIndicators from '@/components/TrustIndicators';
 
 export const metadata: Metadata = {
-  title: 'Hero Section Demo - Anywheredoor',
+  title: 'Hero Section Demo - Cloud Certification',
   description: 'Demo page showcasing the new Simplilearn-inspired hero section and trust indicators',
 };
 

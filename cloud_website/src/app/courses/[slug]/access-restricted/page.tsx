@@ -16,13 +16,13 @@ export async function generateMetadata({ params }: AccessRestrictedPageProps): P
   
   if (!course) {
     return {
-      title: 'Course Not Found | Anywheredoor',
+      title: 'Course Not Found | Cloud Certification',
       robots: { index: false, follow: false },
     };
   }
 
   return {
-    title: `Access Restricted - ${course.title} | Anywheredoor`,
+    title: `Access Restricted - ${course.title} | Cloud Certification`,
     description: 'Your access to this course has been restricted.',
     robots: { index: false, follow: false },
   };

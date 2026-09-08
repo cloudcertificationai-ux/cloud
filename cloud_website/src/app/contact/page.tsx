@@ -394,7 +394,7 @@ export default function ContactPage() {
                     </div>
                     <div className="ml-3">
                       <p className="text-gray-900 font-medium">Email</p>
-                      <p className="text-gray-600">hello@anywheredoor.com</p>
+                      <p className="text-gray-600">hello@Cloud Certification.com</p>
                     </div>
                   </div>
                 </div>
@@ -431,7 +431,7 @@ export default function ContactPage() {
                     Browse All Courses
                   </a>
                   <a href="/about" className="block text-blue-600 hover:text-blue-800 transition-colors">
-                    About Anywheredoor
+                    About Cloud Certification
                   </a>
                   <a href="/instructors" className="block text-blue-600 hover:text-blue-800 transition-colors">
                     Meet Our Instructors

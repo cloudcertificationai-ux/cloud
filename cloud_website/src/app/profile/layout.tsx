@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'My Profile | Anywheredoor',
+  title: 'My Profile | Cloud Certification',
   description: 'Manage your account information and profile settings',
 }
 
