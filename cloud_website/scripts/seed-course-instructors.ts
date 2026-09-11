@@ -34,8 +34,17 @@ async function main() {
   let updated = 0
 
   for (const course of courses) {
-    // Keep the ServiceNow pillar instructor (Satya Sharma) intact.
-    if (course.slug === 'servicenow') {
+    // Keep flagship live-training instructors intact.
+    if (
+      course.slug === 'servicenow' ||
+      course.slug === 'sailpoint-live-training' ||
+      course.slug === 'workday-software-training' ||
+      course.slug === 'robotic-process-automation' ||
+      course.slug === 'uipath-training-online' ||
+      course.slug === 'blue-prism-training-online' ||
+      course.slug === 'mulesoft-training' ||
+      course.slug === 'master-workday-training'
+    ) {
       console.log(`↷ skip pillar instructor: ${course.slug}`)
       continue
     }

@@ -30,6 +30,10 @@ describe('Footer Component', () => {
   it('displays certification course links', () => {
     render(<Footer />);
     
+    expect(screen.getByText('UiPath Training Online')).toBeInTheDocument();
+    expect(screen.getByText('Robotic Process Automation Training')).toBeInTheDocument();
+    expect(screen.getByText('Workday Software Training')).toBeInTheDocument();
+    expect(screen.getByText('SailPoint Live Training')).toBeInTheDocument();
     expect(screen.getByText('ServiceNow Training Program')).toBeInTheDocument();
     expect(screen.getByText('Cloud Computing Training Program')).toBeInTheDocument();
     expect(screen.getByText('DevOps Training Program')).toBeInTheDocument();

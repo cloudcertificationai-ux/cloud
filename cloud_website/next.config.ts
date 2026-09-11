@@ -52,6 +52,26 @@ const nextConfig: NextConfig = {
   // Static optimization
   trailingSlash: false,
 
+  async redirects() {
+    return [
+      { source: '/sailpoint-live-training', destination: '/courses/sailpoint-live-training', permanent: true },
+      { source: '/workday-software-training', destination: '/courses/workday-software-training', permanent: true },
+      { source: '/robotic-process-automation', destination: '/courses/robotic-process-automation', permanent: true },
+      { source: '/uipath-training-online', destination: '/courses/uipath-training-online', permanent: true },
+      { source: '/mulesoft-training', destination: '/courses/mulesoft-training', permanent: true },
+      { source: '/blue-prism-training-online', destination: '/courses/blue-prism-training-online', permanent: true },
+      { source: '/product/master-workday-training', destination: '/courses/master-workday-training', permanent: true },
+      { source: '/workday-training-certification-us', destination: '/courses/master-workday-training', permanent: true },
+      { source: '/workday-course-certification-uk', destination: '/courses/master-workday-training', permanent: true },
+      { source: '/different-rpa-vendors', destination: '/blog/different-rpa-vendors', permanent: true },
+      { source: '/blueprism-vs-automation-anywhere', destination: '/blog/blueprism-vs-automation-anywhere', permanent: true },
+      { source: '/guide-to-best-workday-certification', destination: '/blog/guide-to-best-workday-certification', permanent: true },
+      { source: '/guide-on-database-setup-in-pega', destination: '/blog/guide-on-database-setup-in-pega', permanent: true },
+      { source: '/free-workday-training-in-australia', destination: '/blog/free-workday-training-in-australia', permanent: true },
+      { source: '/free-workday-training-in-australia%20', destination: '/blog/free-workday-training-in-australia', permanent: true },
+    ];
+  },
+
   // Bundle optimization
   turbopack: {
     // Parent folder has other apps/lockfiles; keep resolution inside this project

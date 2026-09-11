@@ -3,6 +3,12 @@ import Link from 'next/link';
 const FOOTER_LINK_CLASS = 'text-[12px] no-underline text-[#bbb] hover:text-white';
 
 const certificationCourses = [
+  { href: '/courses/uipath-training-online', label: 'UiPath Training Online' },
+  { href: '/courses/blue-prism-training-online', label: 'Blue Prism Training Online' },
+  { href: '/courses/mulesoft-training', label: 'MuleSoft Training' },
+  { href: '/courses/robotic-process-automation', label: 'Robotic Process Automation Training' },
+  { href: '/courses/workday-software-training', label: 'Workday Software Training' },
+  { href: '/courses/sailpoint-live-training', label: 'SailPoint Live Training' },
   { href: '/courses/servicenow', label: 'ServiceNow Training Program' },
   { href: '/courses/cloud-computing', label: 'Cloud Computing Training Program' },
   { href: '/courses/devops', label: 'DevOps Training Program' },

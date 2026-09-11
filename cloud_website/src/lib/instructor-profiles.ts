@@ -241,10 +241,10 @@ export function resolveInstructorCategory(course: {
   if (blob.includes('data') || blob.includes('analytics') || blob.includes('spark') || blob.includes('databricks') || blob.includes('power-bi')) {
     return 'data-analytics';
   }
-  if (blob.includes('salesforce') || blob.includes('workday') || blob.includes('enterprise') || blob.includes('servicenow')) {
+  if (blob.includes('salesforce') || blob.includes('workday') || blob.includes('enterprise') || blob.includes('servicenow') || blob.includes('sailpoint')) {
     return 'enterprise-applications';
   }
-  if (blob.includes('software') || blob.includes('full-stack') || blob.includes('web') || blob.includes('react') || blob.includes('node')) {
+  if (blob.includes('software') || blob.includes('full-stack') || blob.includes('web') || blob.includes('react') || blob.includes('node') || blob.includes('rpa') || blob.includes('uipath') || blob.includes('robotic') || blob.includes('mulesoft') || blob.includes('blue prism') || blob.includes('blue-prism')) {
     return 'software-engineering';
   }
   return 'default';

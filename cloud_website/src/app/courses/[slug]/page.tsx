@@ -143,9 +143,18 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
         ...profile,
         name: course.Instructor?.name || profile.name,
         title:
-          course.slug === 'servicenow'
-            ? 'ServiceNow Solution Architect'
-            : profile.title,
+          (
+            {
+              servicenow: 'ServiceNow Solution Architect',
+              'sailpoint-live-training': 'SailPoint IdentityIQ Solution Architect',
+              'workday-software-training': 'Workday HCM Solution Architect',
+              'master-workday-training': 'Workday HCM Solution Architect',
+              'robotic-process-automation': 'RPA Solution Architect',
+              'uipath-training-online': 'UiPath Solution Architect',
+              'blue-prism-training-online': 'Blue Prism Solution Architect',
+              'mulesoft-training': 'MuleSoft Solution Architect',
+            } as Record<string, string>
+          )[course.slug] || profile.title,
         bio: course.Instructor?.bio || profile.bio,
         avatar: course.Instructor?.avatar || profile.avatar,
         company: course.Instructor?.company || profile.company,
