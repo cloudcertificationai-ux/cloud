@@ -47,25 +47,14 @@ describe('Contact Page', () => {
     expect(screen.getByText('Contact Information')).toBeInTheDocument();
     expect(screen.getByText('Our Office')).toBeInTheDocument();
     
-    // Check for address using more flexible text matching
-    expect(screen.getByText((content, element) => {
-      return element?.textContent?.includes('123 Tech Hub Street') || false;
-    })).toBeInTheDocument();
-    expect(screen.getByText((content, element) => {
-      return element?.textContent?.includes('Innovation District') || false;
-    })).toBeInTheDocument();
-    expect(screen.getByText((content, element) => {
-      return element?.textContent?.includes('San Francisco, CA 94105') || false;
-    })).toBeInTheDocument();
-    
-    // Check for phone and email
-    expect(screen.getByText('+1 (555) 123-4567')).toBeInTheDocument();
-    expect(screen.getByText('hello@anywheredoor.com')).toBeInTheDocument();
-    
-    // Check for office hours
-    expect(screen.getByText('Office Hours')).toBeInTheDocument();
-    expect(screen.getByText('Monday - Friday')).toBeInTheDocument();
-    expect(screen.getByText('9:00 AM - 6:00 PM PST')).toBeInTheDocument();
+    const office = screen.getByText('Our Office').parentElement;
+    expect(office).toHaveTextContent('H-405, Ma Mahegiba Nagar');
+    expect(office).toHaveTextContent('Ashram Road');
+    expect(office).toHaveTextContent('Ahmedabad, Gandhinagar');
+    expect(office).toHaveTextContent('Gujarat - 380005');
+    expect(screen.getByRole('link', { name: '+91 95486 57094' })).toHaveAttribute('href', 'tel:+919548657094');
+    expect(screen.getByRole('link', { name: 'info@cloudcertification.io' })).toHaveAttribute('href', 'mailto:info@cloudcertification.io');
+    expect(screen.queryByText('Office Hours')).not.toBeInTheDocument();
   });
 
   it('should validate required fields', async () => {

@@ -367,9 +367,10 @@ export default function ContactPage() {
                     <div className="ml-3">
                       <p className="text-gray-900 font-medium">Address</p>
                       <p className="text-gray-600">
-                        123 Tech Hub Street<br />
-                        Innovation District<br />
-                        San Francisco, CA 94105
+                        H-405, Ma Mahegiba Nagar<br />
+                        Ashram Road<br />
+                        Ahmedabad, Gandhinagar<br />
+                        Gujarat - 380005
                       </p>
                     </div>
                   </div>
@@ -382,7 +383,9 @@ export default function ContactPage() {
                     </div>
                     <div className="ml-3">
                       <p className="text-gray-900 font-medium">Phone</p>
-                      <p className="text-gray-600">+1 (555) 123-4567</p>
+                      <p className="text-gray-600">
+                        <a href="tel:+919548657094" className="hover:text-blue-600">+91 95486 57094</a>
+                      </p>
                     </div>
                   </div>
 
@@ -394,29 +397,10 @@ export default function ContactPage() {
                     </div>
                     <div className="ml-3">
                       <p className="text-gray-900 font-medium">Email</p>
-                      <p className="text-gray-600">hello@Cloud Certification.com</p>
+                      <p className="text-gray-600">
+                        <a href="mailto:info@cloudcertification.io" className="hover:text-blue-600">info@cloudcertification.io</a>
+                      </p>
                     </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Office Hours */}
-              <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                  Office Hours
-                </h3>
-                <div className="space-y-2 text-gray-600">
-                  <div className="flex justify-between">
-                    <span>Monday - Friday</span>
-                    <span>9:00 AM - 6:00 PM PST</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Saturday</span>
-                    <span>10:00 AM - 4:00 PM PST</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Sunday</span>
-                    <span>Closed</span>
                   </div>
                 </div>
               </div>

@@ -213,7 +213,7 @@ describe('Application Integration Tests', () => {
       // Check contact information
       expect(screen.getByText(/Contact Information/i)).toBeInTheDocument();
       expect(screen.getByText(/Our Office/i)).toBeInTheDocument();
-      expect(screen.getByText(/Office Hours/i)).toBeInTheDocument();
+      expect(screen.queryByText(/Office Hours/i)).not.toBeInTheDocument();
     });
 
     it('validates form inputs and shows errors', async () => {
