@@ -27,12 +27,12 @@ export default function SignInPage() {
     const loadingKey = connection || provider
     setIsLoading(loadingKey)
     try {
-      // If connection is specified, pass it as a parameter to Auth0
-      const options: any = { callbackUrl }
-      if (connection) {
-        options.connection = connection
-      }
-      await signIn(provider, options)
+      // connection must be an Auth0 authorization param, not a NextAuth option
+      await signIn(
+        provider,
+        { callbackUrl },
+        connection ? { connection } : undefined
+      )
     } catch (error) {
       console.error('Sign in error:', error)
       setIsLoading(null)

@@ -187,6 +187,24 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      // Auth tokens and session cookies must never be served from the CDN.
+      {
+        source: '/api/auth/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'private, no-cache, no-store, max-age=0, must-revalidate',
+          },
+          {
+            key: 'CDN-Cache-Control',
+            value: 'private, no-store',
+          },
+          {
+            key: 'Vercel-CDN-Cache-Control',
+            value: 'private, no-store',
+          },
+        ],
+      },
       // Static pages - medium-term caching with ISR support
       {
         source: '/(about|contact|instructors)',
