@@ -4,6 +4,7 @@ import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import prisma from '@/lib/db';
 import { CategoryWithCourses } from '@/types/categories';
+import { homepageCourseFallback } from '@/data/homepage-course-fallback';
 
 // Dynamically import client components to keep this page as a server component
 const NavigationFlow = dynamic(() => import('@/components/NavigationFlow'));
@@ -187,6 +188,10 @@ export default async function Home() {
   } catch (error) {
     console.error('Error fetching data during build:', error);
     // Use fallback data for build time
+  }
+
+  if (categories.length === 0) {
+    categories = homepageCourseFallback;
   }
   
   const successMetrics = {
