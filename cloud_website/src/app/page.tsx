@@ -236,11 +236,11 @@ export default async function Home() {
       <div className="min-h-screen bg-white">
         {/* Hero Section - Integrated Component */}
         <HeroSection
-          headline="Learn with CloudCertificaiton.io"
-          subheadline={`Join ${successMetrics.totalStudents.toLocaleString()}+ professionals who've advanced to senior roles with our job-ready courses in programming, data science, and cybersecurity. Take control of your career`}
+          headline="Learn with CloudCertification.io"
+          subheadline="Join 18,000+ professionals trained over 15 years in SAP, Workday, Salesforce, and Cloud, with 12,000+ placed and hands-on labs."
           primaryCTA={{
-            text: "Start 7-day Free Trial",
-            href: "/courses"
+            text: "FREE LMS",
+            href: "https://lms.cloudcertification.io/"
           }}
           secondaryCTA={{
             text: "Watch Success Stories",

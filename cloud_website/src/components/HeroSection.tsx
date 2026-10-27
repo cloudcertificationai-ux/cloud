@@ -66,28 +66,34 @@ export default function HeroSection({
           </h1>
 
           {/* Subheadline */}
-          <p className="text-gray-600 text-sm sm:text-base mb-1">
+          <p className="text-gray-600 text-sm sm:text-base mb-6">
             {subheadline}
-          </p>
-
-          {/* Pricing hint */}
-          <p className="text-gray-700 text-sm font-medium mb-6">
-            Flexible plans · cancel anytime
           </p>
 
           {/* CTAs */}
           <div className="flex items-center gap-3 flex-wrap">
+            {primaryCTA.href.startsWith('http') ? (
+              <a
+                href={primaryCTA.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm sm:text-base px-6 py-3 rounded-md transition-colors duration-200"
+              >
+                {primaryCTA.text}
+              </a>
+            ) : (
+              <Link
+                href={primaryCTA.href}
+                className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm sm:text-base px-6 py-3 rounded-md transition-colors duration-200"
+              >
+                {primaryCTA.text}
+              </Link>
+            )}
             <Link
-              href={primaryCTA.href}
-              className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm sm:text-base px-6 py-3 rounded-md transition-colors duration-200"
-            >
-              {primaryCTA.text}
-            </Link>
-            <Link
-              href="/courses?filter=free"
+              href="/courses"
               className="inline-block border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-semibold text-sm sm:text-base px-6 py-3 rounded-md transition-colors duration-200"
             >
-              Free Courses
+              All Courses
             </Link>
           </div>
         </div>
